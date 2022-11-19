@@ -244,7 +244,7 @@ class Product extends ActiveRecord
             'quantity:numberFormat',
             'low_stock_threshold:numberFormat',
             'high_stock_threshold:numberFormat',
-            'stock_threshold_status:raw',
+            'thresholdBagde:raw',
             'added_shipping_fee:numberFormat',
         ];
     }
