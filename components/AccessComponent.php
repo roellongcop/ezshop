@@ -19,27 +19,32 @@ class AccessComponent extends Component
 	        'link' => '/dashboard', 
 	        'icon' => '<i class="fa fa-cog"></i>',
 	    ],
+	    '1' => [
+	        'label' => 'Orders', 
+	        'link' => '/dashboard', 
+	        'icon' => '<i class="fa fa-cog"></i>',
+	    ],
 	    '1.1' => [
+	        'label' => 'Orders',
+	        'link' => '/order', 
+	        'icon' => '<i class="fa fa-cog"></i>',
+	    ],
+	    '1.2' => [
 	        'label' => 'Products',
 	        'link' => '#',
 	        'icon' => '<i class="fa fa-cog"></i>',
 	        'sub' => [
-	            '1.1.1' => [
+	            '1.2.1' => [
 	                'label' => 'List',
 	                'link' => '/product',
 	                'icon' => '<i class="fa fa-cog"></i>',
 	            ],
-	            '1.1.2' => [
+	            '1.2.2' => [
 	                'label' => 'Categories',
 	                'link' => '/product-category',
 	                'icon' => '<i class="fa fa-cog"></i>',
 	            ],
 	        ],
-	    ],
-	    '1.2' => [
-	        'label' => 'Orders',
-            'link' => '/order',
-	        'icon' => '<i class="fa fa-cog"></i>',
 	    ],
 	    '2' => [
 	        'label' => 'Users',

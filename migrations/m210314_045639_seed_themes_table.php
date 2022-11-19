@@ -301,82 +301,82 @@ class m210314_045639_seed_themes_table extends \app\migrations\Migration
                 ],
                 'bundles' => $keenDemo1Bundles
             ],
-            /*11 => [
-                'id' => 11,
-                'description' => 'keen/sub/demo2/fixed',
-                'name' => 'Demo2 Fixed',
-                'basePath' => '@app/themes/keen/sub/demo2/fixed/assets/assets',
-                'baseUrl' => '@web/themes/keen/sub/demo2/fixed',
-                'pathMap' => [
-                    '@app/views' => [
-                        '@app/themes/keen/sub/demo2/fixed/views',
-                        '@app/themes/keen/views',
-                    ],
-                    '@app/widgets' => [
-                        '@app/themes/keen/sub/demo2/fixed/widgets',
-                        '@app/themes/keen/widgets',
-                    ],
-                ],
-                'bundles' => $keenDemo2Bundles
-            ],
-            12 => [
-                'id' => 12,
-                'description' => 'keen/sub/demo2/fluid',
-                'name' => 'Demo2 Fluid',
-                'basePath' => '@app/themes/keen/sub/demo2/fixed/assets/assets',
-                'baseUrl' => '@web/themes/keen/sub/demo2/fixed',
-                'pathMap' => [
-                    '@app/views' => [
-                        '@app/themes/keen/sub/demo2/fluid/views',
-                        '@app/themes/keen/sub/demo2/fixed/views',
-                        '@app/themes/keen/views',
-                    ],
-                    '@app/widgets' => [
-                        '@app/themes/keen/sub/demo2/fluid/widgets',
-                        '@app/themes/keen/sub/demo2/fixed/widgets',
-                        '@app/themes/keen/widgets',
-                    ],
-                ],
-                'bundles' => $keenDemo2Bundles
-            ],
-            13 => [
-                'id' => 13,
-                'description' => 'keen/sub/demo3/fixed',
-                'name' => 'Demo3 Fixed',
-                'basePath' => '@app/themes/keen/sub/demo3/fixed/assets/assets',
-                'baseUrl' => '@web/themes/keen/sub/demo3/fixed',
-                'pathMap' => [
-                    '@app/views' => [
-                        '@app/themes/keen/sub/demo3/fixed/views',
-                        '@app/themes/keen/views',
-                    ],
-                    '@app/widgets' => [
-                        '@app/themes/keen/sub/demo3/fixed/widgets',
-                        '@app/themes/keen/widgets',
-                    ],
-                ],
-                'bundles' => $keenDemo3Bundles
-            ],
-            14 => [
-                'id' => 14,
-                'description' => 'keen/sub/demo3/fluid',
-                'name' => 'Demo3 Fluid',
-                'basePath' => '@app/themes/keen/sub/demo3/fixed/assets/assets',
-                'baseUrl' => '@web/themes/keen/sub/demo3/fixed',
-                'pathMap' => [
-                    '@app/views' => [
-                        '@app/themes/keen/sub/demo3/fluid/views',
-                        '@app/themes/keen/sub/demo3/fixed/views',
-                        '@app/themes/keen/views',
-                    ],
-                    '@app/widgets' => [
-                        '@app/themes/keen/sub/demo3/fluid/widgets',
-                        '@app/themes/keen/sub/demo3/fixed/widgets',
-                        '@app/themes/keen/widgets',
-                    ],
-                ],
-                'bundles' => $keenDemo3Bundles
-            ],*/
+            // 11 => [
+            //     'id' => 11,
+            //     'description' => 'keen/sub/demo2/fixed',
+            //     'name' => 'Demo2 Fixed',
+            //     'basePath' => '@app/themes/keen/sub/demo2/fixed/assets/assets',
+            //     'baseUrl' => '@web/themes/keen/sub/demo2/fixed',
+            //     'pathMap' => [
+            //         '@app/views' => [
+            //             '@app/themes/keen/sub/demo2/fixed/views',
+            //             '@app/themes/keen/views',
+            //         ],
+            //         '@app/widgets' => [
+            //             '@app/themes/keen/sub/demo2/fixed/widgets',
+            //             '@app/themes/keen/widgets',
+            //         ],
+            //     ],
+            //     'bundles' => $keenDemo2Bundles
+            // ],
+            // 12 => [
+            //     'id' => 12,
+            //     'description' => 'keen/sub/demo2/fluid',
+            //     'name' => 'Demo2 Fluid',
+            //     'basePath' => '@app/themes/keen/sub/demo2/fixed/assets/assets',
+            //     'baseUrl' => '@web/themes/keen/sub/demo2/fixed',
+            //     'pathMap' => [
+            //         '@app/views' => [
+            //             '@app/themes/keen/sub/demo2/fluid/views',
+            //             '@app/themes/keen/sub/demo2/fixed/views',
+            //             '@app/themes/keen/views',
+            //         ],
+            //         '@app/widgets' => [
+            //             '@app/themes/keen/sub/demo2/fluid/widgets',
+            //             '@app/themes/keen/sub/demo2/fixed/widgets',
+            //             '@app/themes/keen/widgets',
+            //         ],
+            //     ],
+            //     'bundles' => $keenDemo2Bundles
+            // ],
+            // 13 => [
+            //     'id' => 13,
+            //     'description' => 'keen/sub/demo3/fixed',
+            //     'name' => 'Demo3 Fixed',
+            //     'basePath' => '@app/themes/keen/sub/demo3/fixed/assets/assets',
+            //     'baseUrl' => '@web/themes/keen/sub/demo3/fixed',
+            //     'pathMap' => [
+            //         '@app/views' => [
+            //             '@app/themes/keen/sub/demo3/fixed/views',
+            //             '@app/themes/keen/views',
+            //         ],
+            //         '@app/widgets' => [
+            //             '@app/themes/keen/sub/demo3/fixed/widgets',
+            //             '@app/themes/keen/widgets',
+            //         ],
+            //     ],
+            //     'bundles' => $keenDemo3Bundles
+            // ],
+            // 14 => [
+            //     'id' => 14,
+            //     'description' => 'keen/sub/demo3/fluid',
+            //     'name' => 'Demo3 Fluid',
+            //     'basePath' => '@app/themes/keen/sub/demo3/fixed/assets/assets',
+            //     'baseUrl' => '@web/themes/keen/sub/demo3/fixed',
+            //     'pathMap' => [
+            //         '@app/views' => [
+            //             '@app/themes/keen/sub/demo3/fluid/views',
+            //             '@app/themes/keen/sub/demo3/fixed/views',
+            //             '@app/themes/keen/views',
+            //         ],
+            //         '@app/widgets' => [
+            //             '@app/themes/keen/sub/demo3/fluid/widgets',
+            //             '@app/themes/keen/sub/demo3/fixed/widgets',
+            //             '@app/themes/keen/widgets',
+            //         ],
+            //     ],
+            //     'bundles' => $keenDemo3Bundles
+            // ],
         ];
     }
 }

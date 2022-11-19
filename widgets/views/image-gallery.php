@@ -7,6 +7,16 @@ use app\widgets\Autocomplete;
 use app\widgets\Webcam;
 use yii\widgets\Pjax;
 
+$this->registerCssFile(App::publishedUrl("/plugins/custom/cropper/cropper.bundle.css"), [
+    'depends' => [
+        'yii\web\YiiAsset',
+        'yii\bootstrap\BootstrapAsset',
+    ]
+]);
+$this->registerJsFile(App::publishedUrl("/plugins/custom/cropper/cropper.bundle.js"), [
+    'depends' => App::setting('theme')->appAssetClass
+]);
+
 $this->registerWidgetJsFile('autocomplete');
 $this->registerWidgetCssFile('image-gallery');
 $this->registerWidgetJsFile('image-gallery');
