@@ -57,6 +57,11 @@ class ProductController extends Controller
             $post['Product']['gallery'] = $post['Product']['gallery'] ?? [];
         }
 
+        if ($step == 'variations') {
+            $post['Product']['colors'] = $post['Product']['colors'] ?? [];
+            $post['Product']['sizes'] = $post['Product']['sizes'] ?? [];
+        }
+
         if ($step == 'others') {
             $post['Product']['tags'] = $post['Product']['tags'] ?? [];
         }
@@ -80,6 +85,10 @@ class ProductController extends Controller
                 break;
 
             case 'photos':
+                $redirect = [$action, 'slug' => $model->slug, 'step' => 'variations'];
+                break;
+
+            case 'variations':
                 $redirect = [$action, 'slug' => $model->slug, 'step' => 'others'];
                 break;
 
@@ -181,6 +190,7 @@ class ProductController extends Controller
                 return $this->redirect($this->setRedirectLink($model, $step, 'update'));
             }
         }
+
 
         $model->flashErrors();
 

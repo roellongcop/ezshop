@@ -66,12 +66,19 @@ class Product extends ActiveRecord
         [
             'counter' => 4,
             'state' => 'pending',
+            'step' => 'variations',
+            'title' => 'Variations',
+            'description' => 'Colors & Sizes'
+        ],
+        [
+            'counter' => 5,
+            'state' => 'pending',
             'step' => 'others',
             'title' => 'Others',
             'description' => 'Tags, Shipping & etc.'
         ],
         [
-            'counter' => 5,
+            'counter' => 6,
             'state' => 'pending',
             'step' => 'completed',
             'title' => 'Completed',
@@ -103,13 +110,13 @@ class Product extends ActiveRecord
     public function rules()
     {
         return $this->setRules([
-            [['name', 'regular_price', 'sale_price', 'categories'], 'required'],
+            [['name', 'regular_price', 'sale_price', 'categories', 'specification'], 'required'],
             ['name', 'unique'],
             [['description'], 'string'],
             [['regular_price', 'sale_price', 'added_shipping_fee'], 'number'],
             [['quantity', 'low_stock_threshold', 'high_stock_threshold', 'stock_threshold_status'], 'integer'],
             [['name', 'image', 'sku'], 'string', 'max' => 255],
-            [['categories', 'tags', 'gallery'], 'safe'],
+            [['categories', 'tags', 'gallery', 'colors', 'sizes'], 'safe'],
             [['low_stock_threshold', 'high_stock_threshold'], 'validateThresholdStock'],
             [['sale_price', 'regular_price'], 'validatePrice'],
         ]);
@@ -134,7 +141,7 @@ class Product extends ActiveRecord
             'quantity' => 'Quantity',
             'low_stock_threshold' => 'Low Stock Threshold',
             'high_stock_threshold' => 'High Stock Threshold',
-            'stock_threshold_status' => 'Stock Threshold Status',
+            'stock_threshold_status' => 'Stock Status',
             'added_shipping_fee' => 'Added Shipping Fee',
         ]);
     }
@@ -176,7 +183,7 @@ class Product extends ActiveRecord
             'checkbox',
             'image',
             'name',
-            'sku',
+            // 'sku',
             'regular_price',
             'sale_price',
             'quantity',
@@ -267,6 +274,8 @@ class Product extends ActiveRecord
             'categories', 
             'tags',
             'gallery',
+            'colors',
+            'sizes',
         ];
 
         return $behaviors;

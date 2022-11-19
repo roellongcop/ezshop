@@ -122,6 +122,39 @@ use app\widgets\InputList;
 	</div>
 </div>
 
+
+<div class="separator separator-dashed my-5"></div>
+<h6 class="font-weight-bolder mb-3">
+	Variations:
+	<a href="<?= Url::current(['step' => 'variations']) ?>">
+		<i class="fa fa-edit"></i>
+	</a>
+</h6>
+<div class="text-dark-50 line-height-lg">
+	<div>
+		<span class="font-weight-bolder">
+			<?= $model->getAttributeLabel('colors') ?>:
+		</span> 
+		<ul>
+			<?= Html::foreach($model->colors, function($color) {
+				return Html::tag('li', $color);
+			}) ?>
+		</ul>
+	</div>
+
+	<div>
+		<span class="font-weight-bolder">
+			<?= $model->getAttributeLabel('sizes') ?>:
+		</span> 
+		<ul>
+			<?= Html::foreach($model->sizes, function($size) {
+				return Html::tag('li', $size);
+			}) ?>
+		</ul>
+	</div>
+</div>
+
+
 <div class="separator separator-dashed my-5"></div>
 <h6 class="font-weight-bolder mb-3">
 	Other Details:

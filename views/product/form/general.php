@@ -12,7 +12,7 @@ $this->addJsFile('js/create-product');
 <div class="row">
 	<div class="col-md-8">
 		<?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
-		<?= $form->field($model, 'description')->textarea(['rows' => 6]) ?>
+		<?= $form->field($model, 'specification')->textarea(['rows' => 4]) ?>
 
 		<div class="row">
 			<div class="col-md-6">
@@ -39,6 +39,7 @@ $this->addJsFile('js/create-product');
 	</div>
 </div>
 
+<?= $form->field($model, 'description')->textarea(['rows' => 6]) ?>
 
 
 <div class="modal fade" id="modal-add-category" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
