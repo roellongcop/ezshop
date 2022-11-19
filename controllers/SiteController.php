@@ -18,7 +18,7 @@ class SiteController extends Controller
         $behaviors = parent::behaviors();
         $behaviors['AccessControl'] = [
             'class' => 'app\filters\AccessControl',
-            'publicActions' => ['login', 'reset-password', 'contact']
+            'publicActions' => ['login', 'reset-password', 'contact', 'home']
         ];
         $behaviors['VerbFilter'] = [
             'class' => 'app\filters\VerbFilter',
@@ -28,6 +28,12 @@ class SiteController extends Controller
         ];
 
         return $behaviors;
+    }
+
+    public function actionHome()
+    {
+        $this->layout = 'frontend';
+        return $this->render('home');
     }
 
     public function beforeAction($action)
