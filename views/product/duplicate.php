@@ -11,6 +11,7 @@ $this->params['breadcrumbs'][] = ['label' => $originalModel->mainAttribute, 'url
 $this->params['breadcrumbs'][] = 'Duplicate';
 $this->params['searchModel'] = new ProductSearch();
 $this->params['showCreateButton'] = true; 
+$this->params['wrapCard'] = false;
 ?>
 <div class="product-duplicate-page">
 	<?= $this->render('_form', [
