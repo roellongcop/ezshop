@@ -335,10 +335,10 @@ class Product extends ActiveRecord
 
     public function getThresholdBagde()
     {
-        $status = App::params('stock_threshold_status')[$this->stock_threshold_status];
+        $status = App::params('stock_threshold_status')[$this->stock_threshold_status] ?? '';
 
-        return Html::tag('label', $status['label'], [
+        return $status ? Html::tag('label', $status['label'], [
             'class' => 'badge badge-' . $status['class']
-        ]);
+        ]): '';
     }
 }
