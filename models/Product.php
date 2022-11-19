@@ -92,8 +92,8 @@ class Product extends ActiveRecord
     {
         return [
             'controllerID' => 'product',
-            'mainAttribute' => 'id',
-            'paramName' => 'id',
+            'mainAttribute' => 'name',
+            'paramName' => 'slug',
         ];
     }
 
@@ -179,6 +179,8 @@ class Product extends ActiveRecord
             'sale_price',
             'quantity',
             'stock_threshold_status',
+            'created_at',
+            'active',
         ];
     }
 
@@ -225,11 +227,11 @@ class Product extends ActiveRecord
     {
         return [
             'name:raw',
-            'categories:raw',
+            'categories:jsonEditor',
             'description:raw',
-            'tags:raw',
+            'tags:jsonEditor',
             'image:raw',
-            'gallery:raw',
+            'gallery:jsonEditor',
             'regular_price:raw',
             'sale_price:raw',
             'sku:raw',
@@ -323,5 +325,14 @@ class Product extends ActiveRecord
 
             return $files;
         }
+    }
+
+    public function getThresholdBagde()
+    {
+        $status = App::params('stock_threshold_status')[$this->stock_threshold_status];
+
+        return Html::tag('label', $status['label'], [
+            'class' => 'badge badge-' . $status['class']
+        ]);
     }
 }

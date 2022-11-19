@@ -3,6 +3,11 @@
 return [
     'user.passwordResetTokenExpire' => 3600,
     'pagination' => [25 => 25, 50 => 50, 75 => 75, 100 => 100],
+    'stock_threshold_status' => [
+        0 => ['id' => 0, 'label' => 'Safe', 'class' => 'primary'],
+        1 => ['id' => 1, 'label' => 'High', 'class' => 'success'],
+        2 => ['id' => 2, 'label' => 'Low', 'class' => 'danger'],
+    ],
     'record_status' => [
         0 => ['id' => 0, 'label' => 'In-active', 'class' => 'danger'],
         1 => ['id' => 1, 'label' => 'Active', 'class' => 'success'],

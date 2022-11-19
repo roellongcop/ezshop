@@ -15,5 +15,7 @@ $this->params['showCreateButton'] = true;
 <div class="product-update-page">
 	<?= $this->render('_form', [
         'model' => $model,
+        'activeStep' => $activeStep,
+        'stepForms' => $stepForms
     ]) ?>
 </div>

@@ -36,14 +36,14 @@ class ProductController extends Controller
 
     /**
      * Displays a single Product model.
-     * @param integer $id
+     * @param integer $slug
      * @return mixed
      * @throws ForbiddenHttpException if the model cannot be found
      */
-    public function actionView($id)
+    public function actionView($slug)
     {
         return $this->render('view', [
-            'model' => Product::controllerFind($id),
+            'model' => Product::controllerFind($slug, 'slug'),
         ]);
     }
 
@@ -60,7 +60,7 @@ class ProductController extends Controller
         $stepForms = Product::stepForms($step);
 
         if (($post = App::post()) != null) {
-            if ($step == 'gallery') {
+            if ($step == 'general') {
                 $post['Product']['categories'] = $post['Product']['categories'] ?? [];
             }
 
@@ -74,6 +74,9 @@ class ProductController extends Controller
 
             if ($step == 'completed') {
                 $model->setActive();
+                $model->save();
+                App::success('Product Successfully Completed');
+                return $this->redirect($model->viewUrl);
             }
 
             if ($model->load($post) && $model->save()) {
@@ -103,11 +106,6 @@ class ProductController extends Controller
                         return $this->redirect(['create', 'slug' => $model->slug, 'step' => 'completed']);
                         break;
 
-                    case 'completed':
-                        App::success('Product Successfully Completed');
-                        return $this->redirect($model->viewUrl);
-                        break;
-                    
                     default:
                         return $this->redirect($model->viewUrl);
                         break;
@@ -115,6 +113,7 @@ class ProductController extends Controller
 
             }
         }
+
 
         $model->flashErrors();
 
@@ -130,9 +129,9 @@ class ProductController extends Controller
      * If duplication is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionDuplicate($id)
+    public function actionDuplicate($slug)
     {
-        $originalModel = Product::controllerFind($id);
+        $originalModel = Product::controllerFind($slug, 'slug');
         $model = new Product();
         $model->attributes = $originalModel->attributes;
 
@@ -151,13 +150,13 @@ class ProductController extends Controller
     /**
      * Updates an existing Product model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
+     * @param integer $slug
      * @return mixed
      * @throws ForbiddenHttpException if the model cannot be found
      */
-    public function actionUpdate($id)
+    public function actionUpdate($slug)
     {
-        $model = Product::controllerFind($id);
+        $model = Product::controllerFind($slug, 'slug');
 
         if ($model->load(App::post()) && $model->save()) {
             App::success('Successfully Updated');
@@ -172,13 +171,13 @@ class ProductController extends Controller
     /**
      * Deletes an existing Product model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
+     * @param integer $slug
      * @return mixed
      * @throws ForbiddenHttpException if the model cannot be found
      */
-    public function actionDelete($id)
+    public function actionDelete($slug)
     {
-        $model = Product::controllerFind($id);
+        $model = Product::controllerFind($slug, 'slug');
 
         if($model->delete()) {
             App::success('Successfully Deleted');
