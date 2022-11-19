@@ -1,0 +1,4 @@
+assets/*
+!assets/.gitkeep
+protected/*
+!protected/.gitkeep

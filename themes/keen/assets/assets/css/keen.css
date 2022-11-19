@@ -1,0 +1,49 @@
+.app-scroll::-webkit-scrollbar,
+#kt_quick_panel::-webkit-scrollbar {
+    width: 5px;
+}
+.app-scroll::-webkit-scrollbar-track,
+#kt_quick_panel::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.2); 
+    border-radius: 10px;
+}
+
+.app-scroll::-webkit-scrollbar-thumb,
+#kt_quick_panel::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,24%); 
+}
+
+th {
+    text-transform: uppercase;
+}
+
+.help-block {
+    color: #F64E60;
+    font-size: 0.9rem;
+    font-weight: 400;
+}  
+
+.kt_quick_panel {
+    z-index: 9;
+}
+
+.daterangepicker {
+    z-index: 99999;
+}
+
+#kt_quick_panel {
+    overflow: auto;
+} 
+
+.mw200 {
+    max-width: 200px;
+}
+
+select.kt-selectpicker.is-invalid + button.dropdown-toggle {
+    border-color: #F64E60 !important;
+}
+
+select.kt-selectpicker.is-valid + button.dropdown-toggle {
+    border-color: #1BC5BD !important;
+}
