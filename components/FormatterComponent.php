@@ -137,4 +137,9 @@ class FormatterComponent extends \yii\i18n\Formatter
 
         return ($return == 'start')? $start: $end;
     }
+
+    public function asNumberFormat($num)
+    {
+        return number_format($num);
+    }
 }

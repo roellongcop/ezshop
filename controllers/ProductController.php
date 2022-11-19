@@ -47,6 +47,58 @@ class ProductController extends Controller
         ]);
     }
 
+    private function setPostData($post, $step)
+    {
+        if ($step == 'general') {
+            $post['Product']['categories'] = $post['Product']['categories'] ?? [];
+        }
+
+        if ($step == 'photos') {
+            $post['Product']['gallery'] = $post['Product']['gallery'] ?? [];
+        }
+
+        if ($step == 'others') {
+            $post['Product']['tags'] = $post['Product']['tags'] ?? [];
+        }
+
+        if ($step == 'completed') {
+            $post['Product']['record_status'] = Product::RECORD_ACTIVE;
+        }
+
+        return $post;
+    }
+
+    private function setRedirectLink($model, $step, $action='create')
+    {
+        switch ($step) {
+            case 'general':
+                $redirect = [$action, 'slug' => $model->slug, 'step' => 'inventory'];
+                break;
+
+            case 'inventory':
+                $redirect = [$action, 'slug' => $model->slug, 'step' => 'photos'];
+                break;
+
+            case 'photos':
+                $redirect = [$action, 'slug' => $model->slug, 'step' => 'others'];
+                break;
+
+            case 'others':
+                $redirect = [$action, 'slug' => $model->slug, 'step' => 'completed'];
+                break;
+
+            case 'completed':
+                $redirect = $model->viewUrl;
+                break;
+
+            default:
+                $redirect = $model->viewUrl;
+                break;
+        }
+
+        return $redirect;
+    }
+
     /**
      * Creates a new Product model.
      * If creation is successful, the browser will be redirected to the 'view' page.
@@ -56,64 +108,16 @@ class ProductController extends Controller
     {
         $model = Product::findOrCreate(['slug' => $slug]);
         $model->setInactive();
-
         $stepForms = Product::stepForms($step);
 
         if (($post = App::post()) != null) {
-            if ($step == 'general') {
-                $post['Product']['categories'] = $post['Product']['categories'] ?? [];
-            }
-
-            if ($step == 'photos') {
-                $post['Product']['gallery'] = $post['Product']['gallery'] ?? [];
-            }
-
-            if ($step == 'others') {
-                $post['Product']['tags'] = $post['Product']['tags'] ?? [];
-            }
-
-            if ($step == 'completed') {
-                $model->setActive();
-                $model->save();
-                App::success('Product Successfully Completed');
-                return $this->redirect($model->viewUrl);
-            }
+            $post = $this->setPostData($post, $step);
 
             if ($model->load($post) && $model->save()) {
-
-                switch ($step) {
-                    case 'general':
-                        App::success('Successfully Created');
-
-                        return $this->redirect(['create', 'slug' => $model->slug, 'step' => 'inventory']);
-                        break;
-
-                    case 'inventory':
-                        App::success('Inventory Created');
-
-                        return $this->redirect(['create', 'slug' => $model->slug, 'step' => 'photos']);
-                        break;
-
-                    case 'photos':
-                        App::success('Photo Gallery Created');
-
-                        return $this->redirect(['create', 'slug' => $model->slug, 'step' => 'others']);
-                        break;
-
-                    case 'others':
-                        App::success('Tags & Shipping Created');
-
-                        return $this->redirect(['create', 'slug' => $model->slug, 'step' => 'completed']);
-                        break;
-
-                    default:
-                        return $this->redirect($model->viewUrl);
-                        break;
-                }
-
+                App::success('Successfully Processed');
+                return $this->redirect($this->setRedirectLink($model, $step));
             }
         }
-
 
         $model->flashErrors();
 
@@ -129,21 +133,31 @@ class ProductController extends Controller
      * If duplication is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionDuplicate($slug)
+    public function actionDuplicate($slug, $step='general')
     {
         $originalModel = Product::controllerFind($slug, 'slug');
         $model = new Product();
         $model->attributes = $originalModel->attributes;
 
-        if ($model->load(App::post()) && $model->save()) {
-            App::success('Successfully Duplicated');
+        $model->setInactive();
+        $stepForms = Product::stepForms($step);
 
-            return $this->redirect($model->viewUrl);
+        if (($post = App::post()) != null) {
+            $post = $this->setPostData($post, $step);
+
+            if ($model->load($post) && $model->save()) {
+                App::success('Successfully Processed');
+                return $this->redirect($this->setRedirectLink($model, $step, 'update'));
+            }
         }
 
+        $model->flashErrors();
+
         return $this->render('duplicate', [
-            'model' => $model,
             'originalModel' => $originalModel,
+            'model' => $model,
+            'activeStep' => $stepForms[$step],
+            'stepForms' => $stepForms,
         ]);
     }
 
@@ -154,17 +168,26 @@ class ProductController extends Controller
      * @return mixed
      * @throws ForbiddenHttpException if the model cannot be found
      */
-    public function actionUpdate($slug)
+    public function actionUpdate($slug, $step='general')
     {
         $model = Product::controllerFind($slug, 'slug');
+        $stepForms = Product::stepForms($step);
 
-        if ($model->load(App::post()) && $model->save()) {
-            App::success('Successfully Updated');
-            return $this->redirect($model->viewUrl);
+        if (($post = App::post()) != null) {
+            $post = $this->setPostData($post, $step);
+
+            if ($model->load($post) && $model->save()) {
+                App::success('Successfully Processed');
+                return $this->redirect($this->setRedirectLink($model, $step, 'update'));
+            }
         }
+
+        $model->flashErrors();
 
         return $this->render('update', [
             'model' => $model,
+            'activeStep' => $stepForms[$step],
+            'stepForms' => $stepForms,
         ]);
     }
 

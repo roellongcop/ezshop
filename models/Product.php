@@ -172,6 +172,8 @@ class Product extends ActiveRecord
     public function getDefaultGridColumns()
     {
         return [
+            'serial',
+            'checkbox',
             'image',
             'name',
             'sku',
@@ -207,20 +209,24 @@ class Product extends ActiveRecord
             'description' => ['attribute' => 'description', 'format' => 'raw'],
             // 'tags' => ['attribute' => 'tags', 'format' => 'raw'],
             // 'gallery' => ['attribute' => 'gallery', 'format' => 'raw'],
-            'regular_price' => ['attribute' => 'regular_price', 'format' => 'raw'],
-            'sale_price' => ['attribute' => 'sale_price', 'format' => 'raw'],
+            'regular_price' => ['attribute' => 'regular_price', 'format' => 'numberFormat'],
+            'sale_price' => ['attribute' => 'sale_price', 'format' => 'numberFormat'],
             'sku' => ['attribute' => 'sku', 'format' => 'raw'],
-            'quantity' => ['attribute' => 'quantity', 'format' => 'raw'],
-            'low_stock_threshold' => ['attribute' => 'low_stock_threshold', 'format' => 'raw'],
-            'high_stock_threshold' => ['attribute' => 'high_stock_threshold', 'format' => 'raw'],
-            'stock_threshold_status' => ['attribute' => 'stock_threshold_status', 'format' => 'raw'],
-            'added_shipping_fee' => ['attribute' => 'added_shipping_fee', 'format' => 'raw'],
+            'quantity' => ['attribute' => 'quantity', 'format' => 'numberFormat'],
+            'low_stock_threshold' => ['attribute' => 'low_stock_threshold', 'format' => 'numberFormat'],
+            'high_stock_threshold' => ['attribute' => 'high_stock_threshold', 'format' => 'numberFormat'],
+            'stock_threshold_status' => [
+                'attribute' => 'stock_threshold_status', 
+                'format' => 'raw',
+                'value' => 'thresholdBagde'
+            ],
+            'added_shipping_fee' => ['attribute' => 'added_shipping_fee', 'format' => 'numberFormat'],
         ];
     }
 
     public function getPhoto($w=50)
     {
-        return Html::image($this->image, ['w' => $w], ['class' => 'img-fluid']);
+        return Html::image($this->image, ['w' => $w], ['class' => 'img-thumbnail']);
     }
 
     public function detailColumns()
@@ -232,14 +238,14 @@ class Product extends ActiveRecord
             'tags:jsonEditor',
             'image:raw',
             'gallery:jsonEditor',
-            'regular_price:raw',
-            'sale_price:raw',
+            'regular_price:numberFormat',
+            'sale_price:numberFormat',
             'sku:raw',
-            'quantity:raw',
-            'low_stock_threshold:raw',
-            'high_stock_threshold:raw',
+            'quantity:numberFormat',
+            'low_stock_threshold:numberFormat',
+            'high_stock_threshold:numberFormat',
             'stock_threshold_status:raw',
-            'added_shipping_fee:raw',
+            'added_shipping_fee:numberFormat',
         ];
     }
 
