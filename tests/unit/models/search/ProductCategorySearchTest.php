@@ -2,9 +2,9 @@
 
 namespace tests\unit\models\search;
 
-use app\models\search\ThemeSearch;
+use app\models\search\ProductCategorySearch;
 
-class ThemeSearchTest extends \Codeception\Test\Unit
+class ProductCategorySearchTest extends \Codeception\Test\Unit
 {
     public function _before()
     {
@@ -15,17 +15,17 @@ class ThemeSearchTest extends \Codeception\Test\Unit
 
     public function testSearchWithResult()
     {
-        $searchModel = new ThemeSearch();
-        $dataProviders = $searchModel->search(['ThemeSearch' => ['keywords' => '']]);
+        $searchModel = new ProductCategorySearch();
+        $dataProviders = $searchModel->search(['ProductCategorySearch' => ['keywords' => '']]);
         expect_that($dataProviders);
-        expect($dataProviders->totalCount)->equals(10);
+        expect($dataProviders->totalCount)->equals(2);
     }
 
     public function testSearchWithNoResult()
     {
-        $searchModel = new ThemeSearch();
+        $searchModel = new ProductCategorySearch();
         $dataProviders = $searchModel->search([
-            'ThemeSearch' => ['keywords' => 'qwertyuiopasdfghjkl234567890']
+            'ProductCategorySearch' => ['keywords' => 'qwertyuiopasdfghjkl234567890']
         ]);
 
         expect_that($dataProviders);

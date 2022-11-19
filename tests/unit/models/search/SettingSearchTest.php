@@ -18,7 +18,7 @@ class SettingSearchTest extends \Codeception\Test\Unit
         $searchModel = new SettingSearch();
         $dataProviders = $searchModel->search(['SettingSearch' => ['keywords' => '']]);
         expect_that($dataProviders);
-        expect($dataProviders->totalCount)->equals(2);
+        expect($dataProviders->totalCount)->equals(4);
     }
 
     public function testSearchWithNoResult()

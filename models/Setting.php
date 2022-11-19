@@ -29,6 +29,7 @@ class Setting extends ActiveRecord
     const TYPE_SELECT = 'select';
     const TYPE_FILE = 'file';
     const TYPE_JSON = 'json';
+    const TYPE_PRODUCT_CATEGORY = 'product-category';
 
     const MODULE = [
         'system' => [
@@ -107,6 +108,7 @@ class Setting extends ActiveRecord
                 self::TYPE_SELECT,
                 self::TYPE_FILE,
                 self::TYPE_JSON,
+                self::TYPE_PRODUCT_CATEGORY,
             ]],
             [['name'], 'unique'],
         ]);

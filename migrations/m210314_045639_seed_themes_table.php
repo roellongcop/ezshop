@@ -301,7 +301,7 @@ class m210314_045639_seed_themes_table extends \app\migrations\Migration
                 ],
                 'bundles' => $keenDemo1Bundles
             ],
-            11 => [
+            /*11 => [
                 'id' => 11,
                 'description' => 'keen/sub/demo2/fixed',
                 'name' => 'Demo2 Fixed',
@@ -376,7 +376,7 @@ class m210314_045639_seed_themes_table extends \app\migrations\Migration
                     ],
                 ],
                 'bundles' => $keenDemo3Bundles
-            ],
+            ],*/
         ];
     }
 }

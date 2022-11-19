@@ -1,0 +1,314 @@
+<?php
+
+namespace app\models;
+
+use Yii;
+use app\helpers\App;
+use app\helpers\ArrayHelper;
+use app\widgets\Anchor;
+
+/**
+ * This is the model class for table "{{%products}}".
+ *
+ * @property int $id
+ * @property string $name
+ * @property string|null $categories
+ * @property string|null $description
+ * @property string|null $tags
+ * @property string|null $image
+ * @property string|null $gallery
+ * @property float $regular_price
+ * @property float $sale_price
+ * @property string|null $sku
+ * @property string $token
+ * @property string $slug
+ * @property int|null $quantity
+ * @property int|null $low_stock_threshold
+ * @property int|null $high_stock_threshold
+ * @property int|null $stock_threshold_status
+ * @property float|null $added_shipping_fee
+ * @property int $record_status
+ * @property int $created_by
+ * @property int $updated_by
+ * @property string $created_at
+ * @property string $updated_at
+ */
+class Product extends ActiveRecord
+{
+    const THRESHOLD_SAFE = 0;
+    const THRESHOLD_HIGH = 1;
+    const THRESHOLD_LOW = 2;
+
+    const STEP_FORM = [
+        [
+            'counter' => 1,
+            'state' => 'current',
+            'step' => 'general',
+            'title' => 'General Information',
+            'description' => 'Fill up Primary Details'
+        ],
+        [
+            'counter' => 2,
+            'state' => 'pending',
+            'step' => 'inventory',
+            'title' => 'Inventory',
+            'description' => 'Manage Stock & Threshold'
+        ],
+        [
+            'counter' => 3,
+            'state' => 'pending',
+            'step' => 'photos',
+            'title' => 'Photos',
+            'description' => 'Create Image Gallery'
+        ],
+        [
+            'counter' => 4,
+            'state' => 'pending',
+            'step' => 'others',
+            'title' => 'Others',
+            'description' => 'Tags, Shipping & etc.'
+        ],
+        [
+            'counter' => 5,
+            'state' => 'pending',
+            'step' => 'completed',
+            'title' => 'Completed',
+            'description' => 'Review and Submit'
+        ]
+    ];
+
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function tableName()
+    {
+        return '{{%products}}';
+    }
+
+    public function config()
+    {
+        return [
+            'controllerID' => 'product',
+            'mainAttribute' => 'id',
+            'paramName' => 'id',
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function rules()
+    {
+        return $this->setRules([
+            [['name', 'regular_price', 'sale_price', 'categories'], 'required'],
+            ['name', 'unique'],
+            [['description'], 'string'],
+            [['regular_price', 'sale_price', 'added_shipping_fee'], 'number'],
+            [['quantity', 'low_stock_threshold', 'high_stock_threshold', 'stock_threshold_status'], 'integer'],
+            [['name', 'image', 'sku'], 'string', 'max' => 255],
+            [['categories', 'tags', 'gallery'], 'safe'],
+            [['low_stock_threshold', 'high_stock_threshold'], 'validateThresholdStock'],
+            [['sale_price', 'regular_price'], 'validatePrice'],
+        ]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function attributeLabels()
+    {
+        return $this->setAttributeLabels([
+            'id' => 'ID',
+            'name' => 'Name',
+            'categories' => 'Categories',
+            'description' => 'Description',
+            'tags' => 'Tags',
+            'image' => 'Image',
+            'gallery' => 'Gallery',
+            'regular_price' => 'Regular Price',
+            'sale_price' => 'Sale Price',
+            'sku' => 'Sku',
+            'quantity' => 'Quantity',
+            'low_stock_threshold' => 'Low Stock Threshold',
+            'high_stock_threshold' => 'High Stock Threshold',
+            'stock_threshold_status' => 'Stock Threshold Status',
+            'added_shipping_fee' => 'Added Shipping Fee',
+        ]);
+    }
+
+    /**
+     * {@inheritdoc}
+     * @return \app\models\query\ProductQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new \app\models\query\ProductQuery(get_called_class());
+    }
+
+    public function validatePrice($attribute, $params)
+    {
+        if ($this->sale_price > $this->regular_price) {
+            $this->addError($attribute, 'Sale price must not be greater than regular price');
+        }
+    }
+
+    public function validateThresholdStock($attribute, $params)
+    {
+        if ($this->low_stock_threshold > 0 || $this->high_stock_threshold > 0) {
+            if ($this->low_stock_threshold == $this->high_stock_threshold) {
+                $this->addError($attribute, 'Threshold must not be equal');
+            }
+            else {
+                if ($this->low_stock_threshold > $this->high_stock_threshold) {
+                    $this->addError($attribute, 'Low threshold must not be greater than high treshold');
+                }
+            }
+        }
+    }
+
+    public function getDefaultGridColumns()
+    {
+        return [
+            'image',
+            'name',
+            'sku',
+            'regular_price',
+            'sale_price',
+            'quantity',
+            'stock_threshold_status',
+        ];
+    }
+
+    public function gridColumns()
+    {
+        return [
+            'image' => [
+                'attribute' => 'image', 
+                'value' => 'photo', 
+                'format' => 'raw'
+            ],
+            'name' => [
+                'attribute' => 'name', 
+                'format' => 'raw',
+                'value' => function($model) {
+                    return Anchor::widget([
+                        'title' => $model->name,
+                        'link' => $model->viewUrl,
+                        'text' => true
+                    ]);
+                }
+            ],
+            'categories' => ['attribute' => 'categories', 'format' => 'raw'],
+            'description' => ['attribute' => 'description', 'format' => 'raw'],
+            'tags' => ['attribute' => 'tags', 'format' => 'raw'],
+            'gallery' => ['attribute' => 'gallery', 'format' => 'raw'],
+            'regular_price' => ['attribute' => 'regular_price', 'format' => 'raw'],
+            'sale_price' => ['attribute' => 'sale_price', 'format' => 'raw'],
+            'sku' => ['attribute' => 'sku', 'format' => 'raw'],
+            'quantity' => ['attribute' => 'quantity', 'format' => 'raw'],
+            'low_stock_threshold' => ['attribute' => 'low_stock_threshold', 'format' => 'raw'],
+            'high_stock_threshold' => ['attribute' => 'high_stock_threshold', 'format' => 'raw'],
+            'stock_threshold_status' => ['attribute' => 'stock_threshold_status', 'format' => 'raw'],
+            'added_shipping_fee' => ['attribute' => 'added_shipping_fee', 'format' => 'raw'],
+        ];
+    }
+
+    public function getPhoto($w=50)
+    {
+        return Url::image($this->image, ['w' => $w], ['class' => 'img-fluid']);
+    }
+
+    public function detailColumns()
+    {
+        return [
+            'name:raw',
+            'categories:raw',
+            'description:raw',
+            'tags:raw',
+            'image:raw',
+            'gallery:raw',
+            'regular_price:raw',
+            'sale_price:raw',
+            'sku:raw',
+            'quantity:raw',
+            'low_stock_threshold:raw',
+            'high_stock_threshold:raw',
+            'stock_threshold_status:raw',
+            'added_shipping_fee:raw',
+        ];
+    }
+
+    public function behaviors()
+    {
+        $behaviors = parent::behaviors();
+
+        $behaviors['ProductBehavior'] = [
+            'class' => 'app\behaviors\ProductBehavior'
+        ];
+
+        $behaviors['SluggableBehavior'] = [
+            'class' => 'yii\behaviors\SluggableBehavior',
+            'attribute' => 'name',
+            'ensureUnique' => true,
+        ];
+
+        $behaviors['JsonBehavior']['fields'] = [
+            'categories', 
+            'tags',
+            'gallery',
+        ];
+
+        return $behaviors;
+    }
+
+    public function getIsSafe()
+    {
+        return $this->stock_threshold_status == self::THRESHOLD_SAFE;
+    }
+
+    public function getIsHigh()
+    {
+        return $this->stock_threshold_status == self::THRESHOLD_HIGH;
+    }
+
+    public function getIsLow()
+    {
+        return $this->stock_threshold_status == self::THRESHOLD_LOW;
+    }
+
+    public static function stepForms($step)
+    {
+        $stepForms = ArrayHelper::index(self::STEP_FORM, 'step');
+        $activeStep = $stepForms[$step];
+
+        foreach ($stepForms as &$stepForm) {
+            if ($activeStep['counter'] == $stepForm['counter']) {
+                $stepForm['state'] = 'current';
+            }
+            elseif ($activeStep['counter'] > $stepForm['counter']) {
+                $stepForm['state'] = 'done';
+            }
+            elseif ($activeStep['counter'] < $stepForm['counter']) {
+                $stepForm['state'] = 'pending';
+            }
+        }
+
+        return $stepForms;
+    }
+
+    public function getImageFiles()
+    {
+        if (($gallery = $this->gallery) != null) {
+            $files = [];
+
+            foreach ($photos as $token) {
+                if (($file = File::findByToken($token)) != null) {
+                    $files[] = $file;
+                }
+            }
+
+            return $files;
+        }
+    }
+}

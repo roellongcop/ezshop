@@ -25,4 +25,12 @@ $model->add('inactive', 'inactive', [
     'record_status' => Setting::RECORD_INACTIVE,
 ]);
 
+$model->add('product-category-1', 'product-category-1', [
+	'type' => Setting::TYPE_PRODUCT_CATEGORY
+]);
+
+$model->add('product-category-2', 'product-category-2', [
+	'type' => Setting::TYPE_PRODUCT_CATEGORY,
+    'record_status' => Setting::RECORD_INACTIVE,
+]);
 return $model->getData();
