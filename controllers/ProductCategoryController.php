@@ -56,13 +56,23 @@ class ProductCategoryController extends Controller
             'record_status' => ProductCategory::RECORD_ACTIVE
         ]);
 
+        if (App::get('ajaxValidate')) {
+            return $this->_ajaxValidate($model);
+        }
+        
         if ($model->load(App::post()) && $model->save()) {
+            if (App::isAjax()) {
+                return $this->_ajaxCreated($model);
+            }
+
             App::success('Successfully Created');
 
             return $this->redirect($model->viewUrl);
         }
 
-        $model->flashErrors();
+        if (App::isAjax()) {
+            return $this->_ajaxForm($model);
+        }
 
         return $this->render('create', [
             'model' => $model,

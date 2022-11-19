@@ -5,6 +5,8 @@ namespace app\models;
 use Yii;
 use app\helpers\App;
 use app\helpers\ArrayHelper;
+use app\helpers\Url;
+use app\helpers\Html;
 use app\widgets\Anchor;
 
 /**
@@ -128,7 +130,7 @@ class Product extends ActiveRecord
             'gallery' => 'Gallery',
             'regular_price' => 'Regular Price',
             'sale_price' => 'Sale Price',
-            'sku' => 'Sku',
+            'sku' => 'Stock Keeping Unit',
             'quantity' => 'Quantity',
             'low_stock_threshold' => 'Low Stock Threshold',
             'high_stock_threshold' => 'High Stock Threshold',
@@ -186,7 +188,7 @@ class Product extends ActiveRecord
             'image' => [
                 'attribute' => 'image', 
                 'value' => 'photo', 
-                'format' => 'raw'
+                'format' => 'raw',
             ],
             'name' => [
                 'attribute' => 'name', 
@@ -199,10 +201,10 @@ class Product extends ActiveRecord
                     ]);
                 }
             ],
-            'categories' => ['attribute' => 'categories', 'format' => 'raw'],
+            // 'categories' => ['attribute' => 'categories', 'format' => 'raw'],
             'description' => ['attribute' => 'description', 'format' => 'raw'],
-            'tags' => ['attribute' => 'tags', 'format' => 'raw'],
-            'gallery' => ['attribute' => 'gallery', 'format' => 'raw'],
+            // 'tags' => ['attribute' => 'tags', 'format' => 'raw'],
+            // 'gallery' => ['attribute' => 'gallery', 'format' => 'raw'],
             'regular_price' => ['attribute' => 'regular_price', 'format' => 'raw'],
             'sale_price' => ['attribute' => 'sale_price', 'format' => 'raw'],
             'sku' => ['attribute' => 'sku', 'format' => 'raw'],
@@ -216,7 +218,7 @@ class Product extends ActiveRecord
 
     public function getPhoto($w=50)
     {
-        return Url::image($this->image, ['w' => $w], ['class' => 'img-fluid']);
+        return Html::image($this->image, ['w' => $w], ['class' => 'img-fluid']);
     }
 
     public function detailColumns()
@@ -297,12 +299,23 @@ class Product extends ActiveRecord
         return $stepForms;
     }
 
+    public function getPreviousStep($activeStep)
+    {
+        if ($activeStep['step'] == 'general') {
+            return $activeStep;
+        }
+
+        $stepForms = ArrayHelper::index(self::STEP_FORM, 'counter');
+
+        return $stepForms[$activeStep['counter'] - 1];
+    }
+
     public function getImageFiles()
     {
         if (($gallery = $this->gallery) != null) {
             $files = [];
 
-            foreach ($photos as $token) {
+            foreach ($gallery as $token) {
                 if (($file = File::findByToken($token)) != null) {
                     $files[] = $file;
                 }

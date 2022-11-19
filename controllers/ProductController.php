@@ -55,23 +55,65 @@ class ProductController extends Controller
     public function actionCreate($slug='', $step='general')
     {
         $model = Product::findOrCreate(['slug' => $slug]);
+        $model->setInactive();
+
         $stepForms = Product::stepForms($step);
 
-        if ($model->load(App::post()) && $model->save()) {
-
-            switch ($step) {
-                case 'general':
-                    App::success('Successfully Created');
-
-                    return $this->redirect(['create', 'slug' => $model->slug, 'step' => 'inventory']);
-                    break;
-                
-                default:
-                    // code...
-                    break;
+        if (($post = App::post()) != null) {
+            if ($step == 'gallery') {
+                $post['Product']['categories'] = $post['Product']['categories'] ?? [];
             }
 
-            return $this->redirect($model->viewUrl);
+            if ($step == 'photos') {
+                $post['Product']['gallery'] = $post['Product']['gallery'] ?? [];
+            }
+
+            if ($step == 'others') {
+                $post['Product']['tags'] = $post['Product']['tags'] ?? [];
+            }
+
+            if ($step == 'completed') {
+                $model->setActive();
+            }
+
+            if ($model->load($post) && $model->save()) {
+
+                switch ($step) {
+                    case 'general':
+                        App::success('Successfully Created');
+
+                        return $this->redirect(['create', 'slug' => $model->slug, 'step' => 'inventory']);
+                        break;
+
+                    case 'inventory':
+                        App::success('Inventory Created');
+
+                        return $this->redirect(['create', 'slug' => $model->slug, 'step' => 'photos']);
+                        break;
+
+                    case 'photos':
+                        App::success('Photo Gallery Created');
+
+                        return $this->redirect(['create', 'slug' => $model->slug, 'step' => 'others']);
+                        break;
+
+                    case 'others':
+                        App::success('Tags & Shipping Created');
+
+                        return $this->redirect(['create', 'slug' => $model->slug, 'step' => 'completed']);
+                        break;
+
+                    case 'completed':
+                        App::success('Product Successfully Completed');
+                        return $this->redirect($model->viewUrl);
+                        break;
+                    
+                    default:
+                        return $this->redirect($model->viewUrl);
+                        break;
+                }
+
+            }
         }
 
         $model->flashErrors();

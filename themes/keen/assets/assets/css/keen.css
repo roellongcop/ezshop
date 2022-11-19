@@ -47,3 +47,20 @@ select.kt-selectpicker.is-invalid + button.dropdown-toggle {
 select.kt-selectpicker.is-valid + button.dropdown-toggle {
     border-color: #1BC5BD !important;
 }
+
+.dropzone .dz-preview .dz-image {
+    height: auto;
+}
+
+.dropzone .dz-preview .dz-remove:hover {
+    color: #fff;
+}
+.dropzone .dz-preview .dz-remove {
+    background: #F64E60;
+    color: #fff;
+    width: fit-content;
+    margin: 0 auto;
+    margin-top: 3rem;
+    padding: 2px 5px;
+    border-radius: 4px;
+}
