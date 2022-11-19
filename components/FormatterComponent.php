@@ -3,6 +3,7 @@
 namespace app\components;
 
 use app\helpers\App;
+use app\helpers\Html;
 use app\widgets\JsonEditor;
 use yii\helpers\Inflector;
 use yii\helpers\Json;
@@ -141,5 +142,12 @@ class FormatterComponent extends \yii\i18n\Formatter
     public function asNumberFormat($num)
     {
         return number_format($num);
+    }
+
+    public function asUl($list)
+    {
+        $list = is_array($list) ? $list: [$list];
+
+        return Html::ul($list);
     }
 }
