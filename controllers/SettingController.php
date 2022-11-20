@@ -12,6 +12,7 @@ use app\models\form\setting\GeneralSettingForm;
 use app\models\form\setting\ImageSettingForm;
 use app\models\form\setting\NotificationSettingForm;
 use app\models\form\setting\SystemSettingForm;
+use app\models\form\setting\AboutUsForm;
 use app\models\form\user\MySettingForm;
 use app\models\search\SettingSearch;
 
@@ -172,6 +173,10 @@ class SettingController extends Controller
 
             case 'notification':
                 $model = new NotificationSettingForm();
+                break;
+
+            case 'about-us':
+                $model = new AboutUsForm();
                 break;
             
             default:

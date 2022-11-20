@@ -1,40 +1,55 @@
 <?php
-/* @var $form yii\bootstrap\KeenActiveForm */
-/* @var $model app\models\LoginForm */
-use app\helpers\App;
-use app\widgets\ActiveForm;
-use app\widgets\Alert;
-use app\widgets\KeenActiveForm;
-use yii\captcha\Captcha;
+/* @var $this yii\web\View */
 use app\helpers\Html;
 
-$this->title = 'Contact';
-$this->params['breadcrumbs'][] = $this->title;
-
-$publishedUrl = App::publishedUrl();
+$this->title = 'About';
+$this->params['breadcrumbs'][] = 'About';
 ?>
-<div class="d-flex flex-column flex-root">
-    <div class="login login-1 login-signin-on d-flex flex-column flex-lg-row flex-column-fluid bg-white" id="kt_login">
-        <div class="login-aside d-flex flex-column flex-row-auto" style="background-color: #7EBFDB;">
-            <div class="d-flex flex-column-auto flex-column pt-lg-40 pt-15">
-                <a href="#" class="text-center mb-15">
-                    <img src="<?= $publishedUrl . '/media/logos/logo-5.svg' ?>" alt="logo" class="h-70px" />
-                </a>
-                <h3 class="font-weight-bolder text-center font-size-h4 font-size-h1-lg text-white">Discover Amazing
-                <br />Features &amp; Possibilites</h3>
+<div class="container-fluid">
+    <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">Contact Us</span></h2>
+    <div class="row px-xl-5">
+        <div class="col-lg-7 mb-5">
+            <div class="contact-form bg-light p-30">
+                <div id="success"></div>
+                <form name="sentMessage" id="contactForm" novalidate="novalidate">
+                    <div class="control-group">
+                        <input type="text" class="form-control" id="name" placeholder="Your Name"
+                            required="required" data-validation-required-message="Please enter your name" />
+                        <p class="help-block text-danger"></p>
+                    </div>
+                    <div class="control-group">
+                        <input type="email" class="form-control" id="email" placeholder="Your Email"
+                            required="required" data-validation-required-message="Please enter your email" />
+                        <p class="help-block text-danger"></p>
+                    </div>
+                    <div class="control-group">
+                        <input type="text" class="form-control" id="subject" placeholder="Subject"
+                            required="required" data-validation-required-message="Please enter a subject" />
+                        <p class="help-block text-danger"></p>
+                    </div>
+                    <div class="control-group">
+                        <textarea class="form-control" rows="8" id="message" placeholder="Message"
+                            required="required"
+                            data-validation-required-message="Please enter your message"></textarea>
+                        <p class="help-block text-danger"></p>
+                    </div>
+                    <div>
+                        <button class="btn btn-primary py-2 px-4" type="submit" id="sendMessageButton">Send
+                            Message</button>
+                    </div>
+                </form>
             </div>
-            <div class="aside-img d-flex flex-row-fluid bgi-no-repeat bgi-position-y-bottom bgi-position-x-center" style="background-image: url(<?= $publishedUrl . '/media/svg/illustrations/payment.svg' ?>)"></div>
         </div>
-        <div class="login-content flex-row-fluid d-flex flex-column justify-content-center position-relative overflow-hidden p-7 mx-auto">
-            <div class="d-flex flex-column-fluid flex-center">
-                <div class="site-contact">
-                    <h1><?= Html::encode($this->title) ?></h1>
-                    <?= Html::ifElse(
-                        Yii::$app->session->hasFlash('contactFormSubmitted'),
-                        $this->render('contact/_submitted', ['model' => $model]),
-                        $this->render('contact/_form', ['model' => $model])
-                    ) ?>
-                </div>
+        <div class="col-lg-5 mb-5">
+            <div class="bg-light p-30 mb-30">
+                <iframe style="width: 100%; height: 250px;"
+                src="https://www.google.com/maps/place/Paagahan,+Mabitac,+Laguna/@14.4454824,121.3714155,14z/data=!3m1!4b1!4m6!3m5!1s0x3397ee6768e8a36d:0xe466853e8760b5ca!8m2!3d14.4501218!4d121.4056153!16s%2Fg%2F1tf2prwl"
+                frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+            </div>
+            <div class="bg-light p-30 mb-3">
+                <p class="mb-2"><i class="fa fa-map-marker-alt text-primary mr-3"></i>123 Street, New York, USA</p>
+                <p class="mb-2"><i class="fa fa-envelope text-primary mr-3"></i>info@example.com</p>
+                <p class="mb-2"><i class="fa fa-phone-alt text-primary mr-3"></i>+012 345 67890</p>
             </div>
         </div>
     </div>

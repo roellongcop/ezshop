@@ -32,13 +32,17 @@ class SiteController extends Controller
 
     public function actionHome()
     {
-        $this->layout = 'frontend';
         return $this->render('home');
     }
 
     public function beforeAction($action)
     {
         switch ($action->id) {
+            case 'home':
+            case 'about':
+                $this->layout = 'frontend';
+                break;
+                
             case 'login':
             case 'reset-password':
             case 'contact':

@@ -26,6 +26,8 @@ AppAsset::register($this);
 
     <?= $this->render('frontend/topbar') ?>
     <?= $this->render('frontend/navbar') ?>
+
+    <?= Html::if($this->params['breadcrumbs'] ?? '', $this->render('frontend/breadcrumbs')) ?>
     <?= $content ?>
 
 

@@ -48,6 +48,10 @@ class Setting extends ActiveRecord
             'label' => 'Notification', 
             'icon' => '<i class="far fa-file-image"></i>'
         ],
+        'about-us' => [
+            'label' => 'About Us', 
+            'icon' => '<i class="fas fa-info-circle"></i>'
+        ],
     ];
 
     public $options;

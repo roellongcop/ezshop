@@ -7,6 +7,7 @@ use app\models\form\setting\EmailSettingForm;
 use app\models\form\setting\ImageSettingForm;
 use app\models\form\setting\NotificationSettingForm;
 use app\models\form\setting\SystemSettingForm;
+use app\models\form\setting\AboutUsForm;
 
 class SettingComponent extends \yii\base\Component
 {
@@ -14,7 +15,7 @@ class SettingComponent extends \yii\base\Component
     public $email;
     public $image;
     public $notification;
-
+    public $aboutUs;
 
     public $theme;
 
@@ -26,6 +27,7 @@ class SettingComponent extends \yii\base\Component
         $this->email = new EmailSettingForm();
         $this->image = new ImageSettingForm();
         $this->notification = new NotificationSettingForm();
+        $this->aboutUs = new AboutUsForm();
 
         $this->theme = Theme::findOne($this->system->theme);
     }

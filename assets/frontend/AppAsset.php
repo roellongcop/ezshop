@@ -21,8 +21,8 @@ class AppAsset extends AssetBundle
     public $sourcePath = '@app/assets/frontend';
 
     public $css = [
-        'https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap',
-        'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css',
+        'googleapis/font-Roboto.css',
+        // 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css',
         'lib/animate/animate.min.css',
         'lib/owlcarousel/assets/owl.carousel.min.css',
         'css/style.css',
