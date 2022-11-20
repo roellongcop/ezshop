@@ -25,11 +25,12 @@ $activePage = $this->params['activePage'] ?? 'home';
                             <a href="" class="dropdown-item">Baby's Dresses</a>
                         </div>
                     </div> -->
-
-                    <?= Html::foreach(ProductCategory::dropdown('id', 'name'), function($category) {
-                        return YiiHtml::a($category, ['site/categories', 'category' => $category], [
-                            'class' => 'nav-item nav-link'
-                        ]);
+                    <?= Html::if(ProductCategory::dropdown('id', 'name'), function($categories) {
+                        return Html::foreach($categories, function($category) {
+                            return YiiHtml::a($category, ['site/shop', 'category' => $category], [
+                                'class' => 'nav-item nav-link'
+                            ]);
+                        });
                     }) ?>
                 </div>
             </nav>
@@ -48,9 +49,16 @@ $activePage = $this->params['activePage'] ?? 'home';
                         <?= YiiHtml::a('Home', ['site/home'], [
                             'class' => 'nav-item nav-link' . ($activePage == 'home' ? ' active': '')
                         ]) ?>
-                        <a href="shop.html" class="nav-item nav-link">Shop</a>
-                        <a href="detail.html" class="nav-item nav-link">Cart</a>
-                        <a href="detail.html" class="nav-item nav-link">Checkout</a>
+                        <?= YiiHtml::a('Shop', ['site/shop'], [
+                            'class' => 'nav-item nav-link' . ($activePage == 'shop' ? ' active': '')
+                        ]) ?>
+                        <?= YiiHtml::a('Cart', ['site/cart'], [
+                            'class' => 'nav-item nav-link' . ($activePage == 'cart' ? ' active': '')
+                        ]) ?>
+
+                        <?= YiiHtml::a('Checkout', ['site/checkout'], [
+                            'class' => 'nav-item nav-link' . ($activePage == 'checkout' ? ' active': '')
+                        ]) ?>
                     </div>
                     <div class="navbar-nav ml-auto py-0 d-none d-lg-block">
                         <a href="" class="btn px-0">

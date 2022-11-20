@@ -16,7 +16,6 @@ use yii\helpers\Html as YiiHtml;
                 <?= YiiHtml::a('Contact', ['site/contact'], [
                     'class' => 'text-body mr-3'
                 ]) ?>
-               
             </div>
         </div>
         <div class="col-lg-6 text-center text-lg-right">
@@ -24,10 +23,10 @@ use yii\helpers\Html as YiiHtml;
                 <div class="btn-group">
                     <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">My Account</button>
                     <div class="dropdown-menu dropdown-menu-right">
-                        <button class="dropdown-item" type="button">Orders History</button>
+                        <button class="dropdown-item" type="button">My Orders History</button>
                         <button class="dropdown-item" type="button">My Wishlist</button>
-                        <button class="dropdown-item" type="button">Product Reviews</button>
-                        <button class="dropdown-item" type="button">Account Details</button>
+                        <button class="dropdown-item" type="button">My Product Reviews</button>
+                        <button class="dropdown-item" type="button">My Account Details</button>
                     </div>
                 </div>
             </div>
