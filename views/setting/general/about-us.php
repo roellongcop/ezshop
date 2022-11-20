@@ -10,7 +10,7 @@ $this->registerJsFile(App::publishedUrl("/plugins/custom/tinymce/tinymce.bundle.
 
 ?>
 <?php $form = ActiveForm::begin(['id' => 'setting-general-notification-form']); ?>
-    <h4 class="mb-10 font-weight-bold text-dark">Notification</h4>
+    <h4 class="mb-10 font-weight-bold text-dark">About Us</h4>
 	<div class="row">
 		<div class="col-md-6">
 			<?= $form->field($model, 'owner')->textInput(['maxlength' => true]) ?>

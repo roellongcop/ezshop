@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = 'About Us';
         </div>
         <div class="col-lg-5 mb-5">
             <div class="bg-light p-30 mb-30">
-                <?= Html::image(App::setting('image')->primary_logo) ?>
+                <?= Html::image(App::setting('image')->primary_logo, [], ['class' => 'img-fluid']) ?>
             </div>
             <div class="bg-light p-30 mb-3">
                 <p class="mb-2">
