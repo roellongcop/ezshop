@@ -154,6 +154,11 @@ class AccessComponent extends Component
 	        'link' => '/visitor', 
 	        'icon' => '<i class="fa fa-cog"></i>',
 	    ],
+	    '8' => [
+	        'label' => 'Emails', 
+	        'link' => '/email', 
+	        'icon' => '<i class="fa fa-cog"></i>',
+	    ],
 	];
 	
 	public $searchModels;

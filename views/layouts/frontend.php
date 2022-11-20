@@ -6,6 +6,7 @@ use app\assets\frontend\AppAsset;
 use app\helpers\App;
 use app\helpers\Url;
 use app\helpers\Html;
+use app\widgets\Alert;
 
 AppAsset::register($this);
 ?>
@@ -26,7 +27,9 @@ AppAsset::register($this);
 
     <?= $this->render('frontend/topbar') ?>
     <?= $this->render('frontend/navbar') ?>
-
+    <div class="container-fluid">
+        <?= Alert::widget() ?>
+    </div>
     <?= Html::if($this->params['breadcrumbs'] ?? '', $this->render('frontend/breadcrumbs')) ?>
     <?= $content ?>
 

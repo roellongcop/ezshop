@@ -5,7 +5,7 @@ namespace app\controllers;
 use Yii;
 use app\helpers\App;
 use app\helpers\Html;
-use app\models\VisitLog;
+use app\models\Email;
 use app\models\form\ContactForm;
 use app\models\form\LoginForm;
 use app\models\form\PasswordResetForm;
@@ -151,8 +151,8 @@ class SiteController extends Controller
      */
     public function actionContact()
     {
-        $model = new ContactForm();
-        if ($model->load(App::post()) && $model->contact()) {
+        $model = new Email();
+        if ($model->load(App::post()) && $model->save()) {
             App::success('Thank you for contacting us. We will respond to you as soon as possible.');
             return $this->refresh();
         }
