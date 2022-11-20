@@ -8,6 +8,7 @@ use app\models\form\setting\ImageSettingForm;
 use app\models\form\setting\NotificationSettingForm;
 use app\models\form\setting\SystemSettingForm;
 use app\models\form\setting\AboutUsForm;
+use app\models\form\setting\SocialMediaForm;
 
 class SettingComponent extends \yii\base\Component
 {
@@ -16,6 +17,7 @@ class SettingComponent extends \yii\base\Component
     public $image;
     public $notification;
     public $aboutUs;
+    public $socialMedia;
 
     public $theme;
 
@@ -28,6 +30,7 @@ class SettingComponent extends \yii\base\Component
         $this->image = new ImageSettingForm();
         $this->notification = new NotificationSettingForm();
         $this->aboutUs = new AboutUsForm();
+        $this->socialMedia = new SocialMediaForm();
 
         $this->theme = Theme::findOne($this->system->theme);
     }

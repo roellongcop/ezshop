@@ -3,6 +3,7 @@
 use app\widgets\Autocomplete;
 use app\helpers\App;
 use app\helpers\Url;
+use app\helpers\Html;
 use yii\helpers\Html as YiiHtml;
 ?>
 <!-- Topbar Start -->
@@ -23,10 +24,28 @@ use yii\helpers\Html as YiiHtml;
                 <div class="btn-group">
                     <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">My Account</button>
                     <div class="dropdown-menu dropdown-menu-right">
-                        <button class="dropdown-item" type="button">My Orders History</button>
-                        <button class="dropdown-item" type="button">My Wishlist</button>
-                        <button class="dropdown-item" type="button">My Product Reviews</button>
-                        <button class="dropdown-item" type="button">My Account Details</button>
+                        <?= YiiHtml::a('My Orders History', ['site/my-orders'], [
+                            'class' => 'dropdown-item'
+                        ]) ?>
+                        <?= YiiHtml::a('My Wishlist', ['site/my-wishlist'], [
+                            'class' => 'dropdown-item'
+                        ]) ?>
+                        <?= YiiHtml::a('My Product Reviews', ['site/my-reviews'], [
+                            'class' => 'dropdown-item'
+                        ]) ?>
+                        <?= YiiHtml::a('My Account Details', ['site/my-account'], [
+                            'class' => 'dropdown-item'
+                        ]) ?>
+
+                        <?= Html::ifElse(App::isLogin(), function() {
+                            return YiiHtml::a('Logout', ['site/logout'], [
+                                'class' => 'dropdown-item'
+                            ]);
+                        }, function() {
+                            return YiiHtml::a('Login', ['site/login'], [
+                                'class' => 'dropdown-item'
+                            ]);
+                        }) ?>
                     </div>
                 </div>
             </div>

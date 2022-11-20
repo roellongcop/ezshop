@@ -2,6 +2,8 @@
 
 use app\helpers\App;
 use app\helpers\Url;
+use app\helpers\Html;
+
 ?>
 <!-- Footer Start -->
 <div class="container-fluid bg-dark text-secondary mt-5 pt-5">
@@ -56,45 +58,58 @@ use app\helpers\Url;
                     <h5 class="text-secondary text-uppercase mb-4">My Account</h5>
 
                     <div class="d-flex flex-column justify-content-start">
-                        <a class="text-secondary mb-2" href="#">
+                        <a class="text-secondary mb-2" href="<?= Url::toRoute(['site/my-orders']) ?>">
                             <i class="fa fa-angle-right mr-2"></i>
-                            Orders History
+                            My Orders History
                         </a>
-                        <a class="text-secondary mb-2" href="#">
+                        <a class="text-secondary mb-2" href="<?= Url::toRoute(['site/my-wishlist']) ?>">
                             <i class="fa fa-angle-right mr-2"></i>
                             My Wishlist
                         </a>
-                        <a class="text-secondary mb-2" href="#">
+                        <a class="text-secondary mb-2" href="<?= Url::toRoute(['site/my-reviews']) ?>">
                             <i class="fa fa-angle-right mr-2"></i>
-                            Product Reviews
+                            My Product Reviews
                         </a>
-                        <a class="text-secondary mb-2" href="#">
+                        <a class="text-secondary mb-2" href="<?= Url::toRoute(['site/my-account']) ?>">
                             <i class="fa fa-angle-right mr-2"></i>
-                            Account Details
+                            My Account Details
                         </a>
-                        <a class="text-secondary mb-2" href="#">
-                            <i class="fa fa-angle-right mr-2"></i>
-                            Login
-                        </a>
+                        <?= Html::ifElse(App::isLogin(), function() {
+                            $url = Url::toRoute(['site/logout']);
+
+                            return <<< HTML
+                                <a class="text-secondary mb-2" href="{$url}">
+                                    <i class="fa fa-angle-right mr-2"></i>
+                                    Logout
+                                </a>
+                            HTML;
+                        }, function() {
+                            $url = Url::toRoute(['site/login']);
+                            return <<< HTML
+                                <a class="text-secondary mb-2" href="{$url}">
+                                    <i class="fa fa-angle-right mr-2"></i>
+                                    Login
+                                </a>
+                            HTML;
+                        }) ?>
+                        
                     </div>
                 </div>
                 <div class="col-md-4 mb-5">
-                    <h5 class="text-secondary text-uppercase mb-4">Newsletter</h5>
-                    <p>Subscribe to our newsletter to get the latest news and updates from our shop.</p>
-                    <form action="">
-                        <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Your Email Address">
-                            <div class="input-group-append">
-                                <button class="btn btn-primary">Sign Up</button>
-                            </div>
-                        </div>
-                    </form>
-                    <h6 class="text-secondary text-uppercase mt-4 mb-3">Follow Us</h6>
+                    <h5 class="text-secondary text-uppercase mb-4">FOLLOW US</h5>
                     <div class="d-flex">
-                        <a class="btn btn-primary btn-square mr-2" href="#"><i class="fab fa-twitter"></i></a>
-                        <a class="btn btn-primary btn-square mr-2" href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a class="btn btn-primary btn-square mr-2" href="#"><i class="fab fa-linkedin-in"></i></a>
-                        <a class="btn btn-primary btn-square" href="#"><i class="fab fa-instagram"></i></a>
+                        <a target="_blank" class="btn btn-primary btn-square mr-2" href="<?= App::setting('socialMedia')->twitter ?>">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a target="_blank" class="btn btn-primary btn-square mr-2" href="<?= App::setting('socialMedia')->facebook ?>">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a target="_blank" class="btn btn-primary btn-square mr-2" href="<?= App::setting('socialMedia')->linkedin ?>">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a target="_blank" class="btn btn-primary btn-square" href="<?= App::setting('socialMedia')->instagram ?>">
+                            <i class="fab fa-instagram"></i>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -104,7 +119,7 @@ use app\helpers\Url;
         <div class="col-md-6 px-xl-0">
             <p class="mb-md-0 text-center text-md-left text-secondary">
                 &copy; 
-                <a class="text-primary" href="#">
+                <a class="text-primary" href="<?= Url::toRoute(['site/home']) ?>">
                    <?= App::setting('aboutUs')->shop_name ?>                 
                 </a>. All Rights Reserved. 
             </p>

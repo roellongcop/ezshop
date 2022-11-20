@@ -9,7 +9,7 @@ $this->registerJsFile(App::publishedUrl("/plugins/custom/tinymce/tinymce.bundle.
 ]);
 
 ?>
-<?php $form = ActiveForm::begin(['id' => 'setting-general-notification-form']); ?>
+<?php $form = ActiveForm::begin(['id' => 'setting-general-about-us-form']); ?>
     <h4 class="mb-10 font-weight-bold text-dark">About Us</h4>
 	<div class="row">
 		<div class="col-md-6">

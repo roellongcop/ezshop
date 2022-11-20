@@ -52,6 +52,10 @@ class Setting extends ActiveRecord
             'label' => 'About Us', 
             'icon' => '<i class="fas fa-info-circle"></i>'
         ],
+        'social-media' => [
+            'label' => 'Social Media', 
+            'icon' => '<i class="fas fa-users"></i>'
+        ],
     ];
 
     public $options;
