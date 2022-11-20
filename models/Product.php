@@ -435,5 +435,12 @@ class Product extends ActiveRecord
             ->limit($limit)
             ->all();
     }
+
+    public static function uniqueSizes()
+    {
+        return App::formatter()->asUniqueArrayFlatten(
+            self::dropdown('name', 'sizes')
+        );
+    }
 }
 

@@ -150,4 +150,26 @@ class FormatterComponent extends \yii\i18n\Formatter
 
         return Html::ul($list);
     }
+
+    public function asArrayFlatten($array) 
+    { 
+        if (!is_array($array)) { 
+            return FALSE; 
+        } 
+        $result = array(); 
+        foreach ($array as $key => $value) { 
+            if (is_array($value)) { 
+                $result = array_merge($result, $this->asArrayFlatten($value)); 
+            } 
+            else { 
+                $result[$key] = $value; 
+            } 
+        } 
+        return $result; 
+    } 
+
+    public function asUniqueArrayFlatten($array) 
+    { 
+        return array_unique($this->asArrayFlatten($array));
+    } 
 }
