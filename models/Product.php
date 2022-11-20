@@ -362,10 +362,10 @@ class Product extends ActiveRecord
             ->all();
     }
 
-    public function getProductCategoryPhotoLink()
+    public function getProductCategoryImageUrl()
     {
         if (($productCategory = $this->productCategory) != null) {
-            return $productCategory->photoLink;
+            return $productCategory->imageUrl;
         }
     }
 
@@ -390,6 +390,50 @@ class Product extends ActiveRecord
         }
 
         return abs((($this->regular_price - $this->sale_price) * 100) / $this->regular_price);
+    }
+
+    public function getImageUrl($w=100)
+    {
+        return Url::image($this->image, ['w' => $w]);
+    }
+
+    public function getIsOnSale()
+    {
+        return $this->regular_price > $this->sale_price;
+    }
+
+    public function getRegularPrice()
+    {
+        return number_format($this->regular_price);
+    }
+
+    public function getSalePrice()
+    {
+        return number_format($this->sale_price);
+    }
+
+    public function getDisplayPrice()
+    {
+        if ($this->isOnSale) {
+            return <<< HTML
+                <h5>₱ {$this->salePrice}</h5>
+                <h6 class="text-muted ml-2">
+                    <del>₱ {$this->regularPrice}</del>
+                </h6>
+            HTML;
+        }
+
+        return Html::tag('h5', '₱ ' . $this->regularPrice);
+    }
+
+    public static function recent($limit=8)
+    {
+        return self::find()
+            ->active()
+            ->orderBy(['id' => SORT_DESC])
+            ->addOrderBy(new Expression('rand()'))
+            ->limit($limit)
+            ->all();
     }
 }
 

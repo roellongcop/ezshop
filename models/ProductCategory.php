@@ -112,7 +112,7 @@ class ProductCategory extends Setting
         return parent::dropdown($key, $value, $condition, $map, $limit);
     }
 
-    public function getPhotoLink()
+    public function getImageUrl()
     {
         return Url::image($this->files);
     }
@@ -127,10 +127,45 @@ class ProductCategory extends Setting
         return StringHelper::truncate($this->description, 100);
     }
 
+    public function getProducts()
+    {
+        return Product::find()
+            ->where(['LIKE', 'categories', $this->name])
+            ->active()
+            ->all();
+    }
+
+    public function getTotalProducts()
+    {
+        return Product::find()
+            ->where(['LIKE', 'categories', $this->name])
+            ->active()
+            ->count();
+    }
+
+    public function getProduct()
+    {
+        if (($products = $this->products) != null) {
+            $count = count($products);
+
+            return $products[rand(0, $count-1)];
+        }
+    }
+
+    public function getProductImageUrl($w=100)
+    {
+        if (($product = $this->product) != null) {
+            return $product->getImageUrl($w);
+        }
+
+        return Url::image(null, ['w' => $w]);
+    }
+
     public static function random($limit=3)
     {
         return self::find()
             ->where(['<>', 'files', ''])
+            ->active()
             ->orderBy(new Expression('rand()'))
             ->limit($limit)
             ->all();
