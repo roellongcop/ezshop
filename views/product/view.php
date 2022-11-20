@@ -99,11 +99,19 @@ $this->params['wrapCard'] = false;
                 'title' => 'Gallery'
             ]) ?>
                 <div class="row">
-                    <?= Html::foreach($model->imageFiles, function($file) {
-                        return Html::tag('div', Html::image($file, ['w' => 200], ['class' => 'img-thumbnail']), [
-                            'class' => 'col-md-4'
-                        ]);
-                    }) ?>
+                    <?= Html::ifElse($model->imageFiles, function($files) {
+                        return Html::tag(
+                            'div', 
+                            Html::foreach($files, function($file) {
+                                return Html::tag('div', Html::image($file, ['w' => 200], ['class' => 'img-thumbnail']), [
+                                    'class' => 'col-md-4'
+                                ]);
+                            }), 
+                            [
+                                'class' => 'row'
+                            ]
+                        );
+                    }, "No Photo Gallery") ?>
                 </div>
             <?php $this->endContent() ?>
         </div>

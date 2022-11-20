@@ -11,6 +11,7 @@ use app\models\form\ContactForm;
 use app\models\form\LoginForm;
 use app\models\form\PasswordResetForm;
 use yii\web\Response;
+use app\models\search\ProductSearch;
 
 class SiteController extends Controller
 {
@@ -26,7 +27,8 @@ class SiteController extends Controller
                 'home', 
                 'find-products-by-keywords',
                 'about',
-                'contact'
+                'contact',
+                'shop'
             ]
         ];
         $behaviors['VerbFilter'] = [
@@ -58,6 +60,7 @@ class SiteController extends Controller
             case 'home':
             case 'about':
             case 'contact':
+            case 'shop':
                 $this->layout = 'frontend';
                 break;
                 
@@ -186,5 +189,17 @@ class SiteController extends Controller
     public function actionAbout()
     {
         return $this->render('about');
+    }
+
+    public function actionShop()
+    {
+        $searchModel = new ProductSearch();
+        $dataProvider = $searchModel->search(['ProductSearch' => App::queryParams()]);
+        $dataProvider->pagination->pageSize = 9;
+
+        return $this->render('shop', [
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+        ]);
     }
 }

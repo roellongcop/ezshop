@@ -12,7 +12,7 @@ use yii\base\InvalidConfigException;
 use yii\base\Widget;
 use yii\data\Pagination;
 use yii\helpers\ArrayHelper;
-use app\helpers\Html;
+use yii\helpers\Html;
 
 /**
  * LinkPager displays a list of hyperlinks that lead to different pages of target.
@@ -259,7 +259,6 @@ class LinkPager extends Widget
             return Html::tag($linkWrapTag, Html::tag($tag, $label, $disabledItemOptions), $options);
         }
         
-
         return Html::a($label, $this->pagination->createUrl($page), $linkOptions);
         return Html::tag($linkWrapTag, Html::a($label, $this->pagination->createUrl($page), $linkOptions), $options);
     }

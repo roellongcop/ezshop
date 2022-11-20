@@ -16,6 +16,8 @@ class ProductSearch extends Product
     public $date_range;
     public $pagination;
 
+    public $sort;
+
     public $searchTemplate = 'product/_search';
     public $searchAction = ['product/index'];
     public $searchLabel = 'Product';
@@ -29,7 +31,7 @@ class ProductSearch extends Product
             [['id', 'quantity', 'low_stock_threshold', 'high_stock_threshold', 'stock_threshold_status', 'created_by', 'updated_by'], 'integer'],
             [['name', 'categories', 'description', 'tags', 'image', 'gallery', 'sku', 'token', 'slug', 'created_at', 'updated_at'], 'safe'],
             [['regular_price', 'sale_price', 'added_shipping_fee'], 'number'],
-            [['keywords', 'pagination', 'date_range', 'record_status'], 'safe'],
+            [['keywords', 'pagination', 'date_range', 'record_status', 'sort'], 'safe'],
             [['keywords'], 'trim'],
         ];
     }
@@ -126,5 +128,12 @@ class ProductSearch extends Product
         $query->daterange($this->date_range);
 
         return $dataProvider;
+    }
+
+    public function getSortLabel()
+    {
+        $sort = App::params('product_sorting')[$this->sort] ?? '';
+
+        return $sort ? $sort['label']: 'Sorting';
     }
 }
