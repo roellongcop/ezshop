@@ -7,6 +7,7 @@ use yii\helpers\Inflector;
 class BaseWidget extends \yii\base\Widget
 {
     public $widgetFunction;
+    public $widgetId;
 
     public function init() 
     {
@@ -26,7 +27,7 @@ class BaseWidget extends \yii\base\Widget
 
     public function render($view, $params = [])
     {
-        $params['widgetId'] = $this->getId();
+        $params['widgetId'] = $this->widgetId ?: $this->getId();
         $params['widgetFunction'] = "widget{$this->widgetFunction}";
         return parent::render($view, $params);
     }

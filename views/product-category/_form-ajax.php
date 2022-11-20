@@ -5,7 +5,8 @@ use app\widgets\ActiveForm;
 ?>
 
 <?php $form = ActiveForm::begin([
-    'id' => 'product-category-form-ajax',
+    'id' => 'form-' . time(),
+    'addClass' => 'product-category-form-ajax',
     'enableAjaxValidation' => true,
     'validationUrl' => ['product-category/create', 'ajaxValidate' => true]
 ]); ?>
@@ -13,6 +14,7 @@ use app\widgets\ActiveForm;
     <div class="row">
         <div class="col-md-12">
             <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'value')->textarea(['rows' => 8]) ?>
         </div>
     </div>
     <div class="form-group float-right">

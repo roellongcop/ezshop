@@ -19,7 +19,7 @@ $('.btn-add-new-category').click(function() {
 });
 
 
-$(document).on('beforeSubmit', 'form#product-category-form-ajax', function(e) {
+$(document).on('beforeSubmit', 'form.product-category-form-ajax', function(e) {
 	e.preventDefault();
 	let form = $(this);
 	KTApp.block('#modal-add-category .modal-body', {

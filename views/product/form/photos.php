@@ -18,6 +18,8 @@ use app\models\File;
 <div class="my-2"></div>
 
 <?= ImageGallery::widget([
+    'finalCropWidth' => 500,
+    'finalCropHeight' => 500,
     'tag' => 'Product',
     'buttonTitle' => 'Choose Main Image',
     'model' => $model,

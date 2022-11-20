@@ -2,6 +2,10 @@
 
 namespace app\models;
 
+use app\helpers\Html;
+use app\helpers\Url;
+use app\helpers\StringHelper;
+use yii\db\Expression;
 
 class ProductCategory extends Setting
 {
@@ -19,8 +23,13 @@ class ProductCategory extends Setting
     {
         $columns = parent::gridColumns();
 
-        $columns['description'] = $columns['value'];
+        $columns['photo'] = [
+            'attribute' => 'files',
+            'format' => 'raw',
+            'label' => 'Photo'
+        ];
 
+        $columns['description'] = $columns['value'];
         unset($columns['value']);
 
         return $columns;
@@ -33,6 +42,21 @@ class ProductCategory extends Setting
         $rules[] = ['name', 'validateName'];
 
         return $rules;
+    }
+
+
+    public function detailColumns()
+    {
+        $columns = parent::detailColumns();
+        $columns['photo'] = [
+            'label' => 'Photo',
+            'format' => 'raw',
+            'value' => function($model) {
+                return Html::image($model->files, ['w' => 200], ['class' => 'img-thumbnail']);
+            }
+        ];
+
+        return $columns;
     }
 
     public function init()
@@ -86,5 +110,29 @@ class ProductCategory extends Setting
         $condition['type'] = parent::TYPE_PRODUCT_CATEGORY;;
 
         return parent::dropdown($key, $value, $condition, $map, $limit);
+    }
+
+    public function getPhotoLink()
+    {
+        return Url::image($this->files);
+    }
+
+    public function getDescription()
+    {
+        return $this->value;
+    }
+
+    public function getTruncatedDescription()
+    {
+        return StringHelper::truncate($this->description, 100);
+    }
+
+    public static function random($limit=3)
+    {
+        return self::find()
+            ->where(['<>', 'files', ''])
+            ->orderBy(new Expression('rand()'))
+            ->limit($limit)
+            ->all();
     }
 }

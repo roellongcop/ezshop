@@ -9,11 +9,15 @@ use app\widgets\RecordStatusInput;
 
 class ActiveForm extends \yii\widgets\ActiveForm
 {
+	public $addClass;
+
 	public function init()
 	{
 		parent::init();
 
 		$currentTheme = App::identity('currentTheme');
+
+		$this->addClass = 'form ' . $this->addClass;
 
 		if ($currentTheme) {
 			if (in_array($currentTheme->slug, Theme::KEEN)) {
@@ -21,7 +25,7 @@ class ActiveForm extends \yii\widgets\ActiveForm
 				$this->successCssClass = 'is-valid';
 				$this->validationStateOn = 'input';
 
-				$this->options['class'] = 'form';
+				$this->options['class'] = $this->addClass;
 				$this->options['novalidate'] = 'novalidate';
 			}
 		}

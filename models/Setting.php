@@ -111,6 +111,7 @@ class Setting extends ActiveRecord
                 self::TYPE_PRODUCT_CATEGORY,
             ]],
             [['name'], 'unique'],
+            [['files'], 'safe']
         ]);
     }
 

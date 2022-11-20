@@ -8,6 +8,7 @@ use app\helpers\ArrayHelper;
 use app\helpers\Url;
 use app\helpers\Html;
 use app\widgets\Anchor;
+use yii\db\Expression;
 
 /**
  * This is the model class for table "{{%products}}".
@@ -350,4 +351,45 @@ class Product extends ActiveRecord
             'class' => 'badge badge-' . $status['class']
         ]): '';
     }
+
+    public static function random($limit=2)
+    {
+        return self::find()
+            ->where('`regular_price` > `sale_price`')
+            ->active()
+            ->orderBy(new Expression('rand()'))
+            ->limit($limit)
+            ->all();
+    }
+
+    public function getProductCategoryPhotoLink()
+    {
+        if (($productCategory = $this->productCategory) != null) {
+            return $productCategory->photoLink;
+        }
+    }
+
+    public function getProductCategory()
+    {
+        if (($productCategories = $this->productCategories) != null) {
+            $count = count($productCategories);
+
+            return $productCategories[rand(0, $count - 1)];
+        }
+    }
+
+    public function getProductCategories()
+    {
+        return $this->hasMany(ProductCategory::class, ['name' => 'categories']);
+    }
+
+    public function getSalePercentage()
+    {
+        if ($this->regular_price <= $this->sale_price) {
+            return 0;
+        }
+
+        return abs((($this->regular_price - $this->sale_price) * 100) / $this->regular_price);
+    }
 }
+
