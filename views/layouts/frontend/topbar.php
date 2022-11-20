@@ -1,5 +1,8 @@
 <?php
 
+use app\widgets\Autocomplete;
+use app\helpers\App;
+use app\helpers\Url;
 use yii\helpers\Html as YiiHtml;
 ?>
 <!-- Topbar Start -->
@@ -48,20 +51,28 @@ use yii\helpers\Html as YiiHtml;
             </a>
         </div>
         <div class="col-lg-4 col-6 text-left">
-            <form action="">
-                <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Search for products">
-                    <div class="input-group-append">
-                        <span class="input-group-text bg-transparent text-primary">
-                            <i class="fa fa-search"></i>
-                        </span>
-                    </div>
-                </div>
+            <form action="<?= Url::toRoute(['site/shop']) ?>" method="get">
+                <?= Autocomplete::widget([
+                    'canRoute' => true,
+                    'url' => Url::toRoute(['site/find-products-by-keywords']),
+                    'input' => <<< HTML
+                        <div class="input-group">
+                            <input type="text" name="keywords" class="form-control" placeholder="Search for products">
+                            <div class="input-group-append">
+                                <span class="input-group-text bg-transparent text-primary">
+                                    <i class="fa fa-search"></i>
+                                </span>
+                            </div>
+                        </div>
+                    HTML
+                ]) ?>
             </form>
         </div>
         <div class="col-lg-4 col-6 text-right">
             <p class="m-0">Customer Service</p>
-            <h5 class="m-0">+012 345 6789</h5>
+            <h5 class="m-0">
+                <?= App::setting('aboutUs')->contact_no ?>
+            </h5>
         </div>
     </div>
 </div>

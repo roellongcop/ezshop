@@ -11,6 +11,7 @@ class Autocomplete extends BaseWidget
     public $url;
     public $data = [];
     public $submitOnclick = true;
+    public $canRoute;
 
     public function init() 
     {
@@ -35,7 +36,7 @@ class Autocomplete extends BaseWidget
             'url' => $this->url,
             'data' => $this->data,
             'submitOnclick' => $this->submitOnclick ? 'true': 'false',
-            'ajax' => $this->ajax()
+            'ajax' => $this->canRoute === null ? $this->ajax(): $this->canRoute
         ]);
     }
 }
