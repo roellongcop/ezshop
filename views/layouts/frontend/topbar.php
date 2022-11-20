@@ -7,15 +7,13 @@ use yii\helpers\Html as YiiHtml;
     <div class="row bg-secondary py-1 px-xl-5">
         <div class="col-lg-6 d-none d-lg-block">
             <div class="d-inline-flex align-items-center h-100">
-                <?= YiiHtml::a('About', ['site/about'], [
+                <?= YiiHtml::a('About Us', ['site/about'], [
                     'class' => 'text-body mr-3'
                 ]) ?>
-                <?= YiiHtml::a('About', ['site/contact'], [
+                <?= YiiHtml::a('Contact', ['site/contact'], [
                     'class' => 'text-body mr-3'
                 ]) ?>
-                <?= YiiHtml::a('About', ['site/faqs'], [
-                    'class' => 'text-body mr-3'
-                ]) ?>
+               
             </div>
         </div>
         <div class="col-lg-6 text-center text-lg-right">

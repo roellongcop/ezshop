@@ -1,9 +1,10 @@
 <?php
 /* @var $this yii\web\View */
+use app\helpers\App;
 use app\helpers\Html;
 
-$this->title = 'About';
-$this->params['breadcrumbs'][] = 'About';
+$this->title = 'Contact';
+$this->params['breadcrumbs'][] = 'Contact';
 ?>
 <div class="container-fluid">
     <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">Contact Us</span></h2>
@@ -42,14 +43,21 @@ $this->params['breadcrumbs'][] = 'About';
         </div>
         <div class="col-lg-5 mb-5">
             <div class="bg-light p-30 mb-30">
-                <iframe style="width: 100%; height: 250px;"
-                src="https://www.google.com/maps/place/Paagahan,+Mabitac,+Laguna/@14.4454824,121.3714155,14z/data=!3m1!4b1!4m6!3m5!1s0x3397ee6768e8a36d:0xe466853e8760b5ca!8m2!3d14.4501218!4d121.4056153!16s%2Fg%2F1tf2prwl"
-                frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+                <?= App::setting('aboutUs')->mapIframe ?>
             </div>
             <div class="bg-light p-30 mb-3">
-                <p class="mb-2"><i class="fa fa-map-marker-alt text-primary mr-3"></i>123 Street, New York, USA</p>
-                <p class="mb-2"><i class="fa fa-envelope text-primary mr-3"></i>info@example.com</p>
-                <p class="mb-2"><i class="fa fa-phone-alt text-primary mr-3"></i>+012 345 67890</p>
+                <p class="mb-2">
+                    <i class="fa fa-map-marker-alt text-primary mr-3"></i>
+                    <?= App::setting('aboutUs')->address ?>
+                </p>
+                <p class="mb-2">
+                    <i class="fa fa-envelope text-primary mr-3"></i>
+                    <?= App::setting('email')->admin_email ?>
+                </p>
+                <p class="mb-2">
+                    <i class="fa fa-phone-alt text-primary mr-3"></i>
+                    <?= App::setting('aboutUs')->contact_no ?>
+                </p>
             </div>
         </div>
     </div>

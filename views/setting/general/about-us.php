@@ -36,6 +36,12 @@ $this->registerJsFile(App::publishedUrl("/plugins/custom/tinymce/tinymce.bundle.
 			]) ?>
 		</div>
 	</div>
+
+	<div class="row mt-10">
+		<div class="col-md-12">
+			<?= $form->field($model, 'mapIframe')->textarea(['rows' => 8]) ?>
+		</div>
+	</div>
 	<div class="form-group"> <br>
 		<?= ActiveForm::buttons() ?>
 	</div>

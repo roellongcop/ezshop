@@ -40,6 +40,7 @@ class SiteController extends Controller
         switch ($action->id) {
             case 'home':
             case 'about':
+            case 'contact':
                 $this->layout = 'frontend';
                 break;
                 
