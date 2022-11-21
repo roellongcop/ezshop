@@ -3,6 +3,12 @@
 return [
     'user.passwordResetTokenExpire' => 3600,
     'pagination' => [25 => 25, 50 => 50, 75 => 75, 100 => 100],
+    'customer_links' => [
+        ['label' => 'My Orders History', 'url' => ['site/my-orders'], 'icon' => 'fa fa-user'],
+        ['label' => 'My Wishlist', 'url' => ['site/my-wishlist'], 'icon' => 'fa fa-user'],
+        ['label' => 'My Product Reviews', 'url' => ['site/my-reviews'], 'icon' => 'fa fa-user'],
+        ['label' => 'My Account Details', 'url' => ['site/my-account'], 'icon' => 'fa fa-user'],
+    ],
     'price_filter' => [
         0 => 100,
         100 => 500,

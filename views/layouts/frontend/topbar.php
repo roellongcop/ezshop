@@ -28,19 +28,9 @@ use yii\helpers\Html as YiiHtml;
                             App::isLogin(), 
                             function() {
                                 return implode('', [
-                                    YiiHtml::a('My Orders History', ['site/my-orders'], [
-                                        'class' => 'dropdown-item'
-                                    ]),
-                                    YiiHtml::a('My Wishlist', ['site/my-wishlist'], [
-                                        'class' => 'dropdown-item'
-                                    ]),
-                                    YiiHtml::a('My Product Reviews', ['site/my-reviews'], [
-                                        'class' => 'dropdown-item'
-                                    ]),
-                                    YiiHtml::a('My Account Details', ['site/my-account'], [
-                                        'class' => 'dropdown-item'
-                                    ]),
-
+                                    Html::foreach(App::params('customer_links'), function($link) {
+                                        return YiiHtml::a($link['label'], $link['url'], ['class' => 'dropdown-item']) ;
+                                    }),
                                     Html::beginForm(['site/logout'], 'post'),
                                     Html::submitButton('Sign Out', ['class' => 'dropdown-item']),
                                     Html::endForm()

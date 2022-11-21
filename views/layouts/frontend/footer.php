@@ -3,7 +3,7 @@
 use app\helpers\App;
 use app\helpers\Url;
 use app\helpers\Html;
-
+use yii\helpers\Html as YiiHtml;
 ?>
 <!-- Footer Start -->
 <div class="container-fluid bg-dark text-secondary mt-5 pt-5">
@@ -48,6 +48,10 @@ use app\helpers\Html;
                             <i class="fa fa-angle-right mr-2"></i>
                             Checkout
                         </a>
+                        <a class="text-secondary mb-2" href="<?= Url::toRoute(['site/about']) ?>">
+                            <i class="fa fa-angle-right mr-2"></i>
+                            About Us
+                        </a> 
                         <a class="text-secondary mb-2" href="<?= Url::toRoute(['site/contact']) ?>">
                             <i class="fa fa-angle-right mr-2"></i>
                             Contact Us
@@ -58,29 +62,17 @@ use app\helpers\Html;
                     <h5 class="text-secondary text-uppercase mb-4">My Account</h5>
 
                     <div class="d-flex flex-column justify-content-start">
-                        <a class="text-secondary mb-2" href="<?= Url::toRoute(['site/my-orders']) ?>">
-                            <i class="fa fa-angle-right mr-2"></i>
-                            My Orders History
-                        </a>
-                        <a class="text-secondary mb-2" href="<?= Url::toRoute(['site/my-wishlist']) ?>">
-                            <i class="fa fa-angle-right mr-2"></i>
-                            My Wishlist
-                        </a>
-                        <a class="text-secondary mb-2" href="<?= Url::toRoute(['site/my-reviews']) ?>">
-                            <i class="fa fa-angle-right mr-2"></i>
-                            My Product Reviews
-                        </a>
-                        <a class="text-secondary mb-2" href="<?= Url::toRoute(['site/my-account']) ?>">
-                            <i class="fa fa-angle-right mr-2"></i>
-                            My Account Details
-                        </a>
+                        <?= Html::foreach(App::params('customer_links'), function($link) {
+                            return YiiHtml::a('<i class="fa fa-angle-right mr-2"></i> ' . $link['label'], $link['url'], ['class' => 'text-secondary mb-2']) ;
+                        }) ?>
+                       
                         <?= Html::ifElse(App::isLogin(), function() {
                             $url = Url::toRoute(['site/logout']);
 
                             return <<< HTML
                                 <a class="text-secondary mb-2" href="{$url}">
                                     <i class="fa fa-angle-right mr-2"></i>
-                                    Logout
+                                    Sign Out
                                 </a>
                             HTML;
                         }, function() {
@@ -88,7 +80,7 @@ use app\helpers\Html;
                             return <<< HTML
                                 <a class="text-secondary mb-2" href="{$url}">
                                     <i class="fa fa-angle-right mr-2"></i>
-                                    Login
+                                    Sign In
                                 </a>
                             HTML;
                         }) ?>

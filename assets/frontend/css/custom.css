@@ -22,3 +22,7 @@ div.required label.control-label:after {
     width: auto;
     margin: 0 auto;
 }
+
+.pointer {
+    cursor: pointer;
+}
