@@ -7,6 +7,7 @@ use app\helpers\App;
 use app\helpers\Html;
 use app\models\Email;
 use app\models\Product;
+use app\models\User;
 use app\models\form\ContactForm;
 use app\models\form\LoginForm;
 use app\models\form\PasswordResetForm;
@@ -19,21 +20,8 @@ class SiteController extends Controller
     public function behaviors()
     {
         $behaviors = parent::behaviors();
-        $behaviors['AccessControl'] = [
-            'class' => 'app\filters\AccessControl',
-            'publicActions' => [
-                'login', 
-                'reset-password', 
-                'contact', 
-                'home', 
-                'find-products-by-keywords',
-                'about',
-                'contact',
-                'shop',
-                'signup',
-                'signup-success',
-            ]
-        ];
+        unset($behaviors['AccessControl']);
+
         $behaviors['VerbFilter'] = [
             'class' => 'app\filters\VerbFilter',
             'verbActions' => [
@@ -88,7 +76,16 @@ class SiteController extends Controller
 
     public function actionSignupSuccess($verification_token)
     {
-        return $verification_token;
+        $user = User::findOne(['verification_token' => $verification_token]);
+        if ($user) {
+            return $this->render('signup-success', [
+                'user' => $user
+            ]);
+        }
+
+        App::danger('User not found');
+
+        return $this->redirect(['signup']);
     }
 
     public function actionSignup()

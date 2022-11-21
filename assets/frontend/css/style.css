@@ -9710,23 +9710,3 @@ a.text-dark:hover, a.text-dark:focus {
     transform: translateY(-15px);
   }
 }
-
-
-
-.help-block {
-    color: #F64E60;
-    font-size: 0.9rem;
-    font-weight: 400;
-}
-
-.has-error input {
-    border-color: #F64E60;
-}
-.has-success input {
-    border-color: #1BC5BD;
-}
-
-div.required label.control-label:after {
-    content: " *";
-    color: red;
-}

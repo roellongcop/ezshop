@@ -1,0 +1,23 @@
+.help-block {
+    color: #F64E60;
+    font-size: 0.9rem;
+    font-weight: 400;
+}
+
+.has-error input {
+    border-color: #F64E60;
+}
+.has-success input {
+    border-color: #1BC5BD;
+}
+
+div.required label.control-label:after {
+    content: " *";
+    color: red;
+}
+
+.signup-container .content-container,
+.signup-success-container .content-container {
+    max-width: 50%;
+    margin: 0 auto;
+}

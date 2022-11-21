@@ -26,6 +26,7 @@ class AppAsset extends AssetBundle
         'lib/animate/animate.min.css',
         'lib/owlcarousel/assets/owl.carousel.min.css',
         'css/style.css',
+        'css/custom.css',
     ];
     public $js = [
         // 'https://code.jquery.com/jquery-3.4.1.min.js',
