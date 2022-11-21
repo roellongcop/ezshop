@@ -52,6 +52,7 @@ class m210528_070049_seed_users_table extends \app\migrations\Migration
             ['developer', Role::DEVELOPER],
             ['superadmin', Role::SUPERADMIN],
             ['admin', Role::ADMIN],
+            ['customer', Role::CUSTOMER],
         ];
     }
 

@@ -6,113 +6,84 @@ use app\helpers\Html;
 use yii\helpers\Html as YiiHtml;
 use yii\widgets\ListView;
 use app\models\Product;
+
+$this->title = 'Shop';
+
+$this->addJsFile('frontend/js/shop');
 ?>
 
-<div class="container-fluid">
+<div class="container-fluid shop-page">
     <div class="row px-xl-5">
         <!-- Shop Sidebar Start -->
         <div class="col-lg-3 col-md-4">
-            <!-- Price Start -->
-            <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filter by price</span></h5>
-            <div class="bg-light p-4 mb-30">
-                <form>
-                    <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                        <input type="checkbox" class="custom-control-input" checked id="price-all">
-                        <label class="custom-control-label" for="price-all">All Price</label>
-                        <!-- <span class="badge border font-weight-normal">1000</span> -->
-                    </div>
-                    <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                        <input type="checkbox" class="custom-control-input" id="price-1">
-                        <label class="custom-control-label" for="price-1">₱0 - ₱100</label>
-                        <!-- <span class="badge border font-weight-normal">150</span> -->
-                    </div>
-                    <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                        <input type="checkbox" class="custom-control-input" id="price-2">
-                        <label class="custom-control-label" for="price-2">₱100 - ₱500</label>
-                        <!-- <span class="badge border font-weight-normal">295</span> -->
-                    </div>
-                    <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                        <input type="checkbox" class="custom-control-input" id="price-3">
-                        <label class="custom-control-label" for="price-3">₱500 - ₱1000</label>
-                        <!-- <span class="badge border font-weight-normal">246</span> -->
-                    </div>
-                    <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                        <input type="checkbox" class="custom-control-input" id="price-4">
-                        <label class="custom-control-label" for="price-4">₱1000 - ₱5000</label>
-                        <!-- <span class="badge border font-weight-normal">145</span> -->
-                    </div>
-                    <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between">
-                        <input type="checkbox" class="custom-control-input" id="price-5">
-                        <label class="custom-control-label" for="price-5">₱5000 - ₱10,000</label>
-                        <!-- <span class="badge border font-weight-normal">168</span> -->
-                    </div>
-                </form>
-            </div>
-            <!-- Price End -->
-            
-            <!-- Color Start -->
-            <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filter by color</span></h5>
-            <div class="bg-light p-4 mb-30">
-                <form>
-                    <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                        <input type="checkbox" class="custom-control-input" checked id="color-all">
-                        <label class="custom-control-label" for="price-all">All Color</label>
-                        <!-- <span class="badge border font-weight-normal">1000</span> -->
-                    </div>
-                    <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                        <input type="checkbox" class="custom-control-input" id="color-1">
-                        <label class="custom-control-label" for="color-1">Black</label>
-                        <!-- <span class="badge border font-weight-normal">150</span> -->
-                    </div>
-                    <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                        <input type="checkbox" class="custom-control-input" id="color-2">
-                        <label class="custom-control-label" for="color-2">White</label>
-                        <!-- <span class="badge border font-weight-normal">295</span> -->
-                    </div>
-                    <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                        <input type="checkbox" class="custom-control-input" id="color-3">
-                        <label class="custom-control-label" for="color-3">Red</label>
-                        <!-- <span class="badge border font-weight-normal">246</span> -->
-                    </div>
-                    <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                        <input type="checkbox" class="custom-control-input" id="color-4">
-                        <label class="custom-control-label" for="color-4">Blue</label>
-                        <!-- <span class="badge border font-weight-normal">145</span> -->
-                    </div>
-                    <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between">
-                        <input type="checkbox" class="custom-control-input" id="color-5">
-                        <label class="custom-control-label" for="color-5">Green</label>
-                        <!-- <span class="badge border font-weight-normal">168</span> -->
-                    </div>
-                </form>
-            </div>
-            <!-- Color End -->
 
-            <!-- Size Start -->
-            <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filter by size</span></h5>
-            <div class="bg-light p-4 mb-30">
-                <form>
+            <form method="get" action="<?= Url::to(['site/shop']) ?>">
+                <!-- Price Start -->
+                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filter by price</span></h5>
+                <div class="bg-light p-4 mb-30">
                     <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                        <input type="checkbox" class="custom-control-input" checked id="size-all">
-                        <label class="custom-control-label" for="size-all">All Size</label>
-                        <!-- <span class="badge border font-weight-normal">1000</span> -->
+                        <input type="checkbox" class="custom-control-input" id="price-all">
+                        <label class="custom-control-label" for="price-all">All Price</label>
                     </div>
-                    <?= Html::if(Product::uniqueSizes(), function($sizes) {
-                        return Html::foreach($sizes, function($size) {
+                    <?= Html::foreach(App::params('price_filter'), function($to, $from) use($searchModel) {
+                        $_from = number_format($from);
+                        $_to = number_format($to);
+                        return <<< HTML
+                            <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                                <input id="price-{$from}-{$to}" value="{$from}-{$to}" type="checkbox" class="custom-control-input filter price-filter" name="price_range[]" {$searchModel->checkedPriceFilter($from, $to)}>
+                                <label class="custom-control-label" for="price-{$from}-{$to}">
+                                    ₱{$_from} - ₱{$_to}
+                                </label>
+                            </div>
+                        HTML;
+                    }) ?>
+                </div>
+                <!-- Price End -->
+                
+                <!-- Color Start -->
+                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filter by color</span></h5>
+                <div class="bg-light p-4 mb-30">
+                    <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                        <input type="checkbox" class="custom-control-input" id="color-all">
+                        <label class="custom-control-label" for="color-all">All Color</label>
+                    </div>
+                    <?= Html::if(Product::uniqueColors(), function($colors) use($searchModel) {
+                        return Html::foreach($colors, function($color) use($searchModel) {
                             return <<< HTML
                                 <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                                    <input type="checkbox" class="custom-control-input" id="size-1">
-                                    <label class="custom-control-label" for="size-1">
-                                        {$size}
+                                    <input name="colors[]" value="{$color}" id="color-{$color}" type="checkbox" class="custom-control-input filter color-filter" {$searchModel->checkedColorFilter($color)}>
+                                    <label class="custom-control-label" for="color-{$color}">
+                                        {$color}
                                     </label>
-                                    <!-- <span class="badge border font-weight-normal">150</span> -->
                                 </div>
                             HTML;
                         });
                     }) ?>
-                </form>
-            </div>
-            <!-- Size End -->
+                </div>
+                <!-- Color End -->
+
+                <!-- Size Start -->
+                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filter by size</span></h5>
+                <div class="bg-light p-4 mb-30">
+                    <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                        <input type="checkbox" class="custom-control-input" id="size-all">
+                        <label class="custom-control-label" for="size-all">All Size</label>
+                    </div>
+                    <?= Html::if(Product::uniqueSizes(), function($sizes) use($searchModel) {
+                        return Html::foreach($sizes, function($size) use($searchModel) {
+                            return <<< HTML
+                                <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                                    <input name="sizes[]" value="{$size}" id="size-{$size}" type="checkbox" class="custom-control-input filter size-filter" {$searchModel->checkedSizeFilter($size)}>
+                                    <label class="custom-control-label" for="size-{$size}">
+                                        {$size}
+                                    </label>
+                                </div>
+                            HTML;
+                        });
+                    }) ?>
+                </div>
+            </form>
+
         </div>
         <!-- Shop Sidebar End -->
 
@@ -121,7 +92,7 @@ use app\models\Product;
         <div class="col-lg-9 col-md-8">
             <div class="row">
                 <div class="col-12 pb-1">
-                    <div class="d-flex align-items-center justify-content-between mb-4">
+                    <div class="d-flex align-items-center justify-content-between">
                         <div>
                             <!-- <button class="btn btn-sm btn-light"><i class="fa fa-th-large"></i></button>
                             <button class="btn btn-sm btn-light ml-2"><i class="fa fa-bars"></i></button> -->

@@ -122,6 +122,10 @@ class SiteController extends Controller
     public function actionIndex()
     {
         if (App::isLogin()) {
+            if (App::identity('isCustomer')) {
+                return $this->redirect(['home']);
+            }
+
             return $this->redirect(['dashboard/index']);
         }
 
@@ -136,7 +140,7 @@ class SiteController extends Controller
     public function actionLogin()
     {
         if (!App::isGuest()) {
-            return $this->goHome();
+            return $this->redirect(['dashboard/index']);
         }
 
         $model = new LoginForm();

@@ -47,6 +47,7 @@ class m210528_064716_seed_roles_table extends \app\migrations\Migration
             ['developer', [Role::DEVELOPER, Role::SUPERADMIN, Role::ADMIN]],
             ['superadmin', [Role::SUPERADMIN, Role::ADMIN]],
             ['admin', [Role::ADMIN]],
+            ['customer', [Role::CUSTOMER]],
         ];
     }
 

@@ -16,6 +16,7 @@ $config = [
             'class' => 'app\modules\api\ApiModule',
         ],
     ],
+    'defaultRoute' => 'site/home',
     'components' => [
         'imageResize' => ['class' => 'app\components\ImageResizeComponent'],
         'db' => ['class' => 'app\components\ConnectionComponent'],

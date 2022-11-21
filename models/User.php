@@ -664,6 +664,13 @@ class User extends ActiveRecord implements IdentityInterface
         }
     }
 
+    public function getIsCustomer()
+    {
+        if (($role = $this->role) != null) {
+            return $role->getIsCustomer();
+        }
+    }
+
     public function getIsAdmin()
     {
         if (($role = $this->role) != null) {

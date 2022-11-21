@@ -17,6 +17,7 @@ class ProductSearch extends Product
     public $pagination;
 
     public $sort;
+    public $price_range;
 
     public $searchTemplate = 'product/_search';
     public $searchAction = ['product/index'];
@@ -31,7 +32,7 @@ class ProductSearch extends Product
             [['id', 'quantity', 'low_stock_threshold', 'high_stock_threshold', 'stock_threshold_status', 'created_by', 'updated_by'], 'integer'],
             [['name', 'categories', 'description', 'tags', 'image', 'gallery', 'sku', 'token', 'slug', 'created_at', 'updated_at'], 'safe'],
             [['regular_price', 'sale_price', 'added_shipping_fee'], 'number'],
-            [['keywords', 'pagination', 'date_range', 'record_status', 'sort'], 'safe'],
+            [['keywords', 'pagination', 'date_range', 'record_status', 'sort', 'sizes', 'price_range', 'colors'], 'safe'],
             [['keywords'], 'trim'],
         ];
     }
@@ -94,16 +95,28 @@ class ProductSearch extends Product
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ]);
-        
+
+
         $query->andFilterWhere(['like', 'name', $this->name])
-            ->andFilterWhere(['like', 'categories', $this->categories])
-            ->andFilterWhere(['like', 'description', $this->description])
-            ->andFilterWhere(['like', 'tags', $this->tags])
-            ->andFilterWhere(['like', 'image', $this->image])
-            ->andFilterWhere(['like', 'gallery', $this->gallery])
-            ->andFilterWhere(['like', 'sku', $this->sku])
-            ->andFilterWhere(['like', 'token', $this->token])
-            ->andFilterWhere(['like', 'slug', $this->slug]);
+            ->andFilterWhere(['like', 'categories', $this->categories]);
+
+        if ($this->colors) {
+            $where = ['or'];
+            foreach ($this->colors as $color) {
+                $where[] = ['LIKE', 'colors', $color];
+            }
+
+            $query->andFilterWhere($where);
+        }
+
+        if ($this->sizes) {
+            $where = ['or'];
+            foreach ($this->sizes as $size) {
+                $where[] = ['LIKE', 'sizes', $size];
+            }
+
+            $query->andFilterWhere($where);
+        }
         
                 
         $query->andFilterWhere(['or', 
@@ -111,18 +124,6 @@ class ProductSearch extends Product
             ['like', 'categories', $this->keywords],  
             ['like', 'description', $this->keywords],  
             ['like', 'tags', $this->keywords],  
-            ['like', 'image', $this->keywords],  
-            ['like', 'gallery', $this->keywords],  
-            ['like', 'regular_price', $this->keywords],  
-            ['like', 'sale_price', $this->keywords],  
-            ['like', 'sku', $this->keywords],  
-            ['like', 'token', $this->keywords],  
-            ['like', 'slug', $this->keywords],  
-            ['like', 'quantity', $this->keywords],  
-            ['like', 'low_stock_threshold', $this->keywords],  
-            ['like', 'high_stock_threshold', $this->keywords],  
-            ['like', 'stock_threshold_status', $this->keywords],  
-            ['like', 'added_shipping_fee', $this->keywords],  
         ]);
 
         $query->daterange($this->date_range);
@@ -136,4 +137,32 @@ class ProductSearch extends Product
 
         return $sort ? $sort['label']: 'Sorting';
     }
+
+    public function checkedPriceFilter($from, $to)
+    {
+        if (!$this->price_range) {
+            return '';
+        }
+
+        return in_array("{$from}-{$to}", $this->price_range) ? 'checked': '';
+    }
+
+    public function checkedColorFilter($color)
+    {
+        if (!$this->colors) {
+            return '';
+        }
+
+        return in_array($color, $this->colors) ? 'checked': '';
+    }
+
+    public function checkedSizeFilter($size)
+    {
+        if (!$this->sizes) {
+            return '';
+        }
+
+        return in_array($size, $this->sizes) ? 'checked': '';
+    }
+    
 }

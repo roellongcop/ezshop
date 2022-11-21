@@ -442,5 +442,12 @@ class Product extends ActiveRecord
             self::dropdown('name', 'sizes')
         );
     }
+
+    public static function uniqueColors()
+    {
+        return App::formatter()->asUniqueArrayFlatten(
+            self::dropdown('name', 'colors')
+        );
+    }
 }
 

@@ -28,6 +28,7 @@ class Role extends ActiveRecord
     const DEVELOPER = 1;
     const SUPERADMIN = 2;
     const ADMIN = 3;
+    const CUSTOMER = 4;
     /**
      * {@inheritdoc}
      */
@@ -85,6 +86,11 @@ class Role extends ActiveRecord
     public function getIsSuperadmin()
     {
         return $this->id == self::SUPERADMIN;
+    }
+
+    public function getIsCustomer()
+    {
+        return $this->id == self::CUSTOMER;
     }
 
     public function getIsAdmin()
