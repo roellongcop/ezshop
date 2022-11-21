@@ -1,5 +1,6 @@
 <?php
 
+use app\helpers\App;
 use app\helpers\Html;
 use yii\helpers\Html as YiiHtml;
 use app\models\ProductCategory;
@@ -12,7 +13,9 @@ $activePage = $this->params['activePage'] ?? 'home';
     <div class="row px-xl-5">
         <div class="col-lg-3 d-none d-lg-block">
             <a class="btn d-flex align-items-center justify-content-between bg-primary w-100" data-toggle="collapse" href="#navbar-vertical" style="height: 65px; padding: 0 30px;">
-                <h6 class="text-dark m-0"><i class="fa fa-bars mr-2"></i>Categories</h6>
+                <h6 class="text-dark m-0"><i class="fa fa-bars mr-2"></i>
+                    <?= App::get('categories') ?: 'Filter by Categories' ?>
+                </h6>
                 <i class="fa fa-angle-down text-dark"></i>
             </a>
             <nav class="collapse position-absolute navbar navbar-vertical navbar-light align-items-start p-0 bg-light" id="navbar-vertical" style="width: calc(100% - 30px); z-index: 999;">
@@ -25,9 +28,12 @@ $activePage = $this->params['activePage'] ?? 'home';
                             <a href="" class="dropdown-item">Baby's Dresses</a>
                         </div>
                     </div> -->
+                    <?= YiiHtml::a('- Filter by Categories -', ['site/shop'], [
+                            'class' => 'nav-item nav-link'
+                        ]) ?>
                     <?= Html::if(ProductCategory::dropdown('id', 'name'), function($categories) {
                         return Html::foreach($categories, function($category) {
-                            return YiiHtml::a($category, ['site/shop', 'category' => $category], [
+                            return YiiHtml::a($category, ['site/shop', 'categories' => $category], [
                                 'class' => 'nav-item nav-link'
                             ]);
                         });

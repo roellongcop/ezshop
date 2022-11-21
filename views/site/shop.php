@@ -26,8 +26,7 @@ $this->addJsFile('frontend/js/shop');
                         <label class="custom-control-label" for="price-all">All Price</label>
                     </div>
                     <?= Html::foreach(App::params('price_filter'), function($to, $from) use($searchModel) {
-                        $_from = number_format($from);
-                        $_to = number_format($to);
+                        list($_from, $_to) = [number_format($from), number_format($to)];
                         return <<< HTML
                             <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                                 <input id="price-{$from}-{$to}" value="{$from}-{$to}" type="checkbox" class="custom-control-input filter price-filter" name="price_range[]" {$searchModel->checkedPriceFilter($from, $to)}>

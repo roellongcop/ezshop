@@ -100,6 +100,18 @@ class ProductSearch extends Product
         $query->andFilterWhere(['like', 'name', $this->name])
             ->andFilterWhere(['like', 'categories', $this->categories]);
 
+
+        if ($this->price_range) {
+            $where = ['or'];
+            foreach ($this->price_range as $price_range) {
+                list($from, $to) = explode('-', $price_range);
+
+                $where[] = ['BETWEEN', 'sale_price', $from, $to];
+            }
+
+            $query->andFilterWhere($where);
+        }
+
         if ($this->colors) {
             $where = ['or'];
             foreach ($this->colors as $color) {
