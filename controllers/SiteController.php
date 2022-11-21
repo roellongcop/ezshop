@@ -56,11 +56,11 @@ class SiteController extends Controller
             case 'shop':
             case 'signup':
             case 'signup-success':
+            case 'login':
             case 'customer-landing':
                 $this->layout = 'frontend';
                 break;
                 
-            case 'login':
             case 'reset-password':
             case 'contact':
                 $this->layout = 'login';
