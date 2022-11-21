@@ -9,7 +9,9 @@ use app\models\Product;
 
 $this->title = 'Shop';
 
-$this->addJsFile('frontend/js/shop');
+$this->addJsFile('frontend/js/shop', [
+    'app\assets\frontend\AppAsset'
+]);
 ?>
 
 <div class="container-fluid shop-page">

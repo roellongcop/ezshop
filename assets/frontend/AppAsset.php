@@ -31,6 +31,7 @@ class AppAsset extends AssetBundle
     public $js = [
         // 'https://code.jquery.com/jquery-3.4.1.min.js',
         // 'https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js',
+        'js/keen-scripts.bundle.js',
         'lib/easing/easing.min.js',
         'lib/owlcarousel/owl.carousel.min.js',
         'mail/jqBootstrapValidation.min.js',
