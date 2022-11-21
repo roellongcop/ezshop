@@ -12,6 +12,7 @@ use app\models\form\LoginForm;
 use app\models\form\PasswordResetForm;
 use yii\web\Response;
 use app\models\search\ProductSearch;
+use app\models\form\CustomerSignupForm;
 
 class SiteController extends Controller
 {
@@ -28,7 +29,9 @@ class SiteController extends Controller
                 'find-products-by-keywords',
                 'about',
                 'contact',
-                'shop'
+                'shop',
+                'signup',
+                'signup-success',
             ]
         ];
         $behaviors['VerbFilter'] = [
@@ -41,19 +44,6 @@ class SiteController extends Controller
         return $behaviors;
     }
 
-    public function actionFindProductsByKeywords($keywords='')
-    {
-        return $this->asJson(
-            Product::findByKeywords($keywords, ['name'])
-        );
-    }
-
-
-    public function actionHome()
-    {
-        return $this->render('home');
-    }
-
     public function beforeAction($action)
     {
         switch ($action->id) {
@@ -61,6 +51,8 @@ class SiteController extends Controller
             case 'about':
             case 'contact':
             case 'shop':
+            case 'signup':
+            case 'signup-success':
                 $this->layout = 'frontend';
                 break;
                 
@@ -93,6 +85,44 @@ class SiteController extends Controller
             ],
         ];
     }
+
+    public function actionSignupSuccess($verification_token)
+    {
+        return $verification_token;
+    }
+
+    public function actionSignup()
+    {
+        $model = new CustomerSignupForm();
+
+        if ($model->load(App::post()) && ($user = $model->signup()) != null) {
+            App::success('Sign Up Successfully');
+
+            return $this->redirect([
+                'signup-success', 
+                'verification_token' => $user->verification_token
+            ]);
+        }
+
+        return $this->render('signup', [
+            'model' => $model
+        ]);
+    }
+
+    public function actionFindProductsByKeywords($keywords='')
+    {
+        return $this->asJson(
+            Product::findByKeywords($keywords, ['name'])
+        );
+    }
+
+
+    public function actionHome()
+    {
+        return $this->render('home');
+    }
+
+    
 
     public function actionResetPassword()
     {

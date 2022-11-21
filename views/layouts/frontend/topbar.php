@@ -24,28 +24,39 @@ use yii\helpers\Html as YiiHtml;
                 <div class="btn-group">
                     <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">My Account</button>
                     <div class="dropdown-menu dropdown-menu-right">
-                        <?= YiiHtml::a('My Orders History', ['site/my-orders'], [
-                            'class' => 'dropdown-item'
-                        ]) ?>
-                        <?= YiiHtml::a('My Wishlist', ['site/my-wishlist'], [
-                            'class' => 'dropdown-item'
-                        ]) ?>
-                        <?= YiiHtml::a('My Product Reviews', ['site/my-reviews'], [
-                            'class' => 'dropdown-item'
-                        ]) ?>
-                        <?= YiiHtml::a('My Account Details', ['site/my-account'], [
-                            'class' => 'dropdown-item'
-                        ]) ?>
+                        <?= Html::ifElse(
+                            App::isLogin(), 
+                            function() {
+                                return implode('', [
+                                    YiiHtml::a('My Orders History', ['site/my-orders'], [
+                                        'class' => 'dropdown-item'
+                                    ]),
+                                    YiiHtml::a('My Wishlist', ['site/my-wishlist'], [
+                                        'class' => 'dropdown-item'
+                                    ]),
+                                    YiiHtml::a('My Product Reviews', ['site/my-reviews'], [
+                                        'class' => 'dropdown-item'
+                                    ]),
+                                    YiiHtml::a('My Account Details', ['site/my-account'], [
+                                        'class' => 'dropdown-item'
+                                    ]),
 
-                        <?= Html::ifElse(App::isLogin(), function() {
-                            return YiiHtml::a('Logout', ['site/logout'], [
-                                'class' => 'dropdown-item'
-                            ]);
-                        }, function() {
-                            return YiiHtml::a('Login', ['site/login'], [
-                                'class' => 'dropdown-item'
-                            ]);
-                        }) ?>
+                                    Html::beginForm(['site/logout'], 'post'),
+                                    Html::submitButton('Sign Out', ['class' => 'dropdown-item']),
+                                    Html::endForm()
+                                ]);
+                            },
+                            function() {
+                                return implode('', [
+                                    YiiHtml::a('Login', ['site/login'], [
+                                        'class' => 'dropdown-item'
+                                    ]),
+                                    YiiHtml::a('Sign Up', ['site/signup'], [
+                                        'class' => 'dropdown-item'
+                                    ])
+                                ]);
+                            }
+                        ) ?>
                     </div>
                 </div>
             </div>

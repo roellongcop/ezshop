@@ -35,6 +35,7 @@ $model->add('developer', 'developer', [
 ]);
 $model->add('superadmin', 'superadmin', ['role_id' => 2]);
 $model->add('admin', 'admin', ['role_id' => 3]);
+$model->add('customer', 'customer', ['role_id' => 4]);
 $model->add('blockeduser', 'blockeduser', ['is_blocked' => User::BLOCKED]);
 $model->add('notverifieduser', 'notverifieduser', ['status' => User::STATUS_INACTIVE]);
 $model->add('inactiveuser', 'inactiveuser', ['record_status' => User::RECORD_INACTIVE]);

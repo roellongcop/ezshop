@@ -33,6 +33,7 @@ use yii\helpers\ArrayHelper;
 class User extends ActiveRecord implements IdentityInterface
 {
     const STATUS_DELETED = 0;
+    const STATUS_UNVERIFIED = 1;
     const STATUS_INACTIVE = 9;
     const STATUS_ACTIVE = 10;
 
@@ -79,7 +80,8 @@ class User extends ActiveRecord implements IdentityInterface
             ['status', 'in', 'range' => [
                     self::STATUS_ACTIVE, 
                     self::STATUS_INACTIVE, 
-                    self::STATUS_DELETED
+                    self::STATUS_DELETED,
+                    self::STATUS_UNVERIFIED,
                 ]
             ],
             ['is_blocked', 'in', 'range' => [self::BLOCKED, self::UNBLOCKED]],
