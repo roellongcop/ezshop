@@ -1,5 +1,8 @@
 #algo
 https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7283081/
+https://towardsdatascience.com/how-to-build-your-own-chatbot-using-deep-learning-bb41f970e281
+https://php-ml.readthedocs.io/en/latest/
+https://www.quora.com/How-do-I-make-a-chatbot-in-PHP
 
 # yii2 keen admin dashboard
 1) create database "db_starter"
