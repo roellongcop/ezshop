@@ -18,6 +18,7 @@ div.required label.control-label:after {
 
 .signup-container .content-container,
 .signup-success-container .content-container {
-    max-width: 50%;
+    max-width: 500px;
+    width: auto;
     margin: 0 auto;
 }

@@ -20,7 +20,22 @@ class SiteController extends Controller
     public function behaviors()
     {
         $behaviors = parent::behaviors();
-        unset($behaviors['AccessControl']);
+        $behaviors['AccessControl'] = [
+            'class' => 'app\filters\AccessControl',
+            'publicActions' => [
+                'login', 
+                'reset-password', 
+                'contact', 
+                'home', 
+                'find-products-by-keywords',
+                'about',
+                'contact',
+                'shop',
+                'signup',
+                'signup-success',
+                'signup-verification',
+            ]
+        ];
 
         $behaviors['VerbFilter'] = [
             'class' => 'app\filters\VerbFilter',
@@ -41,6 +56,7 @@ class SiteController extends Controller
             case 'shop':
             case 'signup':
             case 'signup-success':
+            case 'customer-landing':
                 $this->layout = 'frontend';
                 break;
                 
@@ -88,6 +104,32 @@ class SiteController extends Controller
         return $this->redirect(['signup']);
     }
 
+    public function actionSignupVerification($verification_token)
+    {
+        $user = User::findOne([
+            'verification_token' => $verification_token,
+            // 'status' => User::STATUS_UNVERIFIED
+        ]);
+        if ($user) {
+            $user->status = User::STATUS_ACTIVE;
+            $user->save();
+
+            App::loginUser($user, 0);
+
+            App::success('Account Verified');
+
+            return $this->redirect(['customer-landing']);
+        }
+        
+        App::danger('User not found');
+        return $this->redirect(['signup']);
+    }
+
+    public function actionCustomerLanding()
+    {
+        return $this->render('customer-landing');
+    }
+
     public function actionSignup()
     {
         $model = new CustomerSignupForm();
@@ -113,13 +155,10 @@ class SiteController extends Controller
         );
     }
 
-
     public function actionHome()
     {
         return $this->render('home');
     }
-
-    
 
     public function actionResetPassword()
     {

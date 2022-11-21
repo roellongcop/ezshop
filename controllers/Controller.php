@@ -40,7 +40,6 @@ abstract class Controller extends \yii\web\Controller
     {
         $behaviors = parent::behaviors();
 
-        $behaviors['CustomerFilter'] = ['class' => 'app\filters\CustomerFilter'];
         $behaviors['ThemeFilter'] = ['class' => 'app\filters\ThemeFilter'];
         $behaviors['UserFilter'] = ['class' => 'app\filters\UserFilter'];
         $behaviors['IpFilter'] = ['class' => 'app\filters\IpFilter'];
