@@ -48,7 +48,7 @@ use yii\helpers\Html as YiiHtml;
                             },
                             function() {
                                 return implode('', [
-                                    YiiHtml::a('Login', ['site/login'], [
+                                    YiiHtml::a('Sign In', ['site/login'], [
                                         'class' => 'dropdown-item'
                                     ]),
                                     YiiHtml::a('Sign Up', ['site/signup'], [

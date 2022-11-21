@@ -106,22 +106,28 @@ class SiteController extends Controller
 
     public function actionSignupVerification($verification_token)
     {
-        $user = User::findOne([
-            'verification_token' => $verification_token,
-            // 'status' => User::STATUS_UNVERIFIED
-        ]);
+        $user = User::findOne(['verification_token' => $verification_token]);
         if ($user) {
-            $user->status = User::STATUS_ACTIVE;
-            $user->save();
+            if ($user->status == User::STATUS_UNVERIFIED) {
+                $user->status = User::STATUS_ACTIVE;
+                $user->save();
 
-            App::loginUser($user, 0);
+                App::loginUser($user, 0);
 
-            App::success('Account Verified');
+                App::success('Account Verified');
 
-            return $this->redirect(['customer-landing']);
+                return $this->redirect(['customer-landing']);
+            }
+            else {
+                if (App::isGuest()) {
+                    App::loginUser($user, 0);
+                }
+                App::success('User already verified');
+                return $this->redirect(['customer-landing']);
+            }
         }
         
-        App::danger('User not found');
+        App::waring('User not found');
         return $this->redirect(['signup']);
     }
 
@@ -205,7 +211,10 @@ class SiteController extends Controller
      */
     public function actionLogin()
     {
-        if (!App::isGuest()) {
+        if (App::isLogin()) {
+            if (App::identity('isCustomer')) {
+                return $this->redirect(['customer-landing']);
+            }
             return $this->redirect(['dashboard/index']);
         }
 
