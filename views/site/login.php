@@ -5,7 +5,8 @@ use app\helpers\Html;
 use app\widgets\ActiveForm;
 
 $this->title = 'Sign In';
-$this->params['breadcrumbs'][] = 'Sign In';
+$this->params['activePage'] = 'sign-in';
+// $this->params['breadcrumbs'][] = 'Sign In';
 ?>
 <div class="container-fluid signup-container">
     <h2 class="text-center section-title position-relative text-uppercase mx-xl-5 mb-4">

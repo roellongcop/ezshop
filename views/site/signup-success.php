@@ -3,8 +3,9 @@
 use yii\helpers\Html as YiiHtml;
 /* @var $this yii\web\View */
 $this->title = 'Sign Up: Email Verification';
-$this->params['breadcrumbs'][] = ['label' => 'Sign Up', 'url' => ['site/signup']];
-$this->params['breadcrumbs'][] = 'Email Verification';
+$this->params['activePage'] = 'sign-success';
+// $this->params['breadcrumbs'][] = ['label' => 'Sign Up', 'url' => ['site/signup']];
+// $this->params['breadcrumbs'][] = 'Email Verification';
 ?>
 <div class="container-fluid signup-success-container">
     <h2 class="text-center section-title position-relative text-uppercase mx-xl-5 mb-4">
