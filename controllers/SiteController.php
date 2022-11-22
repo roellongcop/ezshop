@@ -14,6 +14,11 @@ use app\models\form\PasswordResetForm;
 use yii\web\Response;
 use app\models\search\ProductSearch;
 use app\models\form\CustomerSignupForm;
+use app\models\form\user\BillingDetailForm;
+use app\models\form\ChangePasswordForm;
+use app\models\Province;
+use app\models\Municipality;
+
 
 class SiteController extends Controller
 {
@@ -34,6 +39,7 @@ class SiteController extends Controller
                 'signup',
                 'signup-success',
                 'signup-verification',
+                'my-account-details'
             ]
         ];
 
@@ -57,7 +63,8 @@ class SiteController extends Controller
             case 'signup':
             case 'signup-success':
             case 'login':
-            case 'customer-landing':
+            case 'customer-dashboard':
+            case 'my-account-details':
                 $this->layout = 'frontend';
                 break;
                 
@@ -116,14 +123,14 @@ class SiteController extends Controller
 
                 App::success('Account Verified');
 
-                return $this->redirect(['customer-landing']);
+                return $this->redirect(['customer-dashboard']);
             }
             else {
                 if (App::isGuest()) {
                     App::loginUser($user, 0);
                 }
                 App::success('User already verified');
-                return $this->redirect(['customer-landing']);
+                return $this->redirect(['customer-dashboard']);
             }
         }
         
@@ -131,9 +138,9 @@ class SiteController extends Controller
         return $this->redirect(['signup']);
     }
 
-    public function actionCustomerLanding()
+    public function actionCustomerDashboard()
     {
-        return $this->render('customer-landing');
+        return $this->render('customer-dashboard');
     }
 
     public function actionSignup()
@@ -213,7 +220,7 @@ class SiteController extends Controller
     {
         if (App::isLogin()) {
             if (App::identity('isCustomer')) {
-                return $this->redirect(['customer-landing']);
+                return $this->redirect(['customer-dashboard']);
             }
             return $this->redirect(['dashboard/index']);
         }
@@ -222,7 +229,7 @@ class SiteController extends Controller
         $PSR = new PasswordResetForm();
         if ($model->load(App::post()) && $model->login()) {
             if (App::identity('isCustomer')) {
-                return $this->redirect(['customer-landing']);
+                return $this->redirect(['customer-dashboard']);
             }
             return $this->redirect(['dashboard/index']);
         }
@@ -282,6 +289,45 @@ class SiteController extends Controller
         return $this->render('shop', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
+        ]);
+    }
+
+    public function actionMyAccountDetails($province_id='')
+    {
+        if ($province_id) {
+            return $this->asJson([
+                'data' => Html::if(Province::findOne($province_id), function($province) {
+                    return Html::foreach(Municipality::findAll(['prov' => $province->prov]), function($municipality) {
+                        return Html::tag('option', $municipality->Municipality, [
+                            'value' => $municipality->id
+                        ]);
+                    });
+                })
+            ]);
+        }
+
+        $identity = App::identity();
+
+        $billing = new BillingDetailForm(['user_id' => $identity->id]);
+        $password = new ChangePasswordForm(['user_id' => $identity->id]);
+        
+
+        if ($billing->load(App::post()) && $billing->save()) {
+            App::success('Profile Information Updated');
+
+            return $this->redirect(['my-account-details']);
+        }
+
+        if ($password->load(App::post()) && $password->changePassword()) {
+            App::success('Password Updated');
+
+            return $this->redirect(['my-account-details']);
+        }
+
+        return $this->render('my-account-details', [
+            'identity' => $identity,
+            'billing' => $billing,
+            'password' => $password,
         ]);
     }
 }

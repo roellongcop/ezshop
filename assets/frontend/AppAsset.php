@@ -37,6 +37,7 @@ class AppAsset extends AssetBundle
         'mail/jqBootstrapValidation.min.js',
         'mail/contact.js',
         'js/main.js',
+        'js/custom.js',
     ];
 
     public $depends = [

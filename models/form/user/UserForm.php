@@ -48,9 +48,9 @@ abstract class UserForm extends \yii\base\Model
         return $this->_user;
     }
 
-    public function save()
+    public function save($attributeNames = null)
     {
-        if ($this->validate()) {
+        if ($this->validate($attributeNames)) {
             $condition = [
                 'user_id' => $this->user_id,
                 'name' => static::META_NAME,

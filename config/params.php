@@ -5,6 +5,12 @@ return [
     'pagination' => [25 => 25, 50 => 50, 75 => 75, 100 => 100],
     'customer_links' => [
         [
+            'label' => 'My Dashboard', 
+            'url' => ['site/customer-dashboard'], 
+            'icon' => 'fas fa-dashboard',
+            'page' => 'customer-dashboard'
+        ],
+        [
             'label' => 'My Orders History', 
             'url' => ['site/my-orders'], 
             'icon' => 'fas fa-cart-plus',
@@ -24,9 +30,9 @@ return [
         ],
         [
             'label' => 'My Account Details', 
-            'url' => ['site/my-account'], 
+            'url' => ['site/my-account-details'], 
             'icon' => 'fas fa-user-lock',
-            'page' => 'my-account'
+            'page' => 'my-account-details'
         ],
     ],
     'price_filter' => [

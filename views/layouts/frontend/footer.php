@@ -71,13 +71,13 @@ $activePage = $this->params['activePage'] ?? 'home';
                         }) ?>
                        
                         <?= Html::ifElse(App::isLogin(), function() use ($activePage) {
-                            $url = Url::toRoute(['site/logout']);
-                            return <<< HTML
-                                <a class="text-secondary mb-2" href="{$url}">
-                                    <i class="fa fa-angle-right mr-2"></i>
-                                    Sign Out
-                                </a>
-                            HTML;
+                            return implode('', [
+                                Html::beginForm(['site/logout'], 'post'),
+                                YiiHtml::a('<i class="fa fa-angle-right mr-2"></i> Sign Out', '#', [
+                                    'class' => 'mb-2 text-secondary btn-sign-out'
+                                ]),
+                                Html::endForm()
+                            ]);
                         }, function() use ($activePage) {
 
                             return implode('', [
