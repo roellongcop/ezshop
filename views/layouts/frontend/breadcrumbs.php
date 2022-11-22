@@ -2,13 +2,14 @@
 
 use yii\helpers\Html as YiiHtml;
 use app\helpers\Html;
+
 ?>
 
 <div class="container-fluid">
     <div class="row px-xl-5">
         <div class="col-12">
             <nav class="breadcrumb bg-light mb-30">
-                <?= YiiHtml::a('Home', ['site/home'], [
+                <?= $this->params['homeBreadcrumbs'] ?? YiiHtml::a('Home', ['site/home'], [
                     'class' => 'breadcrumb-item text-dark'
                 ]) ?>
                 <?= Html::if($this->params['breadcrumbs'] ?? '', function($breadcrumbs) {

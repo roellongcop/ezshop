@@ -8,7 +8,7 @@ return [
             'label' => 'My Dashboard', 
             'url' => ['site/customer-dashboard'], 
             'icon' => 'fas fa-dashboard',
-            'page' => 'customer-dashboard'
+            'page' => 'customer-dashboard',
         ],
         [
             'label' => 'My Orders History', 

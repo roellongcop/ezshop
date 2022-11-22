@@ -2,11 +2,16 @@
 
 use app\widgets\ActiveForm;
 use app\helpers\Html;
+use yii\helpers\Html as YiiHtml;
 use app\models\Province;
 use app\models\Municipality;
 
 $this->title = 'My Account Details';
 $this->params['activePage'] = 'my-account-details';
+
+
+$this->params['homeBreadcrumbs'] = YiiHtml::a('Dashboard', ['site/customer-dashboard'], ['class' => 'breadcrumb-item text-dark']);
+$this->params['breadcrumbs'][] = 'My Account Details';
 
 $this->addJsFile('frontend/js/my-account-details');
 ?>

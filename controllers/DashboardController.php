@@ -56,6 +56,9 @@ class DashboardController extends Controller
      */
     public function actionIndex()
     {
+        if (App::identity('isCustomer')) {
+            return $this->redirect(['site/customer-dashboard']);
+        }
         $searchModel = new DashboardSearch();
 
         if (($queryParams = App::queryParams()) != null) {
