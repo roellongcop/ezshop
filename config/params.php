@@ -4,10 +4,30 @@ return [
     'user.passwordResetTokenExpire' => 3600,
     'pagination' => [25 => 25, 50 => 50, 75 => 75, 100 => 100],
     'customer_links' => [
-        ['label' => 'My Orders History', 'url' => ['site/my-orders'], 'icon' => 'fas fa-cart-plus'],
-        ['label' => 'My Wishlist', 'url' => ['site/my-wishlist'], 'icon' => 'fas fa-bookmark'],
-        ['label' => 'My Product Reviews', 'url' => ['site/my-reviews'], 'icon' => 'fas fa-star-half-alt'],
-        ['label' => 'My Account Details', 'url' => ['site/my-account'], 'icon' => 'fas fa-user-lock'],
+        [
+            'label' => 'My Orders History', 
+            'url' => ['site/my-orders'], 
+            'icon' => 'fas fa-cart-plus',
+            'page' => 'my-orders'
+        ],
+        [
+            'label' => 'My Wishlist', 
+            'url' => ['site/my-wishlist'], 
+            'icon' => 'fas fa-bookmark',
+            'page' => 'my-wishlists'
+        ],
+        [
+            'label' => 'My Product Reviews', 
+            'url' => ['site/my-reviews'], 
+            'icon' => 'fas fa-star-half-alt',
+            'page' => 'my-product-reviews'
+        ],
+        [
+            'label' => 'My Account Details', 
+            'url' => ['site/my-account'], 
+            'icon' => 'fas fa-user-lock',
+            'page' => 'my-account'
+        ],
     ],
     'price_filter' => [
         0 => 100,

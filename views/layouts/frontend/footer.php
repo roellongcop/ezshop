@@ -64,8 +64,10 @@ $activePage = $this->params['activePage'] ?? 'home';
                     <h5 class="text-secondary text-uppercase mb-4">My Account</h5>
 
                     <div class="d-flex flex-column justify-content-start">
-                        <?= Html::foreach(App::params('customer_links'), function($link) {
-                            return YiiHtml::a('<i class="fa fa-angle-right mr-2"></i> ' . $link['label'], $link['url'], ['class' => 'text-secondary mb-2']) ;
+                        <?= Html::foreach(App::params('customer_links'), function($link) use($activePage) {
+                            return YiiHtml::a('<i class="fa fa-angle-right mr-2"></i> ' . $link['label'], $link['url'], [
+                                'class' => 'mb-2 ' . (($activePage == $link['page']) ? 'active': 'text-secondary')
+                            ]) ;
                         }) ?>
                        
                         <?= Html::ifElse(App::isLogin(), function() use ($activePage) {
