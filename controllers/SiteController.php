@@ -221,7 +221,10 @@ class SiteController extends Controller
         $model = new LoginForm();
         $PSR = new PasswordResetForm();
         if ($model->load(App::post()) && $model->login()) {
-            return $this->goBack();
+            if (App::identity('isCustomer')) {
+                return $this->redirect(['customer-landing']);
+            }
+            return $this->redirect(['dashboard/index']);
         }
 
         $model->password = '';
