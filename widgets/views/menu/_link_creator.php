@@ -44,13 +44,9 @@ $controller = $this->params['controller'] ?? App::controllerID();
                     'menu' => $menu,
                     'viewParams' => $viewParams,
                 ]);
-
-                $class = Html::ifElse($viewParams['activeMenuLink'] ?? false, function($activeMenuLink) use($menu) {
+                
+                $class = Html::if($viewParams['activeMenuLink'] ?? $viewParams['controllerLink'], function($activeMenuLink) use($menu) {
                     return ($activeMenuLink == $menu['link']) ? 'menu-item-active': '';
-                }, function() use($menu, $controller) {
-                    list($c, $a) = App::app()->createController($menu['link']);
-                    $controllerId = $c ? $c->id: '';
-                    return ($controllerId == $controller)? 'menu-item-active': '';
                 });
                 return <<< HTML
                     <li class="menu-item {$class}" aria-haspopup="true">
