@@ -39,9 +39,9 @@ $model->add('customer', 'customer', ['role_id' => 4]);
 $model->add('blockeduser', 'blockeduser', ['is_blocked' => User::BLOCKED]);
 $model->add('notverifieduser', 'notverifieduser', ['status' => User::STATUS_INACTIVE]);
 $model->add('inactiveuser', 'inactiveuser', ['record_status' => User::RECORD_INACTIVE]);
-$model->add('inactiveroleuser', 'inactiveroleuser', ['role_id' => 4]);
+$model->add('inactiveroleuser', 'inactiveroleuser', ['role_id' => 5]);
 $model->add('no_inactive_data_access_role_user', 'no_inactive_data_access_role_user', [
-    'role_id' => 6
+    'role_id' => 7
 ]);
 
 return $model->getData();

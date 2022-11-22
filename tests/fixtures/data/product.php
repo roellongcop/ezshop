@@ -8,6 +8,7 @@ $model = new \app\helpers\FixtureData(function($params) {
 		'name' => 'Name',
 		'categories' => json_encode(['Categories']),
 		'description' => 'Description',
+		'specification' => 'specification',
 		'tags' => json_encode(['Tags']),
 		'image' => 'Image',
 		'gallery' => json_encode(['Gallery']),

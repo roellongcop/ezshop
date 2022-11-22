@@ -6,7 +6,7 @@ use yii\db\Expression;
 $model = new \app\helpers\FixtureData(function($params) {
     return [
 		'name' => 'Name',
-		'email' => 'Email',
+		'email' => 'sample@email.com',
 		'subject' => 'Subject',
 		'message' => 'Message',
 		'record_status' => Email::RECORD_ACTIVE,

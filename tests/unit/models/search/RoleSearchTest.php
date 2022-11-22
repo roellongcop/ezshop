@@ -18,7 +18,7 @@ class RoleSearchTest extends \Codeception\Test\Unit
         $searchModel = new RoleSearch();
         $dataProviders = $searchModel->search(['RoleSearch' => ['keywords' => '']]);
         expect_that($dataProviders);
-        expect($dataProviders->totalCount)->equals(3);
+        expect($dataProviders->totalCount)->equals(7);
     }
 
     public function testSearchWithNoResult()

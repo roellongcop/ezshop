@@ -10,7 +10,7 @@ class EmailTest extends \Codeception\Test\Unit
     {
         return array_replace([
             'name' => 'Name',
-            'email' => 'Email',
+            'email' => 'sample@email.com',
             'subject' => 'Subject',
             'message' => 'Message',
             'record_status' => Email::RECORD_ACTIVE
