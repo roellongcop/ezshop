@@ -1,6 +1,7 @@
 <?php
 /* @var $this yii\web\View */
 use app\helpers\App;
+use yii\helpers\Html as YiiHtml;
 use app\helpers\Html;
 use app\widgets\ActiveForm;
 
@@ -19,6 +20,9 @@ $this->params['activePage'] = 'sign-in';
                     'maxlength' => true,
                 ])->label('Email') ?>
                 <?= $form->field($model, 'password')->passwordInput(['maxlength' => true]) ?>
+                <p>
+                    Don't have an account? <?= YiiHtml::a('Sign Up here', ['site/signup']) ?>
+                </p>
                 <?= Html::submitButton('Sign In', [
                     'class' => 'btn btn-primary py-2 px-4'
                 ]) ?>

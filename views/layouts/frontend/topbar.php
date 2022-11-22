@@ -5,6 +5,8 @@ use app\helpers\App;
 use app\helpers\Url;
 use app\helpers\Html;
 use yii\helpers\Html as YiiHtml;
+
+$activePage = $this->params['activePage'] ?? 'home';
 ?>
 <!-- Topbar Start -->
 <div class="container-fluid">
@@ -26,23 +28,27 @@ use yii\helpers\Html as YiiHtml;
                     <div class="dropdown-menu dropdown-menu-right">
                         <?= Html::ifElse(
                             App::isLogin(), 
-                            function() {
+                            function() use($activePage) {
                                 return implode('', [
-                                    Html::foreach(App::params('customer_links'), function($link) {
-                                        return YiiHtml::a($link['label'], $link['url'], ['class' => 'dropdown-item']) ;
+                                    Html::foreach(App::params('customer_links'), function($link) use($activePage) {
+                                        return YiiHtml::a($link['label'], $link['url'], [
+                                            'class' => 'dropdown-item ' . ($activePage == $link['page'] ? 'active': '')
+                                        ]) ;
                                     }),
                                     Html::beginForm(['site/logout'], 'post'),
-                                    Html::submitButton('Sign Out', ['class' => 'dropdown-item']),
+                                    Html::submitButton('Sign Out', [
+                                        'class' => 'dropdown-item'
+                                    ]),
                                     Html::endForm()
                                 ]);
                             },
-                            function() {
+                            function() use($activePage) {
                                 return implode('', [
                                     YiiHtml::a('Sign In', ['site/login'], [
-                                        'class' => 'dropdown-item'
+                                        'class' => 'dropdown-item ' . ($activePage == 'sign-in' ? 'active': '')
                                     ]),
                                     YiiHtml::a('Sign Up', ['site/signup'], [
-                                        'class' => 'dropdown-item'
+                                        'class' => 'dropdown-item ' . ($activePage == 'sign-up' ? 'active': '')
                                     ])
                                 ]);
                             }

@@ -79,14 +79,15 @@ $activePage = $this->params['activePage'] ?? 'home';
                                 </a>
                             HTML;
                         }, function() use ($activePage) {
-                            $url = Url::toRoute(['site/login']);
-                            $class = $activePage == 'sign-in' ? 'active': 'text-secondary';
-                            return <<< HTML
-                                <a class="{$class} mb-2" href="{$url}">
-                                    <i class="fa fa-angle-right mr-2"></i>
-                                    Sign In
-                                </a>
-                            HTML;
+
+                            return implode('', [
+                                YiiHtml::a('<i class="fa fa-angle-right mr-2"></i> Sign In', ['site/login'], [
+                                    'class' => 'mb-2 ' . ($activePage == 'sign-in' ? 'active': 'text-secondary')
+                                ]),
+                                YiiHtml::a('<i class="fa fa-angle-right mr-2"></i> Sign Up', ['site/signup'], [
+                                    'class' => 'mb-2 ' . ($activePage == 'sign-up' ? 'active': 'text-secondary')
+                                ]),
+                            ]);
                         }) ?>
                         
                     </div>
