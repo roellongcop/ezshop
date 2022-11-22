@@ -18,6 +18,7 @@ use app\models\form\user\BillingDetailForm;
 use app\models\form\ChangePasswordForm;
 use app\models\Province;
 use app\models\Municipality;
+use app\models\Wishlist;
 
 
 class SiteController extends Controller
@@ -328,6 +329,40 @@ class SiteController extends Controller
             'identity' => $identity,
             'billing' => $billing,
             'password' => $password,
+        ]);
+    }
+
+    public function actionToWishlist()
+    {
+        if (($product_id = App::post('product_id')) != null) {
+
+            $condition = [
+                'product_id' => $product_id,
+                'user_id' => App::identity('id')
+            ];
+
+            if (($wishlist = Wishlist::findOne($condition)) != null) {
+                if ($wishlist->delete()) {
+                    return $this->asJson([
+                        'status' => 'success',
+                        'message' => 'Removed from Wishlist'
+                    ]);
+                }
+            }
+
+            $wishlist = new Wishlist($condition);
+
+            if ($wishlist->save()) {
+                return $this->asJson([
+                    'status' => 'success',
+                    'message' => 'Added to Wishlist'
+                ]);
+            }
+        }
+
+        return $this->asJson([
+            'status' => 'failed',
+            'errorSummary' => 'No product found'
         ]);
     }
 }

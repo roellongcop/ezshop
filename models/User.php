@@ -48,6 +48,8 @@ class User extends ActiveRecord implements IdentityInterface
     public $password;
     public $password_repeat;
 
+    public $_wishlist_products_model;
+
     /**
      * {@inheritdoc}
      */
@@ -700,4 +702,30 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return false;
     }
+
+    public function getWishlists()
+    {
+        return $this->hasMany(Wishlist::class, ['user_id' => 'id']);
+    }
+
+    public function getWishlistProductIds()
+    {
+        return array_values(Wishlist::dropdown('id', 'product_id', ['user_id' => $this->id]));
+    }
+
+    public function getWishlistProducts()
+    {
+        return $this->hasMany(Product::class, ['id' => 'product_id'])
+            ->via('wishlists');
+    }
+
+    public function getWishlistProductModels()
+    {
+        if ($this->_wishlist_products_model === null) {
+            $this->_wishlist_products_model = $this->wishlistProducts;
+        }
+
+        return $this->_wishlist_products_model;
+    }
+    
 }
