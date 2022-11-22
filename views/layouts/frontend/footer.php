@@ -4,6 +4,8 @@ use app\helpers\App;
 use app\helpers\Url;
 use app\helpers\Html;
 use yii\helpers\Html as YiiHtml;
+
+$activePage = $this->params['activePage'] ?? 'home';
 ?>
 <!-- Footer Start -->
 <div class="container-fluid bg-dark text-secondary mt-5 pt-5">
@@ -31,28 +33,28 @@ use yii\helpers\Html as YiiHtml;
                 <div class="col-md-4 mb-5">
                     <h5 class="text-secondary text-uppercase mb-4">Quick Shop</h5>
                     <div class="d-flex flex-column justify-content-start">
-                        <a class="text-secondary mb-2" href="<?= Url::toRoute(['site/home']) ?>">
+                        <a class="<?= $activePage == 'home' ? 'active': 'text-secondary' ?> mb-2" href="<?= Url::toRoute(['site/home']) ?>">
                             <i class="fa fa-angle-right mr-2"></i>
                             Home
                         </a>
-                        <a class="text-secondary mb-2" href="<?= Url::toRoute(['site/shop']) ?>">
+                        <a class="<?= $activePage == 'shop' ? 'active': 'text-secondary' ?> mb-2" href="<?= Url::toRoute(['site/shop']) ?>">
                             <i class="fa fa-angle-right mr-2"></i>
-                            Our Shop
+                            Shop
                         </a>
                         
-                        <a class="text-secondary mb-2" href="<?= Url::toRoute(['site/cart']) ?>">
+                        <a class="<?= $activePage == 'cart' ? 'active': 'text-secondary' ?> mb-2" href="<?= Url::toRoute(['site/cart']) ?>">
                             <i class="fa fa-angle-right mr-2"></i>
-                            Shopping Cart
+                            Cart
                         </a>
-                        <a class="text-secondary mb-2" href="<?= Url::toRoute(['site/checkout']) ?>">
+                        <a class="<?= $activePage == 'checkout' ? 'active': 'text-secondary' ?> mb-2" href="<?= Url::toRoute(['site/checkout']) ?>">
                             <i class="fa fa-angle-right mr-2"></i>
                             Checkout
                         </a>
-                        <a class="text-secondary mb-2" href="<?= Url::toRoute(['site/about']) ?>">
+                        <a class="<?= $activePage == 'about' ? 'active': 'text-secondary' ?> mb-2" href="<?= Url::toRoute(['site/about']) ?>">
                             <i class="fa fa-angle-right mr-2"></i>
                             About Us
                         </a> 
-                        <a class="text-secondary mb-2" href="<?= Url::toRoute(['site/contact']) ?>">
+                        <a class="<?= $activePage == 'contact' ? 'active': 'text-secondary' ?> mb-2" href="<?= Url::toRoute(['site/contact']) ?>">
                             <i class="fa fa-angle-right mr-2"></i>
                             Contact Us
                         </a> 
@@ -66,19 +68,19 @@ use yii\helpers\Html as YiiHtml;
                             return YiiHtml::a('<i class="fa fa-angle-right mr-2"></i> ' . $link['label'], $link['url'], ['class' => 'text-secondary mb-2']) ;
                         }) ?>
                        
-                        <?= Html::ifElse(App::isLogin(), function() {
+                        <?= Html::ifElse(App::isLogin(), function() use ($activePage) {
                             $url = Url::toRoute(['site/logout']);
-
                             return <<< HTML
                                 <a class="text-secondary mb-2" href="{$url}">
                                     <i class="fa fa-angle-right mr-2"></i>
                                     Sign Out
                                 </a>
                             HTML;
-                        }, function() {
+                        }, function() use ($activePage) {
                             $url = Url::toRoute(['site/login']);
+                            $class = $activePage == 'sign-in' ? 'active': 'text-secondary';
                             return <<< HTML
-                                <a class="text-secondary mb-2" href="{$url}">
+                                <a class="{$class} mb-2" href="{$url}">
                                     <i class="fa fa-angle-right mr-2"></i>
                                     Sign In
                                 </a>

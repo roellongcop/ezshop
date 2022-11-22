@@ -8,10 +8,9 @@ use yii\widgets\ListView;
 use app\models\Product;
 
 $this->title = 'Shop';
+$this->params['activePage'] = 'shop';
 
-$this->addJsFile('frontend/js/shop', [
-    'app\assets\frontend\AppAsset'
-]);
+$this->addJsFile('frontend/js/shop', ['app\assets\frontend\AppAsset']);
 ?>
 
 <div class="container-fluid shop-page">

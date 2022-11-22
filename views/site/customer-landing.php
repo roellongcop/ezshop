@@ -6,6 +6,7 @@ use app\helpers\Url;
 use app\widgets\ActiveForm;
 
 $this->title = 'Customer Landing';
+$this->params['activePage'] = 'customer-landing';
 ?>
 <div class="container-fluid pt-5">
     <h2 class="text-center section-title position-relative text-uppercase mx-xl-5 mb-4">
