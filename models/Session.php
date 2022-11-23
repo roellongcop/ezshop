@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\helpers\App;
 use app\widgets\Anchor;
 
 /**
@@ -89,9 +90,7 @@ class Session extends ActiveRecord
 
     public function getUsername()
     {
-        if(($model = $this->user) != null) {
-            return $model->username;
-        }
+        return App::if($this->user, fn($user) => $user->username);
     }
 
     public function gridColumns()

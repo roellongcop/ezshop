@@ -368,12 +368,7 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
     public function getCurrentTheme()
     {
         if ($this->_currentTheme === null) {
-            if (($theme = $this->theme) != null) {
-                $this->_currentTheme = $theme;
-            }
-            else {
-                $this->_currentTheme = Theme::findOne(App::setting('system')->theme);
-            }
+            $this->_currentTheme = App::ifElse($this->theme, fn($theme) => $theme, App::setting('theme'));
         }
         return $this->_currentTheme;
     }
@@ -416,37 +411,27 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
 
     public function getMain_navigation()
     {
-        if (($model = $this->role) != null) {
-            return $model->main_navigation;
-        }
+        return $this->mainNavigation;
     }
 
     public function getRoleAccess()
     {
-        if (($model = $this->role) != null) {
-            return $model->role_access;
-        }
+        return App::if($this->role, fn($role) => $role->role_access);
     }
 
     public function getRoleName()
     {
-        if (($model = $this->role) != null) {
-            return $model->name;
-        }
+        return App::if($this->role, fn($role) => $role->name);
     }
 
     public function getModuleAccess()
     {
-        if (($model = $this->role) != null) {
-            return $model->module_access;
-        }
+        return App::if($this->role, fn($role) => $role->module_access);
     }
 
     public function getMainNavigation()
     {
-        if (($model = $this->role) != null) {
-            return $model->main_navigation;
-        }
+        return App::if($this->role, fn($role) => $role->main_navigation);
     }
 
     public function behaviors()
@@ -464,9 +449,7 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
 
     public function getRoleViewUrl()
     {
-        if (($role = $this->role) != null) {
-            return $role->viewUrl;
-        }
+        return App::if($this->role, fn($role) => $role->viewUrl);
     }
 
     public function gridColumns()
@@ -653,30 +636,22 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
 
     public function getIsDeveloper()
     {
-        if (($role = $this->role) != null) {
-            return $role->getIsDeveloper();
-        }
+        return App::if($this->role, fn($role) => $role->getIsDeveloper());
     }
 
     public function getIsSuperadmin()
     {
-        if (($role = $this->role) != null) {
-            return $role->getIsSuperadmin();
-        }
-    }
-
-    public function getIsCustomer()
-    {
-        if (($role = $this->role) != null) {
-            return $role->getIsCustomer();
-        }
+        return App::if($this->role, fn($role) => $role->getIsSuperadmin());
     }
 
     public function getIsAdmin()
     {
-        if (($role = $this->role) != null) {
-            return $role->getIsAdmin();
-        }
+        return App::if($this->role, fn($role) => $role->getIsAdmin());
+    }
+
+    public function getIsCustomer()
+    {
+        return App::if($this->role, fn($role) => $role->getIsCustomer());
     }
 
     public static function findByKeywords($keywords='', $attributes='', $limit=10, $andFilterWhere=[])
