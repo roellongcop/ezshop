@@ -4,6 +4,8 @@ namespace app\controllers;
 
 use app\helpers\App;
 use app\helpers\Html;
+use app\helpers\ArrayHelper;
+
 use app\models\Email;
 use app\models\Product;
 use app\models\User;
@@ -37,7 +39,9 @@ class SiteController extends Controller
                 'signup',
                 'signup-success',
                 'signup-verification',
-                'my-account-details'
+                'my-account-details',
+                'to-wishlist',
+                'navbar-poll'
             ]
         ];
 
@@ -53,8 +57,7 @@ class SiteController extends Controller
 
     public function beforeAction($action)
     {
-        App::view()->params['wishlists'] = App::isLogin() ? App::identity('wishlists'): [];
-        App::view()->params['wishlistProductIds'] = App::isLogin() ? App::identity('wishlistProductIds'): []; 
+        App::view()->params['wishlistProductIds'] = App::isLogin() ? array_values(ArrayHelper::map(App::identity('wishlists'), 'id', 'product_id')): []; 
         
         switch ($action->id) {
             case 'home':
@@ -334,6 +337,13 @@ class SiteController extends Controller
 
     public function actionToWishlist()
     {
+        if (App::isGuest()) {
+            return $this->asJson([
+                'status' => 'failed',
+                'errorSummary' => 'Adding item to wishlists needs an account.'
+            ]);
+        }
+
         if (($product_id = App::post('product_id')) != null) {
 
             $condition = [
@@ -345,6 +355,8 @@ class SiteController extends Controller
                 if ($wishlist->delete()) {
                     return $this->asJson([
                         'status' => 'success',
+                        'action' => 'delete',
+                        'title' => 'Add to Wishlist',
                         'message' => 'Removed from Wishlist'
                     ]);
                 }
@@ -355,6 +367,8 @@ class SiteController extends Controller
             if ($wishlist->save()) {
                 return $this->asJson([
                     'status' => 'success',
+                    'action' => 'save',
+                    'title' => 'Remove from Wishlist',
                     'message' => 'Added to Wishlist'
                 ]);
             }
@@ -364,5 +378,65 @@ class SiteController extends Controller
             'status' => 'failed',
             'errorSummary' => 'No product found'
         ]);
+    }
+
+    public function actionNavbarPoll()
+    {
+        session_write_close();
+        ignore_user_abort(false);
+        set_time_limit(0);
+
+        try {
+
+            if(($post = App::post()) != null) {
+
+                $noChanges = true;
+                $trial = rand(5, 10);
+
+                while($noChanges) {
+                    if ($trial == 0) {
+                        $response['status'] = 'failed';
+                        $response['errorSummary'] = 'no changes';
+                        return $this->asJson($response);
+                    }
+                    $response = [];
+
+                    $myTotalWishlist = App::identity('myTotalWishlist');
+
+                    if ($myTotalWishlist != (int)$post['totalWishlist']) {
+                        $noChanges = false;
+                        $response['totalWishlist'] = $myTotalWishlist;
+                        $response['totalWishlistFormatted'] = number_format($myTotalWishlist);
+
+                    }
+
+
+
+                    if ($noChanges == false) {
+                        $response['status'] = 'success';
+
+                        return $this->asJson($response);
+                    }
+
+                    if (! $response) {
+                        $trial--;
+                    }
+
+                    sleep(2);
+                }
+            }
+
+            return $this->asJson([
+                'status' => 'failed',
+                'errorSummary' => 'No Chat State sent'
+            ]);
+
+        } 
+        catch (\yii\base\ErrorException $e) {
+            return $this->asJson([
+                'status' => 'failed',
+                'errorSummary' => $e->message
+            ]);
+        }
     }
 }

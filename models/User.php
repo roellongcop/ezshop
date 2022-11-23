@@ -680,6 +680,13 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
 
     public function getWishlistProductIds()
     {
-        return array_values(ArrayHelper::map($this->wishlist, 'id', 'product_id'));
+        return array_values(ArrayHelper::map($this->wishlists, 'id', 'product_id'));
+    }
+
+    public function getMyTotalWishlist()
+    {
+        return Wishlist::find()
+            ->where(['user_id' => $this->id])
+            ->count();
     }
 }

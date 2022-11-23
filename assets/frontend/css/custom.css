@@ -26,3 +26,9 @@ div.required label.control-label:after {
 .pointer {
     cursor: pointer;
 }
+
+.wishlist-span {
+    position: relative;
+    left: 10px;
+    top: 5px;
+}

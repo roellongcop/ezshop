@@ -2,10 +2,21 @@
 
 use app\helpers\App;
 use app\helpers\Html;
+use app\helpers\Url;
 use yii\helpers\Html as YiiHtml;
 use app\models\ProductCategory;
 
+
 $activePage = $this->params['activePage'] ?? 'home';
+$totalWishlist = App::identity('myTotalWishlist');
+
+$this->addJsFile('frontend/js/navbar');
+$this->registerJs(<<< JS
+    navbarPoll({
+        totalWishlist: {$totalWishlist},
+        totalCart: 0
+    })
+JS);
 ?>
 
 <!-- Navbar Start -->
@@ -31,12 +42,10 @@ $activePage = $this->params['activePage'] ?? 'home';
                     <?= YiiHtml::a('- Filter by Categories -', ['site/shop'], [
                             'class' => 'nav-item nav-link'
                         ]) ?>
-                    <?= Html::if(ProductCategory::dropdown('id', 'name'), function($categories) {
-                        return Html::foreach($categories, function($category) {
-                            return YiiHtml::a($category, ['site/shop', 'categories' => $category], [
-                                'class' => 'nav-item nav-link'
-                            ]);
-                        });
+                    <?= Html::foreach(ProductCategory::dropdown('id', 'name'), function($category) {
+                        return YiiHtml::a($category, ['site/shop', 'categories' => $category], [
+                            'class' => 'nav-item nav-link'
+                        ]);
                     }) ?>
                 </div>
             </nav>
@@ -67,9 +76,11 @@ $activePage = $this->params['activePage'] ?? 'home';
                         ]) ?>
                     </div>
                     <div class="navbar-nav ml-auto py-0 d-none d-lg-block">
-                        <a href="" class="btn px-0">
+                        <a href="<?= Url::toRoute(['site/my-wishlist']) ?>" class="btn px-0">
                             <i class="fas fa-heart text-primary"></i>
-                            <span class="badge text-secondary border border-secondary rounded-circle" style="padding-bottom: 2px;">0</span>
+                            <span class="badge text-secondary border border-secondary rounded-circle total-wishlist" style="padding-bottom: 2px;">
+                                <?= number_format($totalWishlist) ?>
+                            </span>
                         </a>
                         <a href="" class="btn px-0 ml-3">
                             <i class="fas fa-shopping-cart text-primary"></i>

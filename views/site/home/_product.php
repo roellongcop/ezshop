@@ -1,17 +1,22 @@
 <?php
 
 use app\helpers\App;
+use app\helpers\Html;
 
 $this->addJsFile('frontend/js/product');
-$productIds = $this->params['wishlistProductIds'];
+$wishlist = in_array($product->id, $this->params['wishlistProductIds']);
 ?>
 
-<div class="product-item bg-light mb-4">
+<div class="product-item bg-light mb-4 product-item-<?= $product->id ?>">
+        <?= App::if($wishlist, Html::tag('span', '<i class="far fa-heart"></i>', [
+            'class' => 'text-warning wishlist-span',
+        ])) ?>
+
     <div class="product-img position-relative overflow-hidden">
         <img class="img-fluid w-100" src="<?= $product->getImageUrl(326) ?>" alt="">
         <div class="product-action">
             <a title="Add to Cart" data-toggle="tooltip" class="btn btn-outline-dark btn-square" href=""><i class="fa fa-shopping-cart"></i></a>
-            <a title="<?= in_array($product->id, $productIds)? 'Remove from Wishlists': 'Add to Wishlist' ?>" data-toggle="tooltip" data-product_id="<?= $product->id ?>" class="btn-add-to-wishlist btn btn-outline-dark btn-square" href="#">
+            <a title="<?= $wishlist ? 'Remove from Wishlist': 'Add to Wishlist' ?>" data-toggle="tooltip" data-product_id="<?= $product->id ?>" class="btn-add-to-wishlist btn btn-outline-dark btn-square" href="#">
                 <i class="far fa-heart"></i></a>
             <!-- <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a> -->
             <a title="View Product" data-toggle="tooltip" class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a>
