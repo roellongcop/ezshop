@@ -20,7 +20,7 @@ return [
             'label' => 'My Wishlist', 
             'url' => ['site/my-wishlist'], 
             'icon' => 'fas fa-bookmark',
-            'page' => 'my-wishlists'
+            'page' => 'my-wishlist'
         ],
         [
             'label' => 'My Product Reviews', 
