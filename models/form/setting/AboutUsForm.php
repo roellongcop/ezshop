@@ -2,8 +2,6 @@
 
 namespace app\models\form\setting;
 
-use Yii;
-
 class AboutUsForm extends SettingForm
 {
     const NAME = 'about-us-settings';

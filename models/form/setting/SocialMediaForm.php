@@ -2,8 +2,6 @@
 
 namespace app\models\form\setting;
 
-use Yii;
-
 class SocialMediaForm extends SettingForm
 {
     const NAME = 'social-media-settings';

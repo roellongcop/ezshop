@@ -2,10 +2,7 @@
 
 namespace app\models;
 
-use Yii;
-use app\helpers\App;
 use app\widgets\Anchor;
-use app\helpers\Url;
 
 /**
  * This is the model class for table "{{%sessions}}".
