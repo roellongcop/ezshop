@@ -43,7 +43,11 @@ class Wishlist extends ActiveRecord
     public function rules()
     {
         return $this->setRules([
+            [['user_id', 'product_id'], 'required'],
             [['user_id', 'product_id'], 'integer'],
+            ['user_id', 'exist', 'targetRelation' => 'user'],
+            ['product_id', 'exist', 'targetRelation' => 'product'],
+            [['user_id', 'product_id'], 'validateExistense'],
         ]);
     }
 
@@ -66,6 +70,26 @@ class Wishlist extends ActiveRecord
     public static function find()
     {
         return new \app\models\query\WishlistQuery(get_called_class());
+    }
+
+    public function validateExistense($attribute, $params)
+    {
+        if ($this->isNewRecord) {
+            $wishlist = self::findOne(['user_id' => $this->user_id, 'product_id' => $this->product_id]);
+            if ($wishlist) {
+                $this->addError($attribute, 'already in the wishlist');
+            }
+        }
+    }
+
+    public function getUser()
+    {
+        return $this->hasOne(User::class, ['id' => 'user_id']);
+    }
+
+    public function getProduct()
+    {
+        return $this->hasOne(Product::class, ['id' => 'product_id']);
     }
      
     public function gridColumns()

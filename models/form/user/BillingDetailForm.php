@@ -4,7 +4,7 @@ namespace app\models\form\user;
 
 use app\models\Municipality;
 use app\models\Province;
-use app\helpers\Html;
+use app\helpers\App;
 
 class BillingDetailForm extends UserForm
 {
@@ -30,6 +30,8 @@ class BillingDetailForm extends UserForm
             [['first_name', 'last_name', 'street', 'zip', 'phone', 'email'], 'string'],
             [['email'], 'trim'],
             [['email'], 'email'],
+            ['province_id', 'exist', 'targetRelation' => 'province'],
+            ['city_id', 'exist', 'targetRelation' => 'municipality'],
         ]);
     }
 
@@ -64,16 +66,16 @@ class BillingDetailForm extends UserForm
 
     public function getProv()
     {
-        return Html::if($this->province, fn($province) => $province->prov);
+        return App::if($this->province, fn($province) => $province->prov);
     }
 
     public function getProvinceName()
     {
-        return Html::if($this->province, fn($province) => $province->Province);
+        return App::if($this->province, fn($province) => $province->Province);
     }
 
     public function getMunicipalityName()
     {
-        return Html::if($this->municipality, fn($municipality) => $municipality->Municipality);
+        return App::if($this->municipality, fn($municipality) => $municipality->Municipality);
     }
 }

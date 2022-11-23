@@ -9,8 +9,8 @@ class WishlistTest extends \Codeception\Test\Unit
     protected function data($replace=[])
     {
         return array_replace([
-            'user_id' => 'User ID',
-            'product_id' => 'Product ID',
+            'user_id' => 2,
+            'product_id' => 1,
             'record_status' => Wishlist::RECORD_ACTIVE
         ], $replace);
     }
@@ -19,6 +19,14 @@ class WishlistTest extends \Codeception\Test\Unit
     {
         $model = new Wishlist($this->data());
         expect_that($model->save());
+    }
+
+    public function testCreateExisting()
+    {
+        $model = new Wishlist($this->data(['user_id' => 1]));
+        expect_not($model->save());
+        expect($model->errors)->hasKey('user_id');
+        expect($model->errors)->hasKey('product_id');
     }
 
     public function testNoInactiveDataAccessRoleUserCreateInactiveData()

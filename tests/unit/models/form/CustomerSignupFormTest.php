@@ -4,6 +4,7 @@ namespace tests\unit\models\form;
 
 use app\helpers\App;
 use app\models\form\CustomerSignupForm;
+use app\models\form\user\BillingDetailForm;
 
 class CustomerSignupFormTest extends \Codeception\Test\Unit
 {
@@ -19,7 +20,11 @@ class CustomerSignupFormTest extends \Codeception\Test\Unit
     public function testSuccess()
     {
         $model = new CustomerSignupForm($this->data());
-        expect_that($model->signup());
+        $user = $model->signup();
+        expect_that($user);
+
+        $billing = new BillingDetailForm(['user_id' => $user->id]);
+        expect($billing->email)->equals($user->email);
     }
 
     public function testExistingEmail()

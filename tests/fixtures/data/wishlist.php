@@ -5,8 +5,8 @@ use yii\db\Expression;
 
 $model = new \app\helpers\FixtureData(function($params) {
     return [
-		'user_id' => 'User ID',
-		'product_id' => 'Product ID',
+		'user_id' => 1,
+		'product_id' => 1,
 		'record_status' => Wishlist::RECORD_ACTIVE,
         'created_by' => 1,
         'updated_by' => 1,
