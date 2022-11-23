@@ -53,6 +53,9 @@ class SiteController extends Controller
 
     public function beforeAction($action)
     {
+        App::view()->params['wishlists'] = App::isLogin() ? App::identity('wishlists'): [];
+        App::view()->params['wishlistProductIds'] = App::isLogin() ? App::identity('wishlistProductIds'): []; 
+        
         switch ($action->id) {
             case 'home':
             case 'about':
