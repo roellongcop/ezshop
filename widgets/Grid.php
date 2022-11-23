@@ -10,6 +10,7 @@ use app\widgets\Anchor;
 class Grid extends BaseWidget
 {
     public $dataProvider;
+    public $actionColumns;
     public $columns;
     public $options = ['class' => 'table-responsive'];
     public $pager = ['class' => 'yii\widgets\LinkPager'];
@@ -20,6 +21,11 @@ class Grid extends BaseWidget
     
     public $paramName = 'id';
     public $layout;
+    public $tableOptions = [
+        'class' => 'table table-striped table-bordered',
+    ];
+    public $headerRowOptions = [];
+
     public function init() 
     {
         // your logic here
@@ -27,12 +33,14 @@ class Grid extends BaseWidget
         $currentTheme = App::identity('currentTheme');
         $keenThemes = Theme::KEEN;
         if (in_array($currentTheme->slug, $keenThemes)) {
-            $this->pager['class'] = 'app\widgets\LinkPager';
+            $this->pager['class'] = $this->pager['class'] ?? 'app\widgets\LinkPager';
         }
 
-        $this->columns = $this->searchModel->tableColumns;
+        $this->columns = $this->columns ?: $this->searchModel->tableColumns;
 
         $this->columns['actions'] = $this->columns['actions'] ?? $this->actionColumns();
+
+
         $this->layout = $this->layout ?: $this->render('grid/layout', [
             'searchModel' => $this->searchModel,
             'dataProvider' => $this->dataProvider,
@@ -163,6 +171,8 @@ class Grid extends BaseWidget
             'columns' => $this->columns,
             'pager' => $this->pager,
             'formatter' => $this->formatter,
+            'tableOptions' => $this->tableOptions,
+            'headerRowOptions' => $this->headerRowOptions,
         ]);
     }
 }

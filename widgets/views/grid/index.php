@@ -7,6 +7,7 @@ $this->registerWidgetJsFile('grid');
 $this->registerJs(<<< JS
     new GridWidget({widgetId: '{$widgetId}'}).init();
 JS);
+
 ?>
 <?= GridView::widget([
     'id' => $widgetId,
@@ -16,4 +17,6 @@ JS);
     'columns' => $columns,
     'pager' => $pager,
     'formatter' => $formatter,
+    'tableOptions' => $tableOptions,
+    'headerRowOptions' => $headerRowOptions,
 ]) ?>

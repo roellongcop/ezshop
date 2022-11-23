@@ -172,4 +172,9 @@ class FormatterComponent extends \yii\i18n\Formatter
     { 
         return array_unique($this->asArrayFlatten($array));
     } 
+
+    public function asPeso($num=0)
+    {
+        return '₱ ' . $this->asNumberFormat($num);
+    }
 }

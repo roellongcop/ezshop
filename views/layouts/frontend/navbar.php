@@ -8,7 +8,7 @@ use app\models\ProductCategory;
 
 
 $activePage = $this->params['activePage'] ?? 'home';
-$totalWishlist = App::identity('myTotalWishlist');
+$totalWishlist = App::isLogin() ? App::identity('myTotalWishlist'): 0;
 
 $this->addJsFile('frontend/js/navbar');
 $this->registerJs(<<< JS

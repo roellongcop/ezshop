@@ -32,3 +32,6 @@ div.required label.control-label:after {
     left: 10px;
     top: 5px;
 }
+.table th a {
+    color: #fff;
+}

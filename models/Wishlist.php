@@ -3,6 +3,8 @@
 namespace app\models;
 
 use app\widgets\Anchor;
+use app\helpers\App;
+use app\helpers\Html;
 
 /**
  * This is the model class for table "{{%wishlists}}".
@@ -88,6 +90,26 @@ class Wishlist extends ActiveRecord
     public function getProduct()
     {
         return $this->hasOne(Product::class, ['id' => 'product_id']);
+    }
+
+    public function getProductName()
+    {
+        return App::if($this->product, fn($product) => $product->name);
+    }
+
+    public function getProductRegularPrice()
+    {
+        return App::if($this->product, fn($product) => $product->regular_price);
+    }
+
+    public function getProductSalePrice()
+    {
+        return App::if($this->product, fn($product) => $product->sale_price);
+    }
+
+    public function getProductImage($w=50)
+    {
+        return App::if($this->product, fn($product) => Html::image($product->image, ['w' => $w]));
     }
      
     public function gridColumns()

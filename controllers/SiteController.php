@@ -19,6 +19,7 @@ use app\models\Province;
 use app\models\Municipality;
 use app\models\Wishlist;
 
+use app\models\search\WishlistSearch;
 
 class SiteController extends Controller
 {
@@ -69,6 +70,7 @@ class SiteController extends Controller
             case 'login':
             case 'customer-dashboard':
             case 'my-account-details':
+            case 'my-wishlist':
                 $this->layout = 'frontend';
                 break;
                 
@@ -438,5 +440,17 @@ class SiteController extends Controller
                 'errorSummary' => $e->message
             ]);
         }
+    }
+
+    public function actionMyWishlist()
+    {
+        $searchModel = new WishlistSearch();
+        $dataProvider = $searchModel->search(['WishlistSearch' => App::queryParams()]);
+        $dataProvider->pagination->pageSize = 3;
+
+        return $this->render('my-wishlist', [
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+        ]);
     }
 }
