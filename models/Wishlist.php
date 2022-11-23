@@ -137,4 +137,20 @@ class Wishlist extends ActiveRecord
             'product_id:raw',
         ];
     }
+
+    public static function findByKeywords($keywords='', $attributes='', $limit=10, $andFilterWhere=[])
+    {
+        return parent::findByKeywordsData($attributes, function($attribute) use($keywords, $limit, $andFilterWhere) {
+            return self::find()
+                ->select("{$attribute} AS data")
+                ->alias('u')
+                ->joinWith('product p')
+                ->groupBy($attribute)
+                ->where(['LIKE', $attribute, $keywords])
+                ->andFilterWhere($andFilterWhere)
+                ->limit($limit)
+                ->asArray()
+                ->all();
+        });
+    }
 }

@@ -12,6 +12,7 @@ class Search extends BaseWidget
 
     public $model;
     public $attribute = 'keywords';
+    public $url;
     public $options;
     public $submitOnclick = false;
 
@@ -63,6 +64,7 @@ class Search extends BaseWidget
     {
         return Autocomplete::widget([
             'submitOnclick' => $this->submitOnclick,
+            'url' => $this->url,
             'input' => Html::activeInput('search', $this->model, $this->attribute, $this->options)
         ]);
     }

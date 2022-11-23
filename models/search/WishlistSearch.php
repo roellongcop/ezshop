@@ -55,7 +55,9 @@ class WishlistSearch extends Wishlist
      */
     public function search($params)
     {
-        $query = Wishlist::find();
+        $query = Wishlist::find()
+            ->alias('w')
+            ->joinWith('product p');
 
         // add conditions that should always apply here
         $this->load($params);
@@ -76,20 +78,21 @@ class WishlistSearch extends Wishlist
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'id' => $this->id,
-            'user_id' => $this->user_id,
-            'product_id' => $this->product_id,
-            'record_status' => $this->record_status,
-            'created_by' => $this->created_by,
-            'updated_by' => $this->updated_by,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'w.id' => $this->id,
+            'w.user_id' => $this->user_id,
+            'w.product_id' => $this->product_id,
+            'w.record_status' => $this->record_status,
+            'w.created_by' => $this->created_by,
+            'w.updated_by' => $this->updated_by,
+            'w.created_at' => $this->created_at,
+            'w.updated_at' => $this->updated_at,
         ]);
         
                 
         $query->andFilterWhere(['or', 
-            ['like', 'user_id', $this->keywords],  
-            ['like', 'product_id', $this->keywords],  
+            ['like', 'p.name', $this->keywords],  
+            ['like', 'p.regular_price', $this->keywords],  
+            ['like', 'p.sale_price', $this->keywords],  
         ]);
 
         $query->daterange($this->date_range);

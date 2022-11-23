@@ -446,11 +446,18 @@ class SiteController extends Controller
     {
         $searchModel = new WishlistSearch();
         $dataProvider = $searchModel->search(['WishlistSearch' => App::queryParams()]);
-        $dataProvider->pagination->pageSize = 3;
+        $dataProvider->pagination->pageSize = 5;
 
         return $this->render('my-wishlist', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
         ]);
+    }
+
+    public function actionFindWishlistByKeywords($keywords='')
+    { 
+        return $this->asJson(
+            Wishlist::findByKeywords($keywords, ['p.name', 'p.regular_price', 'p.sale_price'])
+        );
     }
 }

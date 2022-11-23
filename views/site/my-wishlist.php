@@ -1,9 +1,12 @@
 <?php
 
 use app\helpers\App;
+use app\helpers\Url;
 use app\helpers\Html;
 use yii\helpers\Html as YiiHtml;
 use app\widgets\Grid;
+use app\widgets\Search;
+use app\widgets\ActiveForm;
 
 $this->title = 'My Wishlist';
 $this->params['homeBreadcrumbs'] = YiiHtml::a('Dashboard', ['site/customer-dashboard'], ['class' => 'breadcrumb-item text-dark']);
@@ -14,6 +17,22 @@ $this->addJsFile('frontend/js/my-wishlist');
 ?>
 
 <div class="container-fluid">
+    <div class="my-3 text-center">
+        <div style="max-width: 500px;margin: 0 auto;">
+            <?php $form = ActiveForm::begin([
+                'id' => 'main-search-form',
+                'action' => ['site/my-wishlist'], 
+                'method' => 'get'
+            ]); ?>
+                <?= Search::widget([
+                    'url' => Url::toRoute(['site/find-wishlist-by-keywords']),
+                    'submitOnclick' => true,
+                    'model' => $searchModel,
+                ]) ?>
+            <?php ActiveForm::end(); ?>
+        </div>
+    </div>
+
     <div class="row px-xl-5">
         <div class="col-md-12 table-responsive">
             <?= Grid::widget([
@@ -24,25 +43,30 @@ $this->addJsFile('frontend/js/my-wishlist');
                         'attribute' => 'id',
                         'format' => 'raw',
                         'value' => 'productImage',
+                        'contentOptions' => ['class' => 'align-middle']
                     ],
                     'product_name' => [
                         'label' => 'Product',
                         'attribute' => 'productName',
+                        'contentOptions' => ['class' => 'align-middle']
                     ],
                     'regular_price' => [
                         'label' => 'Reg. Price',
                         'attribute' => 'productRegularPrice', 
-                        'format' => 'peso'
+                        'format' => 'peso',
+                        'contentOptions' => ['class' => 'align-middle']
                     ],
                     'sale_price' => [
                         'label' => 'Sale Price',
                         'attribute' => 'productSalePrice', 
-                        'format' => 'peso'
+                        'format' => 'peso',
+                        'contentOptions' => ['class' => 'align-middle']
                     ],
                     'ago' => [
                         'label' => 'Added',
                         'attribute' => 'created_at', 
-                        'format' => 'ago'
+                        'format' => 'ago',
+                        'contentOptions' => ['class' => 'align-middle']
                     ],
                     'actions' => [
                         'attribute' => 'id',
@@ -52,7 +76,8 @@ $this->addJsFile('frontend/js/my-wishlist');
                             'type' => 'button',
                             'class' => 'btn-remove-from-wishlist btn btn-sm btn-danger',
                             'data-product_id' => $model->product_id,
-                        ])
+                        ]),
+                        'contentOptions' => ['class' => 'align-middle']
                     ],
                 ],
                 

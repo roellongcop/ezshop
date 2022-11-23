@@ -21,7 +21,7 @@ $('.btn-remove-from-wishlist').click(function(e) {
 		success: (s) => {
 			if (s.status == 'success') {
 				Swal.fire('Success', s.message, 'success');
-				el.closest('tr').remove();
+				window.location.reload();
 			}
 			else {
 			Swal.fire('Error', s.errorSummary, 'error');
