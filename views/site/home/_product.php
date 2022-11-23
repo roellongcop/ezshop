@@ -4,8 +4,6 @@ use app\helpers\App;
 
 $this->addJsFile('frontend/js/product');
 $productIds = $this->params['wishlistProductIds'];
-
-dd($productIds)
 ?>
 
 <div class="product-item bg-light mb-4">

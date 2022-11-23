@@ -2,7 +2,8 @@
 
 namespace app\components;
 
-class MailerComponent extends \yii\swiftmailer\Mailer
+class MailerComponent extends \yii\symfonymailer\Mailer
 {
     public $useFileTransport = true;
+   
 }
