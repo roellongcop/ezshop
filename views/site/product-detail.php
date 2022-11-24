@@ -12,7 +12,10 @@ $this->title = 'Product Detail: ' . $product->mainAttribute;
 $this->params['activePage'] = 'shop';
 $this->params['breadcrumbs'][] = ['label' => 'Shop', 'url' => ['site/shop']];
 $this->params['breadcrumbs'][] = $product->mainAttribute;
+
 $this->addJsFile('frontend/js/product-detail');
+
+$wishlist = in_array($product->id, $this->params['wishlistProductIds']);
 ?>
 
 <div class="container-fluid pb-5">
@@ -42,8 +45,13 @@ $this->addJsFile('frontend/js/product-detail');
         </div>
 
         <div class="col-lg-7 h-auto mb-30">
-            <div class="h-100 bg-light p-30">
-                <h3><?= $product->name ?></h3>
+            <div class="h-100 bg-light p-30 product-detail-container">
+                <div class="align-items-center d-flex justify-content-between">
+                    <h3><?= $product->name ?></h3>
+                    <button class="btn btn-secondary btn-add-to-wishlist" data-product_id="<?= $product->id ?>">
+                        <?= App::ifElse($wishlist, Html::tag('span', 'Remove From Wishlist'), Html::tag('span', 'Add To Wishlist')) ?>
+                    </button>
+                </div>
                 <div class="d-flex mb-3">
                     <div class="text-primary mr-2">
                         <?= $product->generateStar('<small class="fas fa-star"></small>', '<small class="far fa-star"></small>') ?>
