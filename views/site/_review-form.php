@@ -45,7 +45,7 @@ $review = new Review();
         </label>
         </div>
         <?= $form->field($review, 'review')->textarea(['rows' => 6])->label('Your Review') ?>
-        <?= $form->field($review, 'score')->textInput()->Label(false) ?>
+        <?= $form->field($review, 'score', ['template' => '{input}'])->hiddenInput()->Label(false) ?>
         <div class="form-group">
         <input type="submit" value="Leave Your Review" class="btn btn-primary px-3">
     </div>

@@ -9,18 +9,22 @@ use app\helpers\ArrayHelper;
 use app\models\Email;
 use app\models\Product;
 use app\models\User;
-use app\models\form\LoginForm;
-use app\models\form\PasswordResetForm;
-use app\models\search\ProductSearch;
-use app\models\form\CustomerSignupForm;
-use app\models\form\user\BillingDetailForm;
-use app\models\form\ChangePasswordForm;
 use app\models\Province;
 use app\models\Municipality;
 use app\models\Wishlist;
 use app\models\Review;
 
+use app\models\search\ProductSearch;
+use app\models\search\ReviewSearch;
 use app\models\search\WishlistSearch;
+
+use app\models\form\LoginForm;
+use app\models\form\PasswordResetForm;
+use app\models\form\CustomerSignupForm;
+use app\models\form\ChangePasswordForm;
+
+use app\models\form\user\BillingDetailForm;
+
 use yii\web\NotFoundHttpException;
 
 class SiteController extends Controller
@@ -449,10 +453,14 @@ class SiteController extends Controller
             throw new NotFoundHttpException('Page not found.');
         }
 
+        $searchModel = new ReviewSearch(['product_id' => $product->id]);
+        $dataProvider = $searchModel->search(['ReviewSearch' => App::queryParams()]);
+        $dataProvider->pagination->pageSize = 3;
+
         return $this->render('product-detail', [
             'product' => $product,
             'tab' => $tab,
-            'review' => new Review()
+            'dataProvider' => $dataProvider,
         ]);
     }
 

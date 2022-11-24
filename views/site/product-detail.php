@@ -5,8 +5,11 @@ use yii\helpers\Html as YiiHtml;
 use app\helpers\Html;
 use app\helpers\Url;
 use app\widgets\ActiveForm;
+use yii\widgets\ListView;
+use yii\widgets\Pjax;
 
 $this->title = 'Product Detail: ' . $product->mainAttribute;
+$this->params['activePage'] = 'shop';
 $this->params['breadcrumbs'][] = ['label' => 'Shop', 'url' => ['site/shop']];
 $this->params['breadcrumbs'][] = $product->mainAttribute;
 $this->addJsFile('frontend/js/product-detail');
@@ -127,21 +130,48 @@ $this->addJsFile('frontend/js/product-detail');
             <div class="bg-light p-30">
                 <div class="nav nav-tabs mb-4">
                     <a class="nav-item nav-link text-dark <?= $tab == 'description' ? 'active': '' ?>" data-toggle="tab" href="#description"  data-link="<?= Url::to(Url::current(['tab' => 'description']), true) ?>#leave-a-review"> Description</a>
-                    <a class="nav-item nav-link text-dark <?= $tab == 'reviews' ? 'active': '' ?>" data-toggle="tab" href="#reviews"  data-link="<?= Url::to(Url::current(['tab' => 'reviews']), true) ?>#leave-a-review">Reviews (<?= number_format($product->totalReviews) ?>)</a>
+                    <a class="nav-item nav-link text-dark <?= $tab == 'reviews' ? 'active': '' ?>" data-toggle="tab" href="#reviews"  data-link="<?= Url::to(Url::current(['tab' => 'reviews']), true) ?>#leave-a-review">Reviews (<?= number_format($dataProvider->totalCount) ?>)</a>
                 </div>
                 <div class="tab-content">
-                    <div class="tab-pane fade  <?= $tab == 'description' ? 'show active': '' ?>" id="description">
+                    <div class="tab-pane fade <?= $tab == 'description' ? 'show active': '' ?>" id="description">
                         <h4 class="mb-3">Product Description</h4>
                         <p><?= $product->description ?></p>
                     </div>
                     <div class="tab-pane fade <?= $tab == 'reviews' ? 'show active': '' ?>" id="reviews">
                         <div class="row">
                             <div class="col-md-6">
-                                <h4 class="mb-4"><?= number_format($product->totalReviews) ?> review for "<?= $product->name ?>"</h4>
-                                <?= App::foreach($product->reviews, fn($review) => $this->render('_review', [
-                                    'review' => $review
-                                ])) ?>
+                                <h4 class="mb-4"><?= number_format($dataProvider->totalCount) ?> review(s) for "<?= $product->name ?>"</h4>
 
+                                <?php Pjax::begin(['timeout' => false]); ?>
+                                    <?= ListView::widget([
+                                        'dataProvider' => $dataProvider,
+                                        'options' => [
+                                            'tag' => 'div',
+                                            'class' => 'list-wrapper',
+                                            'id' => 'list-wrapper',
+                                        ],
+                                        'layout' => "{summary}\n{items}\n{pager}",
+                                        'itemView' => fn($model) => $this->render('_review', [
+                                            'review' => $model
+                                        ]),
+                                        'pager' => [
+                                            'class' => 'yii\widgets\LinkPager',
+                                            'options' => [
+                                                'class' => 'pagination justify-content-center'
+                                            ],
+                                            'registerLinkTags' => true,
+                                            'nextPageLabel' => 'Next',
+                                            'prevPageLabel' => 'Previous',
+                                            'linkContainerOptions' => ['class' => 'page-item'],
+                                            'linkOptions' => ['class' => 'page-link'],
+                                            'activePageCssClass' => 'active',
+                                            'disabledListItemSubTagOptions' => [
+                                                'tag' => 'a',
+                                                'class' => 'page-link'
+                                            ]
+                                        ]
+                                    ]) ?>
+                                <?php Pjax::end(); ?>
                             </div>
                             <div class="col-md-6">
                                 <h4 class="mb-4" id="leave-a-review">Leave a review</h4>
@@ -153,7 +183,9 @@ $this->addJsFile('frontend/js/product-detail');
                                     Html::tag('small', 'Please sign in to leave a review.'),
                                     YiiHtml::a('Sign In', ['site/login'], ['class' => 'btn btn-primary'])
                                 ])) ?>
+                            </div>
                         </div>
+
                     </div>
                 </div>
             </div>
