@@ -20,14 +20,25 @@ $('.btn-add-to-wishlist').click(function(e) {
 		dataType: 'json',
 		success: (s) => {
 			if (s.status == 'success') {
-				Swal.fire('Success', s.message, 'success');
+				Swal.fire({
+			        title: "Success",
+			        text: s.message,
+			        icon: "success",
+			        showCancelButton: true,
+			        confirmButtonText: "View Wishlist",
+			        cancelButtonText: "Close",
+			    }).then(function(result) {
+			        if (result.value) {
+			            window.location.href = app.baseUrl + 'my-wishlist';
+			        }
+			    });
 				el.attr('title', s.title);
 				el.attr('data-original-title', s.title);
 				$('[data-toggle="tooltip"]').tooltip();
 
-				const span = $(`.product-item-${product_id}`).find('.wishlist-span');
+				const span = $(el).closest('.product-item').find('.wishlist-span');
 				if(s.action == 'save') {
-					$(`.product-item-${product_id}`).prepend(`<span class="text-warning wishlist-span"><i class="far fa-heart"></i></span>`);
+					$(el).closest('.product-item').prepend(`<span class="text-warning wishlist-span"><i class="fas fa-heart"></i></span>`);
 				}
 				else {
 					span.remove();

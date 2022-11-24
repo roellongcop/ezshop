@@ -481,5 +481,31 @@ class Product extends ActiveRecord
             ->limit(5)
             ->all();
     }
+
+    public function getAverageScore()
+    {
+        $score = Review::find()
+            ->where(['product_id' => $this->id])
+            ->average("score");
+
+        return ceil($score);
+    }
+
+
+    public function generateStar($filled='', $unfilled='')
+    {
+        $data = [];
+        $filled = $filled ?: '<small class="fas fa-star text-primary mr-1"></small>';
+        $unfilled = $unfilled ?: '<small class="far fa-star text-primary mr-1"></small>';
+
+        for ($i = $this->averageScore; $i > 0; $i--) { 
+            $data[] = $filled;
+        }
+        for ($i = (5 - $this->averageScore); $i > 0; $i--) { 
+            $data[] = $unfilled;
+        }
+
+        return implode('', $data);
+    }
 }
 

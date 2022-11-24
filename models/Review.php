@@ -149,4 +149,20 @@ class Review extends ActiveRecord
             'review:raw',
         ];
     }
+
+    public function generateStar($filled='', $unfilled='')
+    {
+        $data = [];
+        $filled = $filled ?: '<i class="fas fa-star"></i>';
+        $unfilled = $unfilled ?: '<i class="far fa-star"></i>';
+
+        for ($i = $this->score; $i > 0; $i--) { 
+            $data[] = $filled;
+        }
+        for ($i = (5 - $this->score); $i > 0; $i--) { 
+            $data[] = $unfilled;
+        }
+
+        return implode('', $data);
+    }
 }

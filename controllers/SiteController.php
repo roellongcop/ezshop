@@ -429,7 +429,9 @@ class SiteController extends Controller
 
     public function actionMyWishlist()
     {
-        $searchModel = new WishlistSearch();
+        $searchModel = new WishlistSearch([
+            'user_id' => App::identity("id")
+        ]);
         $dataProvider = $searchModel->search(['WishlistSearch' => App::queryParams()]);
         $dataProvider->pagination->pageSize = 5;
 
@@ -446,7 +448,7 @@ class SiteController extends Controller
         );
     }
 
-    public function actionProductDetail($slug, $tab='')
+    public function actionProductDetail($slug, $tab='description')
     {
         $product = Product::findOne(['slug' => $slug]);
         if (!$product) {

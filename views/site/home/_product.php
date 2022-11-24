@@ -8,7 +8,7 @@ $wishlist = in_array($product->id, $this->params['wishlistProductIds']);
 ?>
 
 <div class="product-item bg-light mb-4 product-item-<?= $product->id ?>">
-        <?= App::if($wishlist, Html::tag('span', '<i class="far fa-heart"></i>', [
+        <?= App::if($wishlist, Html::tag('span', '<i class="fas fa-heart"></i>', [
             'class' => 'text-warning wishlist-span',
         ])) ?>
 
@@ -30,12 +30,8 @@ $wishlist = in_array($product->id, $this->params['wishlistProductIds']);
             <?= $product->displayPrice ?>
         </div>
         <div class="d-flex align-items-center justify-content-center mb-1">
-            <small class="fa fa-star text-primary mr-1"></small>
-            <small class="fa fa-star text-primary mr-1"></small>
-            <small class="fa fa-star text-primary mr-1"></small>
-            <small class="fa fa-star text-primary mr-1"></small>
-            <small class="fa fa-star text-primary mr-1"></small>
-            <small>(99)</small>
+            <?= $product->generateStar() ?>
+            <small>(<?= number_format($product->totalReviews) ?>)</small>
         </div>
     </div>
 </div>
