@@ -40,7 +40,7 @@ $this->addJsFile('frontend/js/my-wishlist');
                     'serial' => ['class' => 'yii\grid\SerialColumn'],
                     'photo' => [
                         'label' => 'Photo',
-                        'attribute' => 'id',
+                        'attribute' => 'productName',
                         'format' => 'raw',
                         'value' => 'productImage',
                         'contentOptions' => ['class' => 'align-middle']
@@ -71,7 +71,7 @@ $this->addJsFile('frontend/js/my-wishlist');
                         'contentOptions' => ['class' => 'align-middle']
                     ],
                     'actions' => [
-                        'attribute' => 'id',
+                        'attribute' => 'productName',
                         'format' => 'raw',
                         'label' => 'Remove',
                         'value' => fn($model) => Html::tag('button', '<i class="fa fa-times"></i>', [

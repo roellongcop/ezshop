@@ -19,6 +19,50 @@ class ReviewTest extends \Codeception\Test\Unit
         ], $replace);
     }
 
+    public function testInvalidEmail()
+    {
+        $model = new Review($this->data([
+            'email' => 'invalid'
+        ]));
+        expect_not($model->save());
+        expect($model->errors)->hasKey('email');
+    }
+
+
+    public function testInvalidScore()
+    {
+        $model = new Review($this->data([
+            'score' => 99999
+        ]));
+        expect_not($model->save());
+        expect($model->errors)->hasKey('score');
+
+
+        $model = new Review($this->data([
+            'score' => -1
+        ]));
+        expect_not($model->save());
+        expect($model->errors)->hasKey('score');
+    }
+
+    public function testInvalidProductId()
+    {
+        $model = new Review($this->data([
+            'product_id' => 99999
+        ]));
+        expect_not($model->save());
+        expect($model->errors)->hasKey('product_id');
+    }
+
+    public function testInvalidUserId()
+    {
+        $model = new Review($this->data([
+            'user_id' => 99999
+        ]));
+        expect_not($model->save());
+        expect($model->errors)->hasKey('user_id');
+    }
+
     public function testCreateSuccess()
     {
         $model = new Review($this->data());

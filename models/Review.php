@@ -49,6 +49,11 @@ class Review extends ActiveRecord
             [['name', 'email', 'review'], 'required'],
             [['review'], 'string'],
             [['name', 'email'], 'string', 'max' => 255],
+            ['product_id', 'exist', 'targetRelation' => 'product'],
+            ['user_id', 'exist', 'targetRelation' => 'user'],
+            ['email', 'email'],
+            [['email', 'name'], 'trim'],
+            ['score', 'integer', 'max' => 5, 'min' => 1],
         ]);
     }
 
@@ -68,6 +73,16 @@ class Review extends ActiveRecord
         ]);
     }
 
+    public function getUser()
+    {
+        return $this->hasOne(User::class, ['id' => 'user_id']);
+    }
+
+    public function getProduct()
+    {
+        return $this->hasOne(Product::class, ['id' => 'product_id']);
+    }
+
     /**
      * {@inheritdoc}
      * @return \app\models\query\ReviewQuery the active query used by this AR class.
@@ -75,6 +90,11 @@ class Review extends ActiveRecord
     public static function find()
     {
         return new \app\models\query\ReviewQuery(get_called_class());
+    }
+
+    public function getProductName()
+    {
+        return App::if($this->product, fn($product) => $product->name);
     }
      
     public function gridColumns()
@@ -85,7 +105,7 @@ class Review extends ActiveRecord
                 'format' => 'raw',
                 'value' => function($model) {
                     return Anchor::widget([
-                        'title' => $model->product_id,
+                        'title' => $model->productName,
                         'link' => $model->viewUrl,
                         'text' => true
                     ]);

@@ -70,6 +70,21 @@ class WishlistSearch extends Wishlist
             ]
         ]);
 
+        $dataProvider->sort->attributes['productName'] = [
+            'asc' => ['p.name' => SORT_ASC],
+            'desc' => ['p.name' => SORT_DESC],
+        ];
+
+        $dataProvider->sort->attributes['productRegularPrice'] = [
+            'asc' => ['p.regular_price' => SORT_ASC],
+            'desc' => ['p.regular_price' => SORT_DESC],
+        ];
+
+        $dataProvider->sort->attributes['productSalePrice'] = [
+            'asc' => ['p.sale_price' => SORT_ASC],
+            'desc' => ['p.sale_price' => SORT_DESC],
+        ];
+
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
             $query->where('0=1');
