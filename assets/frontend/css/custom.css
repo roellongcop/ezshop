@@ -39,3 +39,71 @@ div.required label.control-label:after {
 .line-through {
     text-decoration: line-through;
 }
+
+
+#review-form .rating {
+  display: inline-block;
+  position: relative;
+  height: 50px;
+  line-height: 50px;
+  font-size: 50px;
+}
+
+#review-form .rating label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  cursor: pointer;
+}
+
+#review-form .rating label:last-child {
+  position: static;
+}
+
+#review-form .rating label:nth-child(1) {
+  z-index: 5;
+}
+
+#review-form .rating label:nth-child(2) {
+  z-index: 4;
+}
+
+#review-form .rating label:nth-child(3) {
+  z-index: 3;
+}
+
+#review-form .rating label:nth-child(4) {
+  z-index: 2;
+}
+
+#review-form .rating label:nth-child(5) {
+  z-index: 1;
+}
+
+#review-form .rating label input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+}
+
+#review-form .rating label .icon {
+  float: left;
+  color: transparent;
+  font-size: 0.7em;
+}
+
+#review-form .rating label:last-child .icon {
+  color: #000;
+}
+
+#review-form .rating:not(:hover) label input:checked ~ .icon,
+#review-form .rating:hover label:hover input ~ .icon {
+  color: #ffd333;
+}
+
+#review-form .rating label input:focus:not(:checked) ~ .icon:last-child {
+  color: #000;
+  text-shadow: 0 0 5px #ffd333;
+}

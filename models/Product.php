@@ -458,5 +458,26 @@ class Product extends ActiveRecord
     {
         return Url::toRoute(['/site/product-detail', 'slug' => $this->slug]);
     }
+
+    public function getReviews()
+    {
+        return $this->hasMany(Review::class, ['product_id' => 'id']);
+    }
+
+    public function getTotalReviews()
+    {
+        return Review::find()
+            ->where(['product_id' => $this->id])
+            ->count();
+    }
+
+    public function getUniqueReviews()
+    {
+        return Review::find()
+            ->where(['product_id' => $this->id])
+            ->groupBy('user_id')
+            ->limit(5)
+            ->all();
+    }
 }
 

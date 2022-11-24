@@ -3,6 +3,8 @@
 namespace app\models;
 
 use app\widgets\Anchor;
+use app\helpers\App;
+use app\helpers\Url;
 
 /**
  * This is the model class for table "{{%reviews}}".
@@ -34,7 +36,7 @@ class Review extends ActiveRecord
     {
         return [
             'controllerID' => 'review',
-            'mainAttribute' => 'id',
+            'mainAttribute' => 'name',
             'paramName' => 'id',
         ];
     }
@@ -46,7 +48,7 @@ class Review extends ActiveRecord
     {
         return $this->setRules([
             [['product_id', 'user_id', 'score'], 'integer'],
-            [['name', 'email', 'review'], 'required'],
+            [['name', 'email', 'review', 'user_id', 'score'], 'required'],
             [['review'], 'string'],
             [['name', 'email'], 'string', 'max' => 255],
             ['product_id', 'exist', 'targetRelation' => 'product'],
@@ -71,6 +73,23 @@ class Review extends ActiveRecord
             'email' => 'Email',
             'review' => 'Review',
         ]);
+    }
+
+    public function beforeValidate()
+    {
+        if (! parent::beforeValidate()) {
+            return false;
+        }
+
+        $this->name = App::if($this->user, fn($user) => $user->username);
+        $this->email = App::if($this->user, fn($user) => $user->email);
+
+        return true;
+    }
+
+    public function getUserImageUrl($w=45)
+    {
+        return App::if($this->user, fn($user) => Url::image($user->photo, ['w' => $w]));
     }
 
     public function getUser()

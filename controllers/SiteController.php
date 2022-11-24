@@ -18,6 +18,7 @@ use app\models\form\ChangePasswordForm;
 use app\models\Province;
 use app\models\Municipality;
 use app\models\Wishlist;
+use app\models\Review;
 
 use app\models\search\WishlistSearch;
 use yii\web\NotFoundHttpException;
@@ -441,7 +442,7 @@ class SiteController extends Controller
         );
     }
 
-    public function actionProductDetail($slug)
+    public function actionProductDetail($slug, $tab='')
     {
         $product = Product::findOne(['slug' => $slug]);
         if (!$product) {
@@ -449,7 +450,31 @@ class SiteController extends Controller
         }
 
         return $this->render('product-detail', [
-            'product' => $product
+            'product' => $product,
+            'tab' => $tab,
+            'review' => new Review()
+        ]);
+    }
+
+    public function actionAddReview($product_id)
+    {
+        $review = new Review([
+            'product_id' => $product_id,
+            'user_id' => App::identity('id')
+        ]);
+
+        if ($review->load(App::post()) && $review->save()) {
+
+            return $this->asJson([
+                'status' => 'success',
+                'review' => $review,
+                'message' => 'Review Added',
+            ]);
+        }
+
+        return $this->asJson([
+            'status' => 'failed',
+            'errorSummary' => $review->errorSummary
         ]);
     }
 }

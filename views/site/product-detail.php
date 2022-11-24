@@ -1,11 +1,15 @@
 <?php
 
 use app\helpers\App;
+use yii\helpers\Html as YiiHtml;
 use app\helpers\Html;
+use app\helpers\Url;
+use app\widgets\ActiveForm;
 
 $this->title = 'Product Detail: ' . $product->mainAttribute;
 $this->params['breadcrumbs'][] = ['label' => 'Shop', 'url' => ['site/shop']];
 $this->params['breadcrumbs'][] = $product->mainAttribute;
+$this->addJsFile('frontend/js/product-detail');
 ?>
 
 <div class="container-fluid pb-5">
@@ -122,64 +126,33 @@ $this->params['breadcrumbs'][] = $product->mainAttribute;
         <div class="col">
             <div class="bg-light p-30">
                 <div class="nav nav-tabs mb-4">
-                    <a class="nav-item nav-link text-dark active" data-toggle="tab" href="#tab-pane-1">Description</a>
-                    <a class="nav-item nav-link text-dark" data-toggle="tab" href="#tab-pane-2">Reviews (0)</a>
+                    <a class="nav-item nav-link text-dark <?= $tab == 'description' ? 'active': '' ?>" data-toggle="tab" href="#description"  data-link="<?= Url::to(Url::current(['tab' => 'description']), true) ?>#leave-a-review"> Description</a>
+                    <a class="nav-item nav-link text-dark <?= $tab == 'reviews' ? 'active': '' ?>" data-toggle="tab" href="#reviews"  data-link="<?= Url::to(Url::current(['tab' => 'reviews']), true) ?>#leave-a-review">Reviews (<?= number_format($product->totalReviews) ?>)</a>
                 </div>
                 <div class="tab-content">
-                    <div class="tab-pane fade show active" id="tab-pane-1">
+                    <div class="tab-pane fade  <?= $tab == 'description' ? 'show active': '' ?>" id="description">
                         <h4 class="mb-3">Product Description</h4>
                         <p><?= $product->description ?></p>
                     </div>
-                    <div class="tab-pane fade" id="tab-pane-2">
+                    <div class="tab-pane fade <?= $tab == 'reviews' ? 'show active': '' ?>" id="reviews">
                         <div class="row">
                             <div class="col-md-6">
-                                <h4 class="mb-4">1 review for "Product Name"</h4>
-                                <div class="media mb-4">
-                                    <img src="img/user.jpg" alt="Image" class="img-fluid mr-3 mt-1" style="width: 45px;">
-                                    <div class="media-body">
-                                        <h6>John Doe<small> - <i>01 Jan 2045</i></small></h6>
-                                        <div class="text-primary mb-2">
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star-half-alt"></i>
-                                            <i class="far fa-star"></i>
-                                        </div>
-                                        <p>Diam amet duo labore stet elitr ea clita ipsum, tempor labore accusam ipsum et no at. Kasd diam tempor rebum magna dolores sed sed eirmod ipsum.</p>
-                                    </div>
-                                </div>
+                                <h4 class="mb-4"><?= number_format($product->totalReviews) ?> review for "<?= $product->name ?>"</h4>
+                                <?= App::foreach($product->reviews, fn($review) => $this->render('_review', [
+                                    'review' => $review
+                                ])) ?>
+
                             </div>
                             <div class="col-md-6">
-                                <h4 class="mb-4">Leave a review</h4>
-                                <small>Your email address will not be published. Required fields are marked *</small>
-                                <div class="d-flex my-3">
-                                    <p class="mb-0 mr-2">Your Rating * :</p>
-                                    <div class="text-primary">
-                                        <i class="far fa-star"></i>
-                                        <i class="far fa-star"></i>
-                                        <i class="far fa-star"></i>
-                                        <i class="far fa-star"></i>
-                                        <i class="far fa-star"></i>
-                                    </div>
-                                </div>
-                                <form>
-                                    <div class="form-group">
-                                        <label for="message">Your Review *</label>
-                                        <textarea id="message" cols="30" rows="5" class="form-control"></textarea>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="name">Your Name *</label>
-                                        <input type="text" class="form-control" id="name">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="email">Your Email *</label>
-                                        <input type="email" class="form-control" id="email">
-                                    </div>
-                                    <div class="form-group mb-0">
-                                        <input type="submit" value="Leave Your Review" class="btn btn-primary px-3">
-                                    </div>
-                                </form>
-                            </div>
+                                <h4 class="mb-4" id="leave-a-review">Leave a review</h4>
+
+                                <?= App::ifElse(App::isLogin(), fn() => implode('', [
+                                    Html::tag('small', 'Your email address will not be published. Please fill up required fields.'),
+                                    $this->render('_review-form', ['product' => $product])
+                                ]), implode('', [
+                                    Html::tag('small', 'Please sign in to leave a review.'),
+                                    YiiHtml::a('Sign In', ['site/login'], ['class' => 'btn btn-primary'])
+                                ])) ?>
                         </div>
                     </div>
                 </div>
@@ -187,3 +160,5 @@ $this->params['breadcrumbs'][] = $product->mainAttribute;
         </div>
     </div>
 </div>
+
+
