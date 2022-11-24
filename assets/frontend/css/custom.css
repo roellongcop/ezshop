@@ -35,3 +35,7 @@ div.required label.control-label:after {
 .table th a {
     color: #fff;
 }
+
+.line-through {
+    text-decoration: line-through;
+}

@@ -153,4 +153,9 @@ class Wishlist extends ActiveRecord
                 ->all();
         });
     }
+
+    public function getProductFrontendUrl()
+    {
+        return App::if($this->product, fn($product) => $product->frontendUrl);
+    }
 }

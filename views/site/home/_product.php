@@ -19,11 +19,11 @@ $wishlist = in_array($product->id, $this->params['wishlistProductIds']);
             <a title="<?= $wishlist ? 'Remove from Wishlist': 'Add to Wishlist' ?>" data-toggle="tooltip" data-product_id="<?= $product->id ?>" class="btn-add-to-wishlist btn btn-outline-dark btn-square" href="#">
                 <i class="far fa-heart"></i></a>
             <!-- <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a> -->
-            <a title="View Product" data-toggle="tooltip" class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a>
+            <a title="View Product" data-toggle="tooltip" class="btn btn-outline-dark btn-square" href="<?= $product->frontendUrl ?>"><i class="fa fa-search"></i></a>
         </div>
     </div>
     <div class="text-center py-4">
-        <a class="h6 text-decoration-none text-truncate" href="">
+        <a class="h6 text-decoration-none text-truncate" href="<?= $product->frontendUrl ?>">
             <?= $product->name ?>
         </a>
         <div class="d-flex align-items-center justify-content-center mt-2">

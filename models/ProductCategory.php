@@ -143,6 +143,11 @@ class ProductCategory extends Setting
             ->count();
     }
 
+    public function getFormattedTotalProducts()
+    {
+        return number_format($this->totalProducts);
+    }
+
     public function getProduct()
     {
         if (($products = $this->products) != null) {
@@ -169,5 +174,10 @@ class ProductCategory extends Setting
             ->orderBy(new Expression('rand()'))
             ->limit($limit)
             ->all();
+    }
+
+    public function getFrontendUrl()
+    {
+        return Url::toRoute(['/site/shop', 'categories' => $this->name]);
     }
 }

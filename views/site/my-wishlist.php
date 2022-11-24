@@ -48,7 +48,9 @@ $this->addJsFile('frontend/js/my-wishlist');
                     'product_name' => [
                         'label' => 'Product',
                         'attribute' => 'productName',
-                        'contentOptions' => ['class' => 'align-middle']
+                        'value' => fn($model) => YiiHtml::a($model->productName, $model->productFrontendUrl, ['class' => 'text-dark']),
+                        'contentOptions' => ['class' => 'align-middle'],
+                        'format' => 'raw'
                     ],
                     'regular_price' => [
                         'label' => 'Reg. Price',

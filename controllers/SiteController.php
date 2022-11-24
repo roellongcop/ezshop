@@ -20,30 +20,36 @@ use app\models\Municipality;
 use app\models\Wishlist;
 
 use app\models\search\WishlistSearch;
+use yii\web\NotFoundHttpException;
 
 class SiteController extends Controller
 {
+    public $layout = 'frontend';
+    
+    const PUBLIC_ACTIONS = [
+        'login', 
+        'reset-password', 
+        'contact', 
+        'home', 
+        'find-products-by-keywords',
+        'about',
+        'contact',
+        'shop',
+        'signup',
+        'signup-success',
+        'signup-verification',
+        'my-account-details',
+        'to-wishlist',
+        'navbar-poll',
+        'product-detail'
+    ];
+
     public function behaviors()
     {
         $behaviors = parent::behaviors();
         $behaviors['AccessControl'] = [
             'class' => 'app\filters\AccessControl',
-            'publicActions' => [
-                'login', 
-                'reset-password', 
-                'contact', 
-                'home', 
-                'find-products-by-keywords',
-                'about',
-                'contact',
-                'shop',
-                'signup',
-                'signup-success',
-                'signup-verification',
-                'my-account-details',
-                'to-wishlist',
-                'navbar-poll'
-            ]
+            'publicActions' => self::PUBLIC_ACTIONS
         ];
 
         $behaviors['VerbFilter'] = [
@@ -60,29 +66,6 @@ class SiteController extends Controller
     {
         App::view()->params['wishlistProductIds'] = App::isLogin() ? array_values(ArrayHelper::map(App::identity('wishlists'), 'id', 'product_id')): []; 
         
-        switch ($action->id) {
-            case 'home':
-            case 'about':
-            case 'contact':
-            case 'shop':
-            case 'signup':
-            case 'signup-success':
-            case 'login':
-            case 'customer-dashboard':
-            case 'my-account-details':
-            case 'my-wishlist':
-                $this->layout = 'frontend';
-                break;
-                
-            case 'reset-password':
-            case 'contact':
-                $this->layout = 'login';
-                break;
-            
-            default:
-                # code...
-                break;
-        }
         return parent::beforeAction($action);
     }
 
@@ -234,10 +217,7 @@ class SiteController extends Controller
         $model = new LoginForm();
         $PSR = new PasswordResetForm();
         if ($model->load(App::post()) && $model->login()) {
-            if (App::identity('isCustomer')) {
-                return $this->redirect(['customer-dashboard']);
-            }
-            return $this->redirect(['dashboard/index']);
+            $this->goBack();
         }
 
         $model->password = '';
@@ -459,5 +439,17 @@ class SiteController extends Controller
         return $this->asJson(
             Wishlist::findByKeywords($keywords, ['p.name', 'p.regular_price', 'p.sale_price'])
         );
+    }
+
+    public function actionProductDetail($slug)
+    {
+        $product = Product::findOne(['slug' => $slug]);
+        if (!$product) {
+            throw new NotFoundHttpException('Page not found.');
+        }
+
+        return $this->render('product-detail', [
+            'product' => $product
+        ]);
     }
 }

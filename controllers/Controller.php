@@ -42,7 +42,8 @@ abstract class Controller extends \yii\web\Controller
     public function behaviors()
     {
         $behaviors = parent::behaviors();
-
+        
+        $behaviors['CustomerFilter'] = ['class' => 'app\filters\CustomerFilter'];
         $behaviors['ThemeFilter'] = ['class' => 'app\filters\ThemeFilter'];
         $behaviors['UserFilter'] = ['class' => 'app\filters\UserFilter'];
         $behaviors['IpFilter'] = ['class' => 'app\filters\IpFilter'];

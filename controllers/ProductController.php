@@ -14,7 +14,7 @@ class ProductController extends Controller
     public function actionFindByKeywords($keywords='')
     {
         return $this->asJson(
-            Product::findByKeywords($keywords, ['id'])
+            Product::findByKeywords($keywords, ['name'])
         );
     }
 

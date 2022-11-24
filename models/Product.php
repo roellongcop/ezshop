@@ -396,6 +396,11 @@ class Product extends ActiveRecord
         return Url::image($this->image, ['w' => $w]);
     }
 
+    public function getGalleryImageUrl($token, $w=100)
+    {
+        return Url::image($token, ['w' => $w]);
+    }
+
     public function getIsOnSale()
     {
         return $this->regular_price > $this->sale_price;
@@ -447,6 +452,11 @@ class Product extends ActiveRecord
         return App::formatter()->asUniqueArrayFlatten(
             self::dropdown('name', 'colors')
         );
+    }
+
+    public function getFrontendUrl()
+    {
+        return Url::toRoute(['/site/product-detail', 'slug' => $this->slug]);
     }
 }
 
