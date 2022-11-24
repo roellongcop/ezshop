@@ -13,7 +13,10 @@ return [
     'language' => 'en-US',
     'components' => [
         'imageResize' => ['class' => 'app\components\ImageResizeComponent'],
-        'db' => ['class' => 'app\components\ConnectionComponent'],
+        'db' => [
+            'class' => 'app\components\ConnectionComponent',
+            'dsn' => 'mysql:host=localhost;dbname=db_ezshop_test'
+        ],
         'queue' => [
             'class' => 'app\components\QueueComponent',
             'as log' => 'yii\queue\LogBehavior',
@@ -22,10 +25,10 @@ return [
         'setting' => ['class' => 'app\components\SettingComponent'],
         'general' => ['class' => 'app\components\GeneralComponent'],
         'formatter' => ['class' => 'app\components\FormatterComponent'],
-        'view' => ['class' => '\app\components\ViewComponent'],
-        'pdf' => ['class' => '\app\components\PdfComponent'],
+        'view' => ['class' => 'app\components\ViewComponent'],
+        'pdf' => ['class' => 'app\components\PdfComponent'],
         'session' => ['class' => 'app\components\DbSessionComponent'],
-        'mailer' => ['class' => '\app\components\MailerComponent'],
+        'mailer' => ['class' => 'app\components\MailerComponent'],
         'urlManager' => ['class' => 'app\components\UrlManagerComponent'],
         'assetManager' => [
             'class' => 'app\components\AssetManagerComponent',
