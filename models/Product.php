@@ -461,7 +461,8 @@ class Product extends ActiveRecord
 
     public function getReviews()
     {
-        return $this->hasMany(Review::class, ['product_id' => 'id']);
+        return $this->hasMany(Review::class, ['product_id' => 'id'])
+            ->orderBy(['id' => SORT_DESC]);
     }
 
     public function getTotalReviews()
@@ -476,6 +477,7 @@ class Product extends ActiveRecord
         return Review::find()
             ->where(['product_id' => $this->id])
             ->groupBy('user_id')
+            ->orderBy(['id' => SORT_DESC]);
             ->limit(5)
             ->all();
     }
