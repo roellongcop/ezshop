@@ -507,5 +507,22 @@ class Product extends ActiveRecord
 
         return implode('', $data);
     }
+
+    public function getTotalPendingReview($user='')
+    {
+        $user = $user ?: App::identity();
+
+        if ($user) {
+            return Review::find()
+                ->where([
+                    'user_id' => $user->id, 
+                    'product_id' => $this->id,
+                    'record_status' => parent::RECORD_INACTIVE
+                ])
+                ->count();
+        }
+
+        return 0;
+    }
 }
 

@@ -54,6 +54,14 @@ class BillingDetailForm extends UserForm
         ];
     }
 
+    public function getFullname()
+    {
+        return implode(' ', array_filter([
+            $this->first_name,
+            $this->last_name,
+        ]));
+    }
+
     public function getProvince()
     {
         return Province::findOne($this->province_id);

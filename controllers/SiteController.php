@@ -158,7 +158,9 @@ class SiteController extends Controller
     public function actionFindProductsByKeywords($keywords='')
     {
         return $this->asJson(
-            Product::findByKeywords($keywords, ['name'])
+            Product::findByKeywords($keywords, ['name'], 10, [
+                'record_status' => Product::RECORD_ACTIVE
+            ])
         );
     }
 
@@ -222,7 +224,10 @@ class SiteController extends Controller
         $model = new LoginForm();
         $PSR = new PasswordResetForm();
         if ($model->load(App::post()) && $model->login()) {
-            $this->goBack();
+            if (App::identity('isCustomer')) {
+                return $this->redirect(['customer-dashboard']);
+            }
+            return $this->redirect(['dashboard/index']);
         }
 
         $model->password = '';
@@ -273,7 +278,7 @@ class SiteController extends Controller
 
     public function actionShop()
     {
-        $searchModel = new ProductSearch();
+        $searchModel = new ProductSearch(['record_status' => Product::RECORD_ACTIVE]);
         $dataProvider = $searchModel->search(['ProductSearch' => App::queryParams()]);
         $dataProvider->pagination->pageSize = 9;
 
@@ -461,7 +466,10 @@ class SiteController extends Controller
             throw new NotFoundHttpException('Page not found.');
         }
 
-        $searchModel = new ReviewSearch(['product_id' => $product->id]);
+        $searchModel = new ReviewSearch([
+            'product_id' => $product->id,
+            'record_status' => Review::RECORD_ACTIVE,
+        ]);
         $dataProvider = $searchModel->search(['ReviewSearch' => App::queryParams()]);
         $dataProvider->pagination->pageSize = 3;
 
@@ -476,7 +484,8 @@ class SiteController extends Controller
     {
         $review = new Review([
             'product_id' => $product_id,
-            'user_id' => App::identity('id')
+            'user_id' => App::identity('id'),
+            'record_status' => Review::RECORD_INACTIVE
         ]);
 
         if ($review->load(App::post()) && $review->save()) {
@@ -484,7 +493,7 @@ class SiteController extends Controller
             return $this->asJson([
                 'status' => 'success',
                 'review' => $review,
-                'message' => 'Review Added',
+                'message' => 'Your review will be visible once approved',
             ]);
         }
 

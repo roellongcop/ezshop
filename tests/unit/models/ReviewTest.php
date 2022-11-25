@@ -15,18 +15,8 @@ class ReviewTest extends \Codeception\Test\Unit
             'name' => 'Name',
             'email' => 'test@email.com',
             'review' => 'Review',
-            'status' => Review::PENDING,
             'record_status' => Review::RECORD_ACTIVE
         ], $replace);
-    }
-
-    public function testInvalidStatus()
-    {
-        $model = new Review($this->data([
-            'status' => 9999
-        ]));
-        expect_not($model->save());
-        expect($model->errors)->hasKey('status');
     }
 
     // public function testInvalidEmail()

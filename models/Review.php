@@ -6,6 +6,8 @@ use app\widgets\Anchor;
 use app\helpers\App;
 use app\helpers\Url;
 
+use app\models\form\user\BillingDetailForm;
+
 /**
  * This is the model class for table "{{%reviews}}".
  *
@@ -24,8 +26,6 @@ use app\helpers\Url;
  */
 class Review extends ActiveRecord
 {
-    const PENDING = 0;
-    const APPROVED = 1;
     /**
      * {@inheritdoc}
      */
@@ -58,10 +58,6 @@ class Review extends ActiveRecord
             ['email', 'email'],
             [['email', 'name'], 'trim'],
             ['score', 'integer', 'max' => 5, 'min' => 1],
-            ['status', 'in', 'range' => [
-                self::PENDING,
-                self::APPROVED,
-            ]]
         ]);
     }
 
@@ -96,6 +92,14 @@ class Review extends ActiveRecord
     public function getUserImageUrl($w=45)
     {
         return App::if($this->user, fn($user) => Url::image($user->photo, ['w' => $w]));
+    }
+
+    public function getPublisherName()
+    {
+        return App::if($this->user, function($user) {
+            $billing = new BillingDetailForm(['user_id' => $user->id]);
+            return $billing->fullname ?: $user->username;
+        });
     }
 
     public function getUser()
