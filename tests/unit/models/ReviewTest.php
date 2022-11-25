@@ -29,15 +29,14 @@ class ReviewTest extends \Codeception\Test\Unit
         expect($model->errors)->hasKey('status');
     }
 
-    public function testInvalidEmail()
-    {
-        $model = new Review($this->data([
-            'email' => 'invalid'
-        ]));
-        expect_not($model->save());
-        expect($model->errors)->hasKey('email');
-    }
-
+    // public function testInvalidEmail()
+    // {
+    //     $model = new Review($this->data([
+    //         'email' => 'invalid'
+    //     ]));
+    //     expect_not($model->save());
+    //     expect($model->errors)->hasKey('email');
+    // }
 
     public function testInvalidScore()
     {

@@ -444,7 +444,13 @@ class SiteController extends Controller
     public function actionFindWishlistByKeywords($keywords='')
     { 
         return $this->asJson(
-            Wishlist::findByKeywords($keywords, ['p.name', 'p.regular_price', 'p.sale_price'])
+            Wishlist::findByKeywords($keywords, 
+                ['p.name', 'p.regular_price', 'p.sale_price'], 
+                10, 
+                [
+                'w.user_id' => App::identity('id')
+                ]
+            )
         );
     }
 

@@ -143,7 +143,7 @@ class Wishlist extends ActiveRecord
         return parent::findByKeywordsData($attributes, function($attribute) use($keywords, $limit, $andFilterWhere) {
             return self::find()
                 ->select("{$attribute} AS data")
-                ->alias('u')
+                ->alias('w')
                 ->joinWith('product p')
                 ->groupBy($attribute)
                 ->where(['LIKE', $attribute, $keywords])
