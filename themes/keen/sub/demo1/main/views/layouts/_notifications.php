@@ -10,11 +10,76 @@ $this->registerCss(<<< CSS
         top: 10px;
     }
 CSS);
+
+$totalUnread = Notification::totalUnread();
+
+$this->registerJs(<<< JS
+    const pollNotification = (totalUnread) => {
+
+        $.ajax({
+            url: app.baseUrl + 'notification/poll',
+            data:{totalUnread},
+            method: 'post',
+            dataType: 'json',
+            success: function(s) {
+                if(s.status == 'success') {
+                    if (parseInt(s.totalUnread) > 0) {
+                        $('.notification-badge').replaceWith('<label class="badge badge-danger badge-pill notification-badge">'+s.totalUnread+'</label>')
+                        pollNotification(s.totalUnread);
+                    }
+                    else {
+                        $('.notification-badge').replaceWith('<label class="notification-badge"></label>')
+                        pollNotification(0);
+                    }
+
+                }
+                else {
+                    pollNotification(totalUnread);
+                }
+            },
+            error: function(e) {
+                console.log(e)
+            }
+        })
+    }
+    pollNotification({$totalUnread});
+
+
+    $('.notification-container').click(function() {
+        $('.notification-content-container').html('')
+
+        KTApp.block('.notification-content-container', {
+            overlayColor: '#000000',
+            message: 'Please wait...',
+            state: 'primary'
+        });
+
+        $.ajax({
+            url: app.baseUrl + 'notification/load',
+            method: 'get',
+            dataType: 'json',
+            success: function(s) {
+                if(s.status == 'success') {
+                    $('.notification-content-container').html(s.content)
+                }
+                else {
+                    Swal.fire('Error', s.errorSummary, 'error');
+                }
+                KTApp.unblock('.notification-content-container');
+            },
+            error: function(e) {
+                Swal.fire('Error', e.responseText, 'error');
+                console.log(e)
+                KTApp.unblock('.notification-content-container');
+            }
+        })
+    })
+JS)
 ?>
 
 <div class="dropdown mr-1">
     <!--begin::Toggle-->
-    <div class="topbar-item" data-toggle="dropdown" data-offset="10px,0px">
+    <div class="topbar-item notification-container" data-toggle="dropdown" data-offset="10px,0px">
         <div class="btn btn-icon btn-clean btn-dropdown btn-lg pulse pulse-primary">
             <span class="svg-icon svg-icon-xl svg-icon-primary">
                 <!--begin::Svg Icon | path:assets/media/svg/icons/Code/Compiling.svg-->
@@ -30,11 +95,13 @@ CSS);
             <span class="pulse-ring"></span>
             
         </div>
-        <?= Html::if(($total = Notification::totalUnread() != null), function() use($total) {
-            return Html::tag('label', $total, [
-                'class' => 'badge badge-danger badge-pill notification-badge'
-            ]);
-        }) ?>
+
+        <label class="notification-badge <?= $totalUnread ? 'badge badge-danger badge-pill': '' ?>">
+            <?= $totalUnread ?: '' ?>
+        </label>
+        <?= Html::if($totalUnread,  
+            Html::tag('label', $totalUnread, ['class' => 'badge badge-danger badge-pill notification-badge'])
+        ) ?>
     </div>
     <!--end::Toggle-->
     <!--begin::Dropdown-->
@@ -45,22 +112,19 @@ CSS);
                 <!--begin::Title-->
                 <h4 class="d-flex flex-center rounded-top">
                     <span class="text-white">Message Center</span>
-                    <span class="btn btn-danger btn-sm font-weight-bold ml-2">
-                        <?= $total ?>
-                    </span>
                 </h4>
                 <!--end::Title-->
                 <!--begin::Tabs-->
                 <ul class="nav nav-bold nav-tabs nav-tabs-line nav-tabs-line-3x nav-tabs-line-transparent-white nav-tabs-line-active-border-success mt-3 px-8 font-size-lg" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link active show" data-toggle="tab" href="#topbar_notifications_events">Events</a>
+                        <a class="nav-link active show" data-toggle="tab" href="#topbar_notifications_events">Reviews</a>
                     </li>
-                    <li class="nav-item">
+                   <!--  <li class="nav-item">
                         <a class="nav-link" data-toggle="tab" href="#topbar_notifications_notifications">Reminders</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" data-toggle="tab" href="#topbar_notifications_logs">Logs</a>
-                    </li>
+                    </li> -->
                 </ul>
                 <!--end::Tabs-->
             </div>
@@ -71,44 +135,8 @@ CSS);
                 <!--begin::Tabpane-->
                 <div class="tab-pane active p-8" id="topbar_notifications_events" role="tabpanel">
                     <!--begin::Scroll-->
-                    <div class="scroll pr-7 mr-n7" data-scroll="true" data-height="300" data-mobile-height="200">
-                        <?= Html::if(Notification::unread(), function($notifications) {
-                            return Html::foreach($notifications, function($notification) {
-                                return <<< HTML
-                                    <!--begin::Item-->
-                                    <div class="d-flex align-items-center mb-6">
-                                        <!--begin::Symbol-->
-                                        <div class="symbol symbol-40 symbol-light-primary mr-5">
-                                            <span class="symbol-label">
-                                                <span class="svg-icon svg-icon-lg svg-icon-primary">
-                                                    <!--begin::Svg Icon | path:assets/media/svg/icons/Design/Color-profile.svg-->
-                                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                            <rect x="0" y="0" width="24" height="24" />
-                                                            <path d="M12,10.9996338 C12.8356605,10.3719448 13.8743941,10 15,10 C17.7614237,10 20,12.2385763 20,15 C20,17.7614237 17.7614237,20 15,20 C13.8743941,20 12.8356605,19.6280552 12,19.0003662 C11.1643395,19.6280552 10.1256059,20 9,20 C6.23857625,20 4,17.7614237 4,15 C4,12.2385763 6.23857625,10 9,10 C10.1256059,10 11.1643395,10.3719448 12,10.9996338 Z M13.3336047,12.504354 C13.757474,13.2388026 14,14.0910788 14,15 C14,15.9088933 13.7574889,16.761145 13.3336438,17.4955783 C13.8188886,17.8206693 14.3938466,18 15,18 C16.6568542,18 18,16.6568542 18,15 C18,13.3431458 16.6568542,12 15,12 C14.3930587,12 13.8175971,12.18044 13.3336047,12.504354 Z" fill="#000000" fill-rule="nonzero" opacity="0.3" />
-                                                            <circle fill="#000000" cx="12" cy="9" r="5" />
-                                                        </g>
-                                                    </svg>
-                                                    <!--end::Svg Icon-->
-                                                </span>
-                                            </span>
-                                        </div>
-                                        <!--end::Symbol-->
-                                        <!--begin::Text-->
-                                        <div class="d-flex flex-column font-weight-bold">
-                                            <a href="{$notification->viewUrl}" class="text-dark text-hover-primary mb-1 font-size-lg">
-                                                {$notification->label}
-                                            </a>
-                                            <span class="text-muted">
-                                                {$notification->message}
-                                            </span>
-                                        </div>
-                                        <!--end::Text-->
-                                    </div>
-                                    <!--end::Item-->
-                                HTML;
-                            });
-                        }) ?>
+                    <div class="scroll pr-7 mr-n7 notification-content-container" data-scroll="true" data-height="300" data-mobile-height="200">
+                       
                         
                     </div>
                     <!--end::Scroll-->

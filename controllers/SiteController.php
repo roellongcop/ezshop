@@ -378,58 +378,27 @@ class SiteController extends Controller
         ignore_user_abort(false);
         set_time_limit(0);
 
-        try {
+        $counter = rand(5, 10);
+        $totalWishlist = App::post('totalWishlist') ?: 0;
 
-            if(($post = App::post()) != null) {
+        for ($i=0; $i < $counter; $i++) { 
+            $myTotalWishlist = App::identity('myTotalWishlist');
 
-                $noChanges = true;
-                $trial = rand(5, 10);
-
-                while($noChanges) {
-                    if ($trial == 0) {
-                        $response['status'] = 'failed';
-                        $response['errorSummary'] = 'no changes';
-                        return $this->asJson($response);
-                    }
-                    $response = [];
-
-                    $myTotalWishlist = App::identity('myTotalWishlist');
-
-                    if ($myTotalWishlist != (int)$post['totalWishlist']) {
-                        $noChanges = false;
-                        $response['totalWishlist'] = $myTotalWishlist;
-                        $response['totalWishlistFormatted'] = number_format($myTotalWishlist);
-
-                    }
-
-
-
-                    if ($noChanges == false) {
-                        $response['status'] = 'success';
-
-                        return $this->asJson($response);
-                    }
-
-                    if (! $response) {
-                        $trial--;
-                    }
-
-                    sleep(2);
-                }
+            if ($myTotalWishlist != (int)$totalWishlist) {
+                return $this->asJson([
+                    'status' => 'success',
+                    'totalWishlist' => $myTotalWishlist,
+                    'totalWishlistFormatted' => number_format($myTotalWishlist)
+                ]);
+                break;
             }
-
-            return $this->asJson([
-                'status' => 'failed',
-                'errorSummary' => 'No Chat State sent'
-            ]);
-
-        } 
-        catch (\yii\base\ErrorException $e) {
-            return $this->asJson([
-                'status' => 'failed',
-                'errorSummary' => $e->message
-            ]);
+            sleep(2);
         }
+
+        return $this->asJson([
+            'status' => 'failed',
+            'errorSummary' => 'no changes'
+        ]);
     }
 
     public function actionMyWishlist()

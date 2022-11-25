@@ -108,4 +108,47 @@ class NotificationController extends Controller
     {
         # dont delete; use in condition if user has access to in-active data
     }
+
+
+    public function actionLoad()
+    {
+        $content = App::foreach(Notification::unread(), 
+            fn($notification) => $this->renderPartial('_content', [
+                'notification' => $notification
+            ])
+        );
+        return $this->asJson([
+            'status' => 'success',
+            'content' => $content ?: 'No data found'
+        ]);
+    }
+
+    public function actionPoll()
+    {
+        session_write_close();
+        ignore_user_abort(false);
+        set_time_limit(0);
+
+        $totalUnread = App::post('totalUnread') ?: 0;
+        
+        $counter = rand(5, 10);
+
+        for ($i=0; $i < $counter; $i++) { 
+            $total = Notification::totalUnread();
+
+            if ($total != (int)$totalUnread) {
+                return $this->asJson([
+                    'status' => 'success',
+                    'totalUnread' => $total
+                ]);
+                break;
+            }
+            sleep(2);
+        }
+
+        return $this->asJson([
+            'status' => 'failed',
+            'errorSummary' => 'no changes'
+        ]);
+    }
 }

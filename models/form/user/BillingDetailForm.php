@@ -30,8 +30,9 @@ class BillingDetailForm extends UserForm
             [['first_name', 'last_name', 'street', 'zip', 'phone', 'email'], 'string'],
             [['email'], 'trim'],
             [['email'], 'email'],
-            ['province_id', 'exist', 'targetRelation' => 'province'],
-            ['city_id', 'exist', 'targetRelation' => 'municipality'],
+
+            ['province_id', 'exist', 'targetAttribute' => 'id', 'targetClass' => 'app\models\Province'],
+            ['city_id', 'exist', 'targetAttribute' => 'id', 'targetClass' => 'app\models\Municipality'],
         ]);
     }
 

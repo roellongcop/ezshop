@@ -89,6 +89,46 @@ class Review extends ActiveRecord
         return true;
     }
 
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+
+        if ($insert) {
+            $roles = [
+                Role::DEVELOPER,
+                Role::SUPERADMIN,
+                Role::ADMIN,
+            ];
+
+            if (($users = User::findAll(['role_id' => $roles])) != null) {
+                foreach ($users as $user) {
+                    $notification = new Notification([
+                        'status' => Notification::STATUS_UNREAD,
+                        'record_status' => Notification::RECORD_ACTIVE,
+                        'user_id' => $user->id,
+                        'type' => Notification::TYPE_NEW_REVIEW,
+                        // 'link' => Url::toRoute(['review/view', 'id' => $this->id]),
+                        'link' => $this->getViewUrl(false, true),
+                        'message' => 'New product review is pending for approval',
+                    ]);
+                    $notification->save();
+                }
+            }
+        }
+    }
+
+    public function getViewUrl($fullpath=true, $force = false)
+    {
+        if ($this->checkLinkAccess('view') || $force) {
+            $paramName = $this->paramName();
+            $url = [
+                implode('/', [$this->controllerID(), 'view']),
+                $paramName => $this->{$paramName}
+            ];
+            return Url::toRoute($url, $fullpath);
+        }
+    }
+
     public function getUserImageUrl($w=45)
     {
         return App::if($this->user, fn($user) => Url::image($user->photo, ['w' => $w]));
@@ -98,7 +138,12 @@ class Review extends ActiveRecord
     {
         return App::if($this->user, function($user) {
             $billing = new BillingDetailForm(['user_id' => $user->id]);
-            return $billing->fullname ?: $user->username;
+
+            if ($billing->fullname) {
+                return $billing->fullname;
+            }
+
+            return $this->name ?: $user->username;
         });
     }
 

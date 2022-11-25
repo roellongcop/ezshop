@@ -27,6 +27,9 @@ class Notification extends ActiveRecord
     const STATUS_READ = 1;
     const STATUS_UNREAD = 0;
 
+    const TYPE_CHANGED_PASSWORD = 'notification_change_password';
+    const TYPE_NEW_REVIEW = 'new_review';
+
     /**
      * {@inheritdoc}
      */
@@ -56,6 +59,7 @@ class Notification extends ActiveRecord
             [['type'], 'string', 'max' => 128],
             [['user_id'], 'exist', 'targetRelation' => 'user'],
             ['status', 'in', 'range' => [self::STATUS_READ, self::STATUS_UNREAD]],
+            ['type', 'in', 'range' => [self::TYPE_CHANGED_PASSWORD, self::TYPE_NEW_REVIEW]],
         ]);
     }
 
@@ -230,6 +234,7 @@ class Notification extends ActiveRecord
         $user_id = $user_id ?: App::identity('id');
         return self::find()
             ->where(['user_id' => $user_id])
+            ->orderBy(['id' => SORT_DESC])
             ->unread()
             ->all();
     }
