@@ -487,6 +487,7 @@ class Product extends ActiveRecord
     {
         $score = Review::find()
             ->where(['product_id' => $this->id])
+            ->active()
             ->average("score");
 
         return ceil($score);

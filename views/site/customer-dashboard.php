@@ -16,6 +16,14 @@ $this->params['activePage'] = 'customer-dashboard';
         <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
             <div class="d-flex align-items-center bg-light mb-4 p-30">
                 <h1 class="fas fa-cart-plus text-primary m-0 mr-3"></h1>
+                <a href="<?= Url::toRoute(['site/my-cart']) ?>">
+                    <h5 class="font-weight-semi-bold m-0">My Shopping Cart</h5>
+                </a>
+            </div>
+        </div>  
+        <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
+            <div class="d-flex align-items-center bg-light mb-4 p-30">
+                <h1 class="fas fa-book text-primary m-0 mr-3"></h1>
                 <a href="<?= Url::toRoute(['site/my-orders']) ?>">
                     <h5 class="font-weight-semi-bold m-0">My Orders History</h5>
                 </a>

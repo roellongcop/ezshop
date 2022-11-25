@@ -5,6 +5,7 @@ namespace app\models;
 use app\widgets\Anchor;
 use app\helpers\App;
 use app\helpers\Url;
+use app\helpers\StringHelper;
 
 use app\models\form\user\BillingDetailForm;
 
@@ -109,7 +110,7 @@ class Review extends ActiveRecord
                         'type' => Notification::TYPE_NEW_REVIEW,
                         // 'link' => Url::toRoute(['review/view', 'id' => $this->id]),
                         'link' => $this->getViewUrl(false, true),
-                        'message' => 'New product review is pending for approval',
+                        'message' => StringHelper::truncate($this->review, 35),
                     ]);
                     $notification->save();
                 }

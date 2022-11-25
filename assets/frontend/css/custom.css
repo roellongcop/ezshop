@@ -109,3 +109,7 @@ div.required label.control-label:after {
   color: #000;
   text-shadow: 0 0 5px #ffd333;
 }
+
+.breadcrumb {
+  margin-bottom: 0;
+}

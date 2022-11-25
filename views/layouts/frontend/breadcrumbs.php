@@ -8,7 +8,7 @@ use app\helpers\App;
 <div class="container-fluid">
     <div class="row px-xl-5">
         <div class="col-12">
-            <div class="d-flex mb-30">
+            <div class="d-flex mb-4">
                 <nav class="breadcrumb bg-light">
                     <a title="Go back" data-toggle="tooltip" href="<?= App::referrer() ?>" class="breadcrumb-item text-dark m-auto">
                         <i class="fa fa-angle-left"></i>
