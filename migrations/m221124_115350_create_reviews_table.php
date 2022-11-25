@@ -22,6 +22,7 @@ class m221124_115350_create_reviews_table extends \app\migrations\Migration
             'name' => $this->string()->notNull(),
             'email' => $this->string()->notNull(),
             'review' => $this->text()->notNull(),
+            'status' => $this->tinyInteger(2)->notNull()->defaultValue(0),
         ]));
 
         $this->createIndexes($this->tableName(), [

@@ -183,7 +183,7 @@ $wishlist = in_array($product->id, $this->params['wishlistProductIds']);
                                 <?= App::ifElse(App::isLogin(), fn() => implode('', [
                                     Html::tag('small', 'Your email address will not be published. Please fill up required fields.'),
                                     $this->render('_review-form', ['product' => $product])
-                                ]), implode('', [
+                                ]), implode(' ', [
                                     Html::tag('small', 'Please sign in to leave a review.'),
                                     YiiHtml::a('Sign In', ['site/login'], ['class' => 'btn btn-primary'])
                                 ])) ?>

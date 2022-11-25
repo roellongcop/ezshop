@@ -11,6 +11,7 @@ $model = new \app\helpers\FixtureData(function($params) {
 		'name' => 'Name',
 		'email' => 'test@email.com',
 		'review' => 'Review',
+		'status' => 0,
 		'record_status' => Review::RECORD_ACTIVE,
         'created_by' => 1,
         'updated_by' => 1,

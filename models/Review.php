@@ -24,6 +24,8 @@ use app\helpers\Url;
  */
 class Review extends ActiveRecord
 {
+    const PENDING = 0;
+    const APPROVED = 1;
     /**
      * {@inheritdoc}
      */
@@ -56,6 +58,10 @@ class Review extends ActiveRecord
             ['email', 'email'],
             [['email', 'name'], 'trim'],
             ['score', 'integer', 'max' => 5, 'min' => 1],
+            ['status', 'integer', 'in', 'range' => [
+                self::PENDING,
+                self::APPROVED,
+            ]]
         ]);
     }
 
