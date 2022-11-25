@@ -11,9 +11,15 @@ return [
             'page' => 'customer-dashboard',
         ],
         [
+            'label' => 'My Cart', 
+            'url' => ['site/my-cart'], 
+            'icon' => 'fas fa-cart-plus',
+            'page' => 'my-cart'
+        ],
+        [
             'label' => 'My Orders History', 
             'url' => ['site/my-orders'], 
-            'icon' => 'fas fa-cart-plus',
+            'icon' => 'fas fa-book',
             'page' => 'my-orders'
         ],
         [
@@ -26,7 +32,7 @@ return [
             'label' => 'My Product Reviews', 
             'url' => ['site/my-reviews'], 
             'icon' => 'fas fa-star-half-alt',
-            'page' => 'my-product-reviews'
+            'page' => 'my-reviews'
         ],
         [
             'label' => 'My Account Details', 
