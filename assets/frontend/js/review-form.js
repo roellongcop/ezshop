@@ -20,6 +20,7 @@ $(document).on('beforeSubmit', '#review-form', function(e) {
       if(s.status == 'success') {
         Swal.fire("Success", s.message, "success");
         // window.location.reload()
+        form[0].reset()
       }
       else {
           Swal.fire("Error", s.errorSummary, "error");
