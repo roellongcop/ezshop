@@ -469,6 +469,7 @@ class Product extends ActiveRecord
     {
         return Review::find()
             ->where(['product_id' => $this->id])
+            ->active()
             ->count();
     }
 
