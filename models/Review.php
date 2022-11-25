@@ -5,6 +5,7 @@ namespace app\models;
 use app\widgets\Anchor;
 use app\helpers\App;
 use app\helpers\Url;
+use app\helpers\Html;
 use app\helpers\StringHelper;
 
 use app\models\form\user\BillingDetailForm;
@@ -220,5 +221,43 @@ class Review extends ActiveRecord
         }
 
         return implode('', $data);
+    }
+
+    public function getProductImage($w=50)
+    {
+        return App::if($this->product, fn($product) => Html::image($product->image, ['w' => $w]));
+    }
+
+    public function getProductFrontendUrl()
+    {
+        return App::if($this->product, fn($product) => $product->frontendUrl);
+    }
+
+    public function getStatusLabel()
+    {
+        return $this->isActive ? 'Approved': 'Pending';
+    }
+
+    public function getStatusBadge()
+    {
+        return Html::tag('label', $this->statusLabel, [
+            'class' => 'badge badge-' . ($this->isActive ? 'success': 'danger')
+        ]);
+    }
+
+    public static function findByKeywords($keywords='', $attributes='', $limit=10, $andFilterWhere=[])
+    {
+        return parent::findByKeywordsData($attributes, function($attribute) use($keywords, $limit, $andFilterWhere) {
+            return self::find()
+                ->select("{$attribute} AS data")
+                ->alias('r')
+                ->joinWith('product p')
+                ->groupBy($attribute)
+                ->where(['LIKE', $attribute, $keywords])
+                ->andFilterWhere($andFilterWhere)
+                ->limit($limit)
+                ->asArray()
+                ->all();
+        });
     }
 }

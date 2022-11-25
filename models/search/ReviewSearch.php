@@ -55,7 +55,9 @@ class ReviewSearch extends Review
      */
     public function search($params)
     {
-        $query = Review::find();
+        $query = Review::find()
+            ->alias('r')
+            ->joinWith('product p');
 
         // add conditions that should always apply here
         $this->load($params);
@@ -68,6 +70,11 @@ class ReviewSearch extends Review
             ]
         ]);
 
+        $dataProvider->sort->attributes['productName'] = [
+            'asc' => ['p.name' => SORT_ASC],
+            'desc' => ['p.name' => SORT_DESC],
+        ];
+
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
             $query->where('0=1');
@@ -76,29 +83,29 @@ class ReviewSearch extends Review
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'id' => $this->id,
-            'product_id' => $this->product_id,
-            'user_id' => $this->user_id,
-            'score' => $this->score,
-            'record_status' => $this->record_status,
-            'created_by' => $this->created_by,
-            'updated_by' => $this->updated_by,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'r.id' => $this->id,
+            'r.product_id' => $this->product_id,
+            'r.user_id' => $this->user_id,
+            'r.score' => $this->score,
+            'r.record_status' => $this->record_status,
+            'r.created_by' => $this->created_by,
+            'r.updated_by' => $this->updated_by,
+            'r.created_at' => $this->created_at,
+            'r.updated_at' => $this->updated_at,
         ]);
         
-        $query->andFilterWhere(['like', 'name', $this->name])
-            ->andFilterWhere(['like', 'email', $this->email])
-            ->andFilterWhere(['like', 'review', $this->review]);
+        // $query->andFilterWhere(['like', 'r.name', $this->name])
+        //     ->andFilterWhere(['like', 'r.email', $this->email])
+        //     ->andFilterWhere(['like', 'r.review', $this->review]);
         
                 
         $query->andFilterWhere(['or', 
-            ['like', 'product_id', $this->keywords],  
-            ['like', 'user_id', $this->keywords],  
-            ['like', 'score', $this->keywords],  
-            ['like', 'name', $this->keywords],  
-            ['like', 'email', $this->keywords],  
-            ['like', 'review', $this->keywords],  
+            ['like', 'p.name', $this->keywords],  
+            // ['like', 'r.user_id', $this->keywords],  
+            // ['like', 'r.score', $this->keywords],  
+            // ['like', 'r.name', $this->keywords],  
+            // ['like', 'r.email', $this->keywords],  
+            ['like', 'r.review', $this->keywords],  
         ]);
 
         $query->daterange($this->date_range);

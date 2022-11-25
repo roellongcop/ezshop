@@ -471,4 +471,32 @@ class SiteController extends Controller
             'errorSummary' => $review->errorSummary
         ]);
     }
+
+
+    public function actionMyReviews()
+    {
+        $searchModel = new ReviewSearch([
+            'user_id' => App::identity("id")
+        ]);
+        $dataProvider = $searchModel->search(['ReviewSearch' => App::queryParams()]);
+        $dataProvider->pagination->pageSize = 5;
+
+        return $this->render('my-reviews', [
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+        ]);
+    }
+
+    public function actionFindReviewsByKeywords($keywords='')
+    { 
+        return $this->asJson(
+            Review::findByKeywords($keywords, 
+                ['p.name', 'r.review'], 
+                10, 
+                [
+                'r.user_id' => App::identity('id')
+                ]
+            )
+        );
+    }
 }
