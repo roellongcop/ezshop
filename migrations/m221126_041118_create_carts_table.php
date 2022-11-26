@@ -20,7 +20,7 @@ class m221126_041118_create_carts_table extends \app\migrations\Migration
             'user_id' => $this->bigInteger(20)->notNull()->defaultValue(0),
             'color' => $this->string(),
             'size' => $this->string(),
-            'quantity' => $this->integer(),
+            'quantity' => $this->integer()->notNull()->defaultValue(0),
         ]));
 
         $this->createIndexes($this->tableName(), [

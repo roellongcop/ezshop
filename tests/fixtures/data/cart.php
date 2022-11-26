@@ -6,7 +6,7 @@ use yii\db\Expression;
 $model = new \app\helpers\FixtureData(function($params) {
     return [
 		'product_id' => 1,
-		'user_id' => 4,
+		'user_id' => 1,
 		'color' => 'Color',
 		'size' => 'Size',
 		'quantity' => 1,
@@ -20,6 +20,7 @@ $model = new \app\helpers\FixtureData(function($params) {
 
 $model->add('1');
 $model->add('inactive', [], [
+	'user_id' => 4,
 	'record_status' => Cart::RECORD_INACTIVE
 ]);
 
