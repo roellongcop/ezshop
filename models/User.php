@@ -689,4 +689,11 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
             ->where(['user_id' => $this->id])
             ->count();
     }
+
+    public function getMyTotalCart()
+    {
+        return Cart::find()
+            ->where(['user_id' => $this->id])
+            ->sum('quantity');
+    }
 }

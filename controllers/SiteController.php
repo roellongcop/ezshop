@@ -390,18 +390,24 @@ class SiteController extends Controller
 
         $counter = rand(5, 10);
         $totalWishlist = App::post('totalWishlist') ?: 0;
+        $totalCart = App::post('totalCart') ?: 0;
 
         for ($i=0; $i < $counter; $i++) { 
             $myTotalWishlist = App::identity('myTotalWishlist');
+            $myTotalCart = App::identity('myTotalCart');
 
-            if ($myTotalWishlist != (int)$totalWishlist) {
+            if ($myTotalWishlist != (int)$totalWishlist || $myTotalCart != (int)$totalCart) {
                 return $this->asJson([
                     'status' => 'success',
                     'totalWishlist' => $myTotalWishlist,
-                    'totalWishlistFormatted' => number_format($myTotalWishlist)
+                    'totalWishlistFormatted' => number_format($myTotalWishlist),
+                    'totalCart' => $myTotalCart,
+                    'totalCartFormatted' => number_format($myTotalCart)
                 ]);
                 break;
             }
+
+            
             sleep(2);
         }
 

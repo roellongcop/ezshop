@@ -11,6 +11,7 @@ const navbarPoll = ({totalWishlist, totalCart}) => {
 
 			if (s.status == 'success') {
 				$('.total-wishlist').html(s.totalWishlistFormatted);
+				$('.total-cart').html(s.totalCartFormatted);
 				navbarPoll(s);
 			}
 			else {

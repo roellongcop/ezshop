@@ -9,12 +9,13 @@ use app\models\ProductCategory;
 
 $activePage = $this->params['activePage'] ?? 'home';
 $totalWishlist = App::isLogin() ? App::identity('myTotalWishlist'): 0;
+$totalCart = App::isLogin() ? App::identity('myTotalCart'): 0;
 
 $this->addJsFile('frontend/js/navbar');
 $this->registerJs(<<< JS
     navbarPoll({
         totalWishlist: {$totalWishlist},
-        totalCart: 0
+        totalCart: {$totalCart},
     })
 JS);
 ?>
@@ -84,7 +85,9 @@ JS);
                         </a>
                         <a href="" class="btn px-0 ml-3">
                             <i class="fas fa-shopping-cart text-primary"></i>
-                            <span class="badge text-secondary border border-secondary rounded-circle" style="padding-bottom: 2px;">0</span>
+                            <span class="badge text-secondary border border-secondary rounded-circle total-cart" style="padding-bottom: 2px;">
+                                <?= number_format($totalCart) ?>
+                            </span>
                         </a>
                     </div>
                 </div>
