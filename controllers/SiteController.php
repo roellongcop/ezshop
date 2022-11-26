@@ -13,10 +13,12 @@ use app\models\Province;
 use app\models\Municipality;
 use app\models\Wishlist;
 use app\models\Review;
+use app\models\Cart;
 
 use app\models\search\ProductSearch;
 use app\models\search\ReviewSearch;
 use app\models\search\WishlistSearch;
+use app\models\search\CartSearch;
 
 use app\models\form\LoginForm;
 use app\models\form\PasswordResetForm;
@@ -530,5 +532,34 @@ class SiteController extends Controller
             'status' => 'failed',
             'errorSummary' => Html::errorSummary($model)
         ]);
+    }
+
+
+    public function actionMyCart()
+    {
+        $searchModel = new CartSearch([
+            'user_id' => App::identity("id")
+        ]);
+        $dataProvider = $searchModel->search(['CartSearch' => App::queryParams()]);
+        $dataProvider->pagination->pageSize = 5;
+
+        return $this->render('my-cart', [
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+        ]);
+    }
+
+
+    public function actionFindCartByKeywords($keywords='')
+    { 
+        return $this->asJson(
+            Cart::findByKeywords($keywords, 
+                ['c.color', 'c.size', 'p.name', 'p.regular_price', 'p.sale_price'], 
+                10, 
+                [
+                'c.user_id' => App::identity('id')
+                ]
+            )
+        );
     }
 }

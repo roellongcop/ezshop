@@ -67,8 +67,8 @@ JS);
                         <?= YiiHtml::a('Shop', ['site/shop'], [
                             'class' => 'nav-item nav-link' . ($activePage == 'shop' ? ' active': '')
                         ]) ?>
-                        <?= YiiHtml::a('Cart', ['site/cart'], [
-                            'class' => 'nav-item nav-link' . ($activePage == 'cart' ? ' active': '')
+                        <?= YiiHtml::a('Cart', ['site/my-cart'], [
+                            'class' => 'nav-item nav-link' . ($activePage == 'my-cart' ? ' active': '')
                         ]) ?>
 
                         <?= YiiHtml::a('Checkout', ['site/checkout'], [

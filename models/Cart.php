@@ -2,6 +2,8 @@
 
 namespace app\models;
 
+use app\helpers\App;
+use app\helpers\Html;
 use app\widgets\Anchor;
 
 /**
@@ -104,5 +106,56 @@ class Cart extends ActiveRecord
             'size:raw',
             'quantity:raw',
         ];
+    }
+
+    public function getUser()
+    {
+        return $this->hasOne(User::class, ['id' => 'user_id']);
+    }
+
+    public function getProduct()
+    {
+        return $this->hasOne(Product::class, ['id' => 'product_id']);
+    }
+
+    public function getProductName()
+    {
+        return App::if($this->product, fn($product) => $product->name);
+    }
+
+    public function getProductRegularPrice()
+    {
+        return App::if($this->product, fn($product) => $product->regular_price);
+    }
+
+    public function getProductSalePrice()
+    {
+        return App::if($this->product, fn($product) => $product->sale_price);
+    }
+
+    public function getProductImage($w=50)
+    {
+        return App::if($this->product, fn($product) => Html::image($product->image, ['w' => $w]));
+    }
+
+    public function getProductFrontendUrl()
+    {
+        return App::if($this->product, fn($product) => $product->frontendUrl);
+    }
+
+    public static function findByKeywords($keywords='', $attributes='', $limit=10, $andFilterWhere=[])
+    {
+        return parent::findByKeywordsData($attributes, function($attribute) use($keywords, $limit, $andFilterWhere) {
+            return self::find()
+                ->select("{$attribute} AS data")
+                ->alias('c')
+                ->joinWith('product p')
+                ->groupBy($attribute)
+                ->where(['LIKE', $attribute, $keywords])
+                ->andFilterWhere($andFilterWhere)
+                ->limit($limit)
+                ->asArray()
+                ->all();
+        });
     }
 }

@@ -17,7 +17,7 @@ class CartSearch extends Cart
 
     public $searchTemplate = 'cart/_search';
     public $searchAction = ['cart/index'];
-    public $searchLabel = 'Cart';
+    public $searchLabel = 'Product';
 
     /**
      * {@inheritdoc}
@@ -55,7 +55,9 @@ class CartSearch extends Cart
      */
     public function search($params)
     {
-        $query = Cart::find();
+        $query = Cart::find()
+            ->alias('c')
+            ->joinWith('product p');
 
         // add conditions that should always apply here
         $this->load($params);
@@ -68,6 +70,21 @@ class CartSearch extends Cart
             ]
         ]);
 
+        $dataProvider->sort->attributes['productName'] = [
+            'asc' => ['p.name' => SORT_ASC],
+            'desc' => ['p.name' => SORT_DESC],
+        ];
+
+        $dataProvider->sort->attributes['productRegularPrice'] = [
+            'asc' => ['p.regular_price' => SORT_ASC],
+            'desc' => ['p.regular_price' => SORT_DESC],
+        ];
+
+        $dataProvider->sort->attributes['productSalePrice'] = [
+            'asc' => ['p.sale_price' => SORT_ASC],
+            'desc' => ['p.sale_price' => SORT_DESC],
+        ];
+
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
             $query->where('0=1');
@@ -76,27 +93,24 @@ class CartSearch extends Cart
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'id' => $this->id,
-            'product_id' => $this->product_id,
-            'user_id' => $this->user_id,
-            'quantity' => $this->quantity,
-            'record_status' => $this->record_status,
-            'created_by' => $this->created_by,
-            'updated_by' => $this->updated_by,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'c.id' => $this->id,
+            'c.product_id' => $this->product_id,
+            'c.user_id' => $this->user_id,
+            'c.quantity' => $this->quantity,
+            'c.record_status' => $this->record_status,
+            'c.created_by' => $this->created_by,
+            'c.updated_by' => $this->updated_by,
+            'c.created_at' => $this->created_at,
+            'c.updated_at' => $this->updated_at,
         ]);
         
-        $query->andFilterWhere(['like', 'color', $this->color])
-            ->andFilterWhere(['like', 'size', $this->size]);
-        
-                
         $query->andFilterWhere(['or', 
-            ['like', 'product_id', $this->keywords],  
-            ['like', 'user_id', $this->keywords],  
-            ['like', 'color', $this->keywords],  
-            ['like', 'size', $this->keywords],  
-            ['like', 'quantity', $this->keywords],  
+            ['like', 'c.color', $this->keywords],  
+            ['like', 'c.size', $this->keywords],  
+            ['like', 'c.quantity', $this->keywords],  
+            ['like', 'p.name', $this->keywords],  
+            ['like', 'p.regular_price', $this->keywords],  
+            ['like', 'p.sale_price', $this->keywords],  
         ]);
 
         $query->daterange($this->date_range);
