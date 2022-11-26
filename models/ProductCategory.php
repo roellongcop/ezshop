@@ -26,7 +26,10 @@ class ProductCategory extends Setting
         $columns['photo'] = [
             'attribute' => 'files',
             'format' => 'raw',
-            'label' => 'Photo'
+            'label' => 'Photo',
+            'value' => function($model) {
+                return Html::image($model->files, ['w' => 100], ['class' => 'img-thumbnail']);
+            }
         ];
 
         $columns['description'] = $columns['value'];
