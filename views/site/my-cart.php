@@ -42,30 +42,24 @@ $this->addJsFile('frontend/js/my-cart');
                         'label' => 'Photo',
                         'attribute' => 'productName',
                         'format' => 'raw',
-                        'value' => 'productImage',
+                        'value' => function($model){
+                            return  implode('&nbsp', [
+                                $model->productImage, 
+                                YiiHtml::a($model->productName, $model->productFrontendUrl, ['class' => 'text-dark']),
+                                Html::tag('small', implode(' | ', array_filter([$model->color, $model->size])), ['class' => 'text-muted font-weight-bold'])
+                            ]);
+                        },
                         'contentOptions' => ['class' => 'align-middle']
                     ],
-                    'product_name' => [
-                        'label' => 'Product',
-                        'attribute' => 'productName',
-                        'value' => fn($model) => implode('<br>', [
-                            YiiHtml::a($model->productName, $model->productFrontendUrl, ['class' => 'text-dark']),
-                            Html::tag('small', implode(' | ', array_filter([$model->color, $model->size])), ['class' => 'text-muted font-weight-bold'])
-                        ]),
-                        'contentOptions' => ['class' => 'align-middle'],
-                        'format' => 'raw'
-                    ],
-                    'regular_price' => [
-                        'label' => 'Reg. Price',
-                        'attribute' => 'productRegularPrice', 
-                        'format' => 'peso',
-                        'contentOptions' => ['class' => 'align-middle']
-                    ],
+                     
                     'sale_price' => [
-                        'label' => 'Sale Price',
+                        'label' => 'Price',
                         'attribute' => 'productSalePrice', 
                         'format' => 'peso',
-                        'contentOptions' => ['class' => 'align-middle']
+                        'contentOptions' => ['class' => 'align-middle'],
+                        'value' => function($model) {
+                            return  $model->productSalePrice;
+                        }
                     ],
                     'ago' => [
                         'label' => 'Added',
