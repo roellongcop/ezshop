@@ -22,6 +22,7 @@ use app\models\form\LoginForm;
 use app\models\form\PasswordResetForm;
 use app\models\form\CustomerSignupForm;
 use app\models\form\ChangePasswordForm;
+use app\models\form\CartForm;
 
 use app\models\form\user\BillingDetailForm;
 
@@ -45,6 +46,7 @@ class SiteController extends Controller
         'signup-verification',
         'my-account-details',
         'to-wishlist',
+        'add-to-cart',
         'navbar-poll',
         'product-detail'
     ];
@@ -331,7 +333,7 @@ class SiteController extends Controller
     {
         if (App::isGuest()) {
             return $this->asJson([
-                'status' => 'failed',
+                'status' => 'account-required',
                 'errorSummary' => 'Adding item to wishlists needs an account.'
             ]);
         }
@@ -343,7 +345,18 @@ class SiteController extends Controller
                 'user_id' => App::identity('id')
             ];
 
-            if (($wishlist = Wishlist::findOne($condition)) != null) {
+            $wishlist = Wishlist::findOne($condition) ?: new Wishlist($condition);
+            if ($wishlist->isNewRecord) {
+                if ($wishlist->save()) {
+                    return $this->asJson([
+                        'status' => 'success',
+                        'action' => 'save',
+                        'title' => 'Remove from Wishlist',
+                        'message' => 'Added to Wishlist'
+                    ]);
+                }
+            }
+            else {
                 if ($wishlist->delete()) {
                     return $this->asJson([
                         'status' => 'success',
@@ -353,17 +366,12 @@ class SiteController extends Controller
                     ]);
                 }
             }
+            
 
-            $wishlist = new Wishlist($condition);
-
-            if ($wishlist->save()) {
-                return $this->asJson([
-                    'status' => 'success',
-                    'action' => 'save',
-                    'title' => 'Remove from Wishlist',
-                    'message' => 'Added to Wishlist'
-                ]);
-            }
+            return $this->asJson([
+                'status' => 'failed',
+                'errorSummary' => $model->errorSummary
+            ]); 
         }
 
         return $this->asJson([
@@ -498,5 +506,29 @@ class SiteController extends Controller
                 ]
             )
         );
+    }
+
+    public function actionAddToCart()
+    {
+        if (App::isGuest()) {
+            return $this->asJson([
+                'status' => 'account-required',
+                'errorSummary' => 'Adding item to cart needs an account.'
+            ]);
+        }
+
+        $model = new CartForm(['user_id' => App::identity('id')]);
+
+        if ($model->load(['CartForm' => App::post()]) && $model->save()) {
+            return $this->asJson([
+                'status' => 'success',
+                'message' => 'Added to cart'
+            ]);
+        }
+
+        return $this->asJson([
+            'status' => 'failed',
+            'errorSummary' => Html::errorSummary($model)
+        ]);
     }
 }
