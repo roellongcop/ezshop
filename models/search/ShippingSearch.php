@@ -56,7 +56,9 @@ class ShippingSearch extends Shipping
      */
     public function search($params)
     {
-        $query = Shipping::find();
+        $query = Shipping::find()
+            ->alias('s')
+            ->joinWith(['province p', 'municipality m']);
 
         // add conditions that should always apply here
         $this->load($params);
@@ -69,6 +71,16 @@ class ShippingSearch extends Shipping
             ]
         ]);
 
+        $dataProvider->sort->attributes['provinceName'] = [
+            'asc' => ['p.Province' => SORT_ASC],
+            'desc' => ['p.Province' => SORT_DESC],
+        ];
+
+        $dataProvider->sort->attributes['municipalityName'] = [
+            'asc' => ['m.Municipality' => SORT_ASC],
+            'desc' => ['m.Municipality' => SORT_DESC],
+        ];
+
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
             $query->where('0=1');
@@ -77,22 +89,22 @@ class ShippingSearch extends Shipping
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'id' => $this->id,
-            'province_id' => $this->province_id,
-            'municipality_id' => $this->municipality_id,
-            'rate' => $this->rate,
-            'record_status' => $this->record_status,
-            'created_by' => $this->created_by,
-            'updated_by' => $this->updated_by,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            's.id' => $this->id,
+            's.province_id' => $this->province_id,
+            's.municipality_id' => $this->municipality_id,
+            's.rate' => $this->rate,
+            's.record_status' => $this->record_status,
+            's.created_by' => $this->created_by,
+            's.updated_by' => $this->updated_by,
+            's.created_at' => $this->created_at,
+            's.updated_at' => $this->updated_at,
         ]);
         
                 
         $query->andFilterWhere(['or', 
-            ['like', 'province_id', $this->keywords],  
-            ['like', 'municipality_id', $this->keywords],  
-            ['like', 'rate', $this->keywords],  
+            ['like', 'p.Province', $this->keywords],  
+            ['like', 'm.Municipality', $this->keywords],  
+            ['like', 's.rate', $this->keywords],  
         ]);
 
         $query->daterange($this->date_range);

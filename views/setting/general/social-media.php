@@ -11,8 +11,16 @@ use app\widgets\TinyMce;
 	<div class="row">
 		<div class="col-md-6">
 			<?= $form->field($model, 'twitter')->textInput(['maxlength' => true]) ?>
+		</div>
+		<div class="col-md-6">
 			<?= $form->field($model, 'facebook')->textInput(['maxlength' => true]) ?>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6">
 			<?= $form->field($model, 'linkedin')->textInput(['maxlength' => true]) ?>
+		</div>
+		<div class="col-md-6">
 			<?= $form->field($model, 'instagram')->textInput(['maxlength' => true]) ?>
 		</div>
 	</div>

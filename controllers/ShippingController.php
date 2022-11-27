@@ -4,6 +4,8 @@ namespace app\controllers;
 
 use app\helpers\App;
 use app\models\Shipping;
+use app\models\Province;
+use app\models\Municipality;
 use app\models\search\ShippingSearch;
 
 /**
@@ -51,8 +53,20 @@ class ShippingController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($province_id='')
     {
+        if ($province_id) {
+            return $this->asJson([
+                'data' => App::if(Province::findOne($province_id), function($province) {
+                    return App::foreach(Municipality::findAll(['prov' => $province->prov]), function($municipality) {
+                        return App::tag('option', $municipality->Municipality, [
+                            'value' => $municipality->id
+                        ]);
+                    });
+                })
+            ]);
+        }
+
         $model = new Shipping();
 
         if ($model->load(App::post()) && $model->save()) {

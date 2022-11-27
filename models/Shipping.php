@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\helpers\App;
 use app\widgets\Anchor;
 
 /**
@@ -58,8 +59,10 @@ class Shipping extends ActiveRecord
     {
         return $this->setAttributeLabels([
             'id' => 'ID',
-            'province_id' => 'Province ID',
-            'municipality_id' => 'Municipality ID',
+            'province_id' => 'Province',
+            'municipality_id' => 'Municipality',
+            'provinceName' => 'Province',
+            'municipalityName' => 'Municipality',
             'rate' => 'Rate',
         ]);
     }
@@ -93,9 +96,19 @@ class Shipping extends ActiveRecord
         return $this->hasOne(Province::class, ['id' => 'province_id']);
     }
 
+    public function getProvinceName()
+    {
+        return App::if($this->province, fn($province) => $province->Province);
+    }
+
     public function getMunicipality()
     {
         return $this->hasOne(Municipality::class, ['id' => 'municipality_id']);
+    }
+
+    public function getMunicipalityName()
+    {
+        return App::if($this->municipality, fn($municipality) => $municipality->Municipality);
     }
 
     /**
@@ -110,18 +123,18 @@ class Shipping extends ActiveRecord
     public function gridColumns()
     {
         return [
-            'province_id' => [
-                'attribute' => 'province_id', 
+            'province' => [
+                'attribute' => 'provinceName', 
                 'format' => 'raw',
                 'value' => function($model) {
                     return Anchor::widget([
-                        'title' => $model->province_id,
+                        'title' => $model->provinceName,
                         'link' => $model->viewUrl,
                         'text' => true
                     ]);
                 }
             ],
-            'municipality_id' => ['attribute' => 'municipality_id', 'format' => 'raw'],
+            'municipality' => ['attribute' => 'municipalityName', 'format' => 'raw'],
             'rate' => ['attribute' => 'rate', 'format' => 'raw'],
         ];
     }
@@ -129,9 +142,14 @@ class Shipping extends ActiveRecord
     public function detailColumns()
     {
         return [
-            'province_id:raw',
-            'municipality_id:raw',
+            'provinceName:raw',
+            'municipalityName:raw',
             'rate:raw',
         ];
+    }
+
+    public function getProvinceNo()
+    {
+        return App::if($this->province, fn($province) => $province->prov);
     }
 }

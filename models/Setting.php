@@ -54,6 +54,10 @@ class Setting extends ActiveRecord
             'label' => 'Social Media', 
             'icon' => '<i class="fas fa-users"></i>'
         ],
+        'shipping' => [
+            'label' => 'Shipping', 
+            'icon' => '<i class="fas fa-truck"></i>'
+        ],
     ];
 
     public $options;

@@ -9,6 +9,7 @@ use app\models\form\setting\NotificationSettingForm;
 use app\models\form\setting\SystemSettingForm;
 use app\models\form\setting\AboutUsForm;
 use app\models\form\setting\SocialMediaForm;
+use app\models\form\setting\ShippingForm;
 
 class SettingComponent extends \yii\base\Component
 {
@@ -18,6 +19,7 @@ class SettingComponent extends \yii\base\Component
     public $notification;
     public $aboutUs;
     public $socialMedia;
+    public $shipping;
 
     public $theme;
 
@@ -31,6 +33,7 @@ class SettingComponent extends \yii\base\Component
         $this->notification = new NotificationSettingForm();
         $this->aboutUs = new AboutUsForm();
         $this->socialMedia = new SocialMediaForm();
+        $this->shipping = new ShippingForm();
 
         $this->theme = Theme::findOne($this->system->theme);
     }
