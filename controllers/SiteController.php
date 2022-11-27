@@ -626,4 +626,14 @@ class SiteController extends Controller
             )
         );
     }
+
+    public function actionCheckout()
+    {
+        $billing = new BillingDetailForm(['user_id' => App::identity('id')]);
+
+
+        return $this->render('checkout', [
+            'billing' => $billing
+        ]);
+    }
 }

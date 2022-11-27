@@ -164,7 +164,10 @@ $shipping = Cart::shipping();
                             <?= App::formatter('asPeso', $subtotal + $shipping) ?>
                         </h5>
                     </div>
-                    <button class="btn btn-block btn-primary font-weight-bold my-3 py-3">Proceed To Checkout</button>
+
+                    <?= Html::a('Proceed To Checkout', ['site/checkout'], [
+                        'class' => 'btn btn-block btn-primary font-weight-bold my-3 py-3'
+                    ]) ?>
                 </div>
             </div>
         </div>
