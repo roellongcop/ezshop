@@ -1,6 +1,6 @@
 import { accountRequired, errorMessage, successMessage, successReload, block, unblock } from './library.js';
 
-$('.btn-remove-from-wishlist').click(function(e) {
+$(document).on('click', '.btn-remove-from-wishlist', function(e) {
 	e.preventDefault();
 
 	const el = $(this),
@@ -46,7 +46,7 @@ $('.btn-remove-from-wishlist').click(function(e) {
 })
 
 
-$('.btn-add-to-cart').click(function(e) {
+$(document).on('click', '.btn-add-to-cart', function(e) {
 	e.preventDefault();
 
 

@@ -6,6 +6,7 @@ use app\helpers\Html;
 use yii\helpers\Html as YiiHtml;
 use app\widgets\Grid;
 use app\models\Cart;
+use yii\widgets\Pjax;
 
 
 $this->title = 'My Cart';
@@ -25,113 +26,114 @@ $shipping = Cart::shipping();
 <div class="container-fluid">
     <div class="row px-xl-5">
         <div class="col-lg-8 table-responsive mb-2 cart-grid">
+            <?php Pjax::begin(['timeout' => false]); ?>
+                <?= Grid::widget([
+                    'layout' => $this->render('_grid-layout', [
+                        'dataProvider' => $dataProvider,
+                        'searchModel' => $searchModel,
+                        'content' => $this->render('_grid-search-input', [
+                            'searchModel' => $searchModel,
+                            'action' => ['site/my-cart'],
+                            'url' => Url::toRoute(['site/find-cart-by-keywords'])
+                        ])
+                    ]),
+                    'columns' => [
+                        'serial' => ['class' => 'yii\grid\SerialColumn'],
+                         'photo' => [
+                            'label' => 'Photo',
+                            'attribute' => 'productName',
+                            'format' => 'raw',
+                            'value' => 'productImage',
+                            'contentOptions' => ['class' => 'align-middle']
+                        ],
+                        'product_name' => [
+                            'label' => 'Product',
+                            'attribute' => 'productName',
+                            'contentOptions' => ['class' => 'align-middle'],
+                            'format' => 'raw',
+                            'value' => 'productTableView',
+                        ],
+                        'sale_price' => [
+                            'label' => 'Price',
+                            'attribute' => 'productSalePrice', 
+                            'format' => 'raw',
+                            'contentOptions' => ['class' => 'align-middle'],
+                            'value' => function($model) {
+                                return $model->productDisplayPrice;
+                            }
+                        ],
+                        'quantity' => [
+                            'label' => 'Quantity',
+                            'attribute' => 'quantity', 
+                            'format' => 'raw',
+                            'contentOptions' => ['class' => 'align-middle'],
+                            'value' => function($model) {
+                                return <<< HTML
+                                    <form method="post">
+                                        
+                                        <div class="input-group quantity mx-auto" style="width: 100px;">
+                                            <div class="input-group-btn">
+                                                <button type="button" class="btn btn-sm btn-primary btn-minus">
+                                                <i class="fa fa-minus"></i>
+                                                </button>
+                                            </div>
+                                            <input data-product-id="{$model->id}" type="text" class="form-control form-control-sm bg-secondary border-0 text-center qty-input" value="{$model->quantity}">
+                                            <div class="input-group-btn">
+                                                <button type="button" class="btn btn-sm btn-primary btn-plus">
+                                                    <i class="fa fa-plus"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                HTML;
+                            }
+                        ],
 
-            <?= Grid::widget([
-                'layout' => $this->render('_grid-layout', [
+                        'total' => [
+                            'label' => 'Total',
+                            'attribute' => 'total', 
+                            'format' => 'peso',
+                            'contentOptions' => ['class' => 'align-middle'],
+                        ],
+                        'actions' => [
+                            'attribute' => 'productName',
+                            'format' => 'raw',
+                            'label' => 'Remove',
+                            'value' => fn($model) => Html::tag('button', '<i class="fa fa-times"></i>', [
+                                'type' => 'button',
+                                'class' => 'btn-remove-from-cart btn btn-sm btn-danger',
+                                'data-id' => $model->id,
+                            ]),
+                            'contentOptions' => ['class' => 'align-middle']
+                        ],
+                    ],
+                    
+                    'headerRowOptions' => [
+                        'class' => 'thead-dark'
+                    ],
+                    'tableOptions' => [
+                        'class' => 'table table-light table-borderless table-hover text-center mb-0'
+                    ],
                     'dataProvider' => $dataProvider,
                     'searchModel' => $searchModel,
-                    'content' => $this->render('_grid-search-input', [
-                        'searchModel' => $searchModel,
-                        'action' => ['site/my-cart'],
-                        'url' => Url::toRoute(['site/find-cart-by-keywords'])
-                    ])
-                ]),
-                'columns' => [
-                    'serial' => ['class' => 'yii\grid\SerialColumn'],
-                     'photo' => [
-                        'label' => 'Photo',
-                        'attribute' => 'productName',
-                        'format' => 'raw',
-                        'value' => 'productImage',
-                        'contentOptions' => ['class' => 'align-middle']
-                    ],
-                    'product_name' => [
-                        'label' => 'Product',
-                        'attribute' => 'productName',
-                        'contentOptions' => ['class' => 'align-middle'],
-                        'format' => 'raw',
-                        'value' => 'productTableView',
-                    ],
-                    'sale_price' => [
-                        'label' => 'Price',
-                        'attribute' => 'productSalePrice', 
-                        'format' => 'raw',
-                        'contentOptions' => ['class' => 'align-middle'],
-                        'value' => function($model) {
-                            return $model->productDisplayPrice;
-                        }
-                    ],
-                    'quantity' => [
-                        'label' => 'Quantity',
-                        'attribute' => 'quantity', 
-                        'format' => 'raw',
-                        'contentOptions' => ['class' => 'align-middle'],
-                        'value' => function($model) {
-                            return <<< HTML
-                                <form method="post">
-                                    
-                                    <div class="input-group quantity mx-auto" style="width: 100px;">
-                                        <div class="input-group-btn">
-                                            <button type="button" class="btn btn-sm btn-primary btn-minus">
-                                            <i class="fa fa-minus"></i>
-                                            </button>
-                                        </div>
-                                        <input data-product-id="{$model->id}" type="text" class="form-control form-control-sm bg-secondary border-0 text-center qty-input" value="{$model->quantity}">
-                                        <div class="input-group-btn">
-                                            <button type="button" class="btn btn-sm btn-primary btn-plus">
-                                                <i class="fa fa-plus"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </form>
-                            HTML;
-                        }
-                    ],
-
-                    'total' => [
-                        'label' => 'Total',
-                        'attribute' => 'total', 
-                        'format' => 'peso',
-                        'contentOptions' => ['class' => 'align-middle'],
-                    ],
-                    'actions' => [
-                        'attribute' => 'productName',
-                        'format' => 'raw',
-                        'label' => 'Remove',
-                        'value' => fn($model) => Html::tag('button', '<i class="fa fa-times"></i>', [
-                            'type' => 'button',
-                            'class' => 'btn-remove-from-cart btn btn-sm btn-danger',
-                            'data-id' => $model->id,
-                        ]),
-                        'contentOptions' => ['class' => 'align-middle']
-                    ],
-                ],
-                
-                'headerRowOptions' => [
-                    'class' => 'thead-dark'
-                ],
-                'tableOptions' => [
-                    'class' => 'table table-light table-borderless table-hover text-center mb-0'
-                ],
-                'dataProvider' => $dataProvider,
-                'searchModel' => $searchModel,
-                'pager' => [
-                    'class' => 'yii\widgets\LinkPager',
-                    'options' => [
-                        'class' => 'pagination justify-content-center'
-                    ],
-                    'registerLinkTags' => true,
-                    'nextPageLabel' => 'Next',
-                    'prevPageLabel' => 'Previous',
-                    'linkContainerOptions' => ['class' => 'page-item'],
-                    'linkOptions' => ['class' => 'page-link'],
-                    'activePageCssClass' => 'active',
-                    'disabledListItemSubTagOptions' => [
-                        'tag' => 'a',
-                        'class' => 'page-link'
+                    'pager' => [
+                        'class' => 'yii\widgets\LinkPager',
+                        'options' => [
+                            'class' => 'pagination justify-content-center'
+                        ],
+                        'registerLinkTags' => true,
+                        'nextPageLabel' => 'Next',
+                        'prevPageLabel' => 'Previous',
+                        'linkContainerOptions' => ['class' => 'page-item'],
+                        'linkOptions' => ['class' => 'page-link'],
+                        'activePageCssClass' => 'active',
+                        'disabledListItemSubTagOptions' => [
+                            'tag' => 'a',
+                            'class' => 'page-link'
+                        ]
                     ]
-                ]
-            ]); ?>
+                ]); ?>
+            <?php Pjax::end(); ?>
             <div class="text-right">
                 <button type="submit" class="btn btn-primary font-weight-bold py-2 text-uppercase btn-update-cart">
                     Update Cart

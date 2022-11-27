@@ -1,7 +1,7 @@
 import { accountRequired, errorMessage, successReload, block, unblock } from './library.js';
 
 $('.btn-update-cart').on('click', function(e) {
-	const inputs = $('.qty-input');
+	const inputs = $(document).find('.qty-input');
 	let data = [];
 
 	inputs.each(function() {
@@ -35,7 +35,7 @@ $('.btn-update-cart').on('click', function(e) {
 	})
 });
 
-$('.btn-remove-from-cart').click(function(e) {
+$(document).on('click', '.btn-remove-from-cart', function(e) {
 	e.preventDefault();
 
 	const el = $(this),
