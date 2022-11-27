@@ -75,7 +75,7 @@ $wishlist = in_array($product->id, $this->params['wishlistProductIds']);
                     ])) ?>
                     <?= App::foreach($product->sizes, fn($size, $key) => <<< HTML
                         <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" class="custom-control-input" id="size-{$key}" name="size">
+                            <input value="{$size}" type="radio" class="custom-control-input" id="size-{$key}" name="size">
                             <label class="custom-control-label" for="size-{$key}">
                                 {$size}
                             </label>
@@ -89,7 +89,7 @@ $wishlist = in_array($product->id, $this->params['wishlistProductIds']);
 
                     <?= App::foreach($product->colors, fn($color, $key) => <<< HTML
                         <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" class="custom-control-input" id="color-{$key}" name="color">
+                            <input value="{$color}" type="radio" class="custom-control-input" id="color-{$key}" name="color">
                             <label class="custom-control-label" for="color-{$key}">
                                 {$color}
                             </label>
@@ -103,14 +103,14 @@ $wishlist = in_array($product->id, $this->params['wishlistProductIds']);
                                 <i class="fa fa-minus"></i>
                             </button>
                         </div>
-                        <input type="text" class="form-control bg-secondary border-0 text-center" value="1">
+                        <input type="text" class="form-control bg-secondary border-0 text-center qty-input" value="1">
                         <div class="input-group-btn">
                             <button class="btn btn-primary btn-plus">
                                 <i class="fa fa-plus"></i>
                             </button>
                         </div>
                     </div>
-                    <button class="btn btn-primary px-3"><i class="fa fa-shopping-cart mr-1"></i> Add To
+                    <button class="btn btn-primary px-3 btn-add-to-cart" data-product_id="<?= $product->id ?>"><i class="fa fa-shopping-cart mr-1"></i> Add To
                         Cart</button>
                 </div>
                 <div class="d-flex pt-2">

@@ -50,7 +50,7 @@ $shipping = Cart::shipping();
                         'attribute' => 'productName',
                         'contentOptions' => ['class' => 'align-middle'],
                         'format' => 'raw',
-                        'value' => fn($model) => YiiHtml::a($model->productName, $model->productFrontendUrl, ['class' => 'text-dark']),
+                        'value' => 'productTableView',
                     ],
                     'sale_price' => [
                         'label' => 'Price',

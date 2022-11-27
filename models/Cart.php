@@ -4,6 +4,7 @@ namespace app\models;
 
 use app\helpers\App;
 use app\helpers\Html;
+use yii\helpers\Html as YiiHtml;
 use app\widgets\Anchor;
 use app\models\form\user\BillingDetailForm;
 
@@ -168,10 +169,9 @@ class Cart extends ActiveRecord
 
     public function getProductTableView()
     {
-         return  implode('&nbsp', [
-            $model->productImage, 
-            YiiHtml::a($model->productName, $model->productFrontendUrl, ['class' => 'text-dark']),
-            Html::tag('small', implode(' | ', array_filter([$model->color, $model->size])), ['class' => 'text-muted font-weight-bold'])
+         return  implode('<br>', [
+            YiiHtml::a($this->productName, $this->productFrontendUrl, ['class' => 'text-dark']),
+            Html::tag('small', implode(' | ', array_filter([$this->color, $this->size])), ['class' => 'text-muted font-weight-bold'])
         ]);
     }
 
