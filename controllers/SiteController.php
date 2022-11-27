@@ -574,6 +574,14 @@ class SiteController extends Controller
     public function actionMyCart()
     {
         if (($carts = App::post('cart')) != null) {
+
+            if (App::isGuest()) {
+                return $this->asJson([
+                    'status' => 'account-required',
+                    'errorSummary' => 'Updating item to cart needs an account.'
+                ]);
+            }
+
             foreach ($carts as $cart) {
                 Cart::updateAll(['quantity' => $cart['quantity']], ['id' => $cart['id']]);
             }

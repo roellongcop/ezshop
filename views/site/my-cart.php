@@ -13,8 +13,8 @@ $this->params['homeBreadcrumbs'] = YiiHtml::a('Dashboard', ['site/customer-dashb
 $this->params['breadcrumbs'][] = 'My Cart';
 $this->params['activePage'] = 'my-cart';
 
-$this->addJsFile('frontend/js/my-cart', [
-    'app\assets\frontend\AppAsset'
+$this->addJsFile('frontend/js/my-cart', ['app\assets\frontend\AppAsset'], [
+    'type' => 'module'
 ]);
 
 $searchModel->searchLabel = 'from Cart';

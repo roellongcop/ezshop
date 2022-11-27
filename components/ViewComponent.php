@@ -69,17 +69,18 @@ class ViewComponent extends \yii\web\View
         }
     }
 
-    public function addJsFile ($files, $depends=[])
+    public function addJsFile ($files, $depends=[], $options=[])
     {
         $depends = $depends ?: [
             'yii\web\YiiAsset',
             'yii\bootstrap\BootstrapAsset',
         ];
+
+        $options['depends'] = $depends;
+
         $files = is_array($files) ? $files: [$files];
         foreach ($files as $js) {
-            $this->registerJsFile(App::publishedUrl("/{$js}.js", Yii::getAlias('@app/assets')), [
-                'depends' => $depends
-            ]);
+            $this->registerJsFile(App::publishedUrl("/{$js}.js", Yii::getAlias('@app/assets')), $options);
         }
     }
 

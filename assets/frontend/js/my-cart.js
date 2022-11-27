@@ -1,25 +1,4 @@
-const accountRequired = ({errorSummary}) => {
-	Swal.fire({
-        title: "Account Required",
-        text: errorSummary,
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: "Sign In",
-        cancelButtonText: "Sign Up",
-    }).then(function(result) {
-        if (result.value) {
-            window.location.href = app.baseUrl + 'login';
-        }
-        else if (result.dismiss === "cancel") {
-            window.location.href = app.baseUrl + 'signup';
-        }
-    });
-}
-
-const errorMessage = ({errorSummary}) => {
-	Swal.fire('Error', errorSummary, 'error')
-}
-
+import { accountRequired, errorMessage, successReload, block, unblock } from './library.js';
 
 $('.btn-update-cart').on('click', function(e) {
 
@@ -33,13 +12,7 @@ $('.btn-update-cart').on('click', function(e) {
 		});
 	});
 
-	KTApp.block('.cart-grid', {
-		overlayColor: '#000000',
-		message: 'Updating cart...',
-		state: 'primary'
-	});
-
-
+	block('.cart-grid', 'Updating cart...');
 	$.ajax({
 		url: app.baseUrl + 'my-cart',
 		data: {cart: data},
@@ -47,19 +20,18 @@ $('.btn-update-cart').on('click', function(e) {
 		method: 'post',
 		success: function(s) {
 			if (s.status == 'success') {
-				Swal.fire({
-			        text: s.message,
-			        icon: "success",
-			        timer: 1200,
-			        showConfirmButton: false,
-			    }).then(function(result) {
-			        if (result.dismiss === "timer") {
-						window.location.reload();
-			        }
-			    })
+				successReload(s);
 			}
+			else if(s.status == 'account-required') {
+				accountRequired(s);
+			}
+			else {
+				errorMessage(s);
+			}
+			unblock('.cart-grid');
 		},
 		error: function(e) {
+			unblock('.cart-grid');
 			console.log(e);
 		}
 	})
@@ -73,8 +45,7 @@ $('.btn-remove-from-cart').click(function(e) {
 		
 	el.blur();
 
-
-	 Swal.fire({
+	Swal.fire({
         title: "Are you sure?",
         text: "You won\"t be able to revert this!",
         icon: "warning",
@@ -83,11 +54,7 @@ $('.btn-remove-from-cart').click(function(e) {
         cancelButtonText: "No, cancel!",
     }).then(function(result) {
         if (result.value) {
-            KTApp.block(`body`, {
-				overlayColor: '#000000',
-				message: 'Loading...',
-				state: 'primary'
-			});
+			block('body', 'Loading...');
 
 			$.ajax({
 				url: app.baseUrl + 'site/remove-from-cart',
@@ -96,16 +63,7 @@ $('.btn-remove-from-cart').click(function(e) {
 				dataType: 'json',
 				success: (s) => {
 					if (s.status == 'success') {
-						Swal.fire({
-					        text: s.message,
-					        icon: "success",
-					        timer: 1200,
-					        showConfirmButton: false,
-					    }).then(function(result) {
-					        if (result.dismiss === "timer") {
-								window.location.reload();
-					        }
-					    })
+						successReload(s);
 					}
 					else if (s.status == 'account-required') {
 						accountRequired(s);
