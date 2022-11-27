@@ -467,6 +467,13 @@ class SiteController extends Controller
 
     public function actionAddReview($product_id)
     {
+        if (App::isGuest()) {
+            return $this->asJson([
+                'status' => 'account-required',
+                'errorSummary' => 'Adding item to cart needs an account.'
+            ]);
+        }
+        
         $review = new Review([
             'product_id' => $product_id,
             'user_id' => App::identity('id'),

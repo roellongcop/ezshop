@@ -21,6 +21,5 @@ const navbarPoll = ({totalWishlist, totalCart}) => {
 		error: (e) => {
 			console.log(e)
 		}
-
 	})
 }

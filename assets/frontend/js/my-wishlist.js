@@ -1,39 +1,4 @@
-const accountRequired = ({errorSummary}) => {
-	Swal.fire({
-        title: "Account Required",
-        text: errorSummary,
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: "Sign In",
-        cancelButtonText: "Sign Up",
-    }).then(function(result) {
-        if (result.value) {
-            window.location.href = app.baseUrl + 'login';
-        }
-        else if (result.dismiss === "cancel") {
-            window.location.href = app.baseUrl + 'signup';
-        }
-    });
-}
-
-const successMessage = ({ message, buttonText, url }) => {
-	Swal.fire({
-        title: "Success",
-        text: message,
-        icon: "success",
-        showCancelButton: true,
-        confirmButtonText: buttonText,
-        cancelButtonText: "Close",
-    }).then(function(result) {
-        if (result.value) {
-            window.location.href = app.baseUrl + url;
-        }
-    });
-}
-
-const errorMessage = ({errorSummary}) => {
-	Swal.fire('Error', errorSummary, 'error')
-}
+import { accountRequired, errorMessage, successMessage, successReload, block, unblock } from './library.js';
 
 $('.btn-remove-from-wishlist').click(function(e) {
 	e.preventDefault();
@@ -42,7 +7,6 @@ $('.btn-remove-from-wishlist').click(function(e) {
 		product_id = el.data('product_id');
 		
 	el.blur();
-
 
 	 Swal.fire({
         title: "Are you sure?",
@@ -53,11 +17,7 @@ $('.btn-remove-from-wishlist').click(function(e) {
         cancelButtonText: "No, cancel!",
     }).then(function(result) {
         if (result.value) {
-            KTApp.block(`body`, {
-				overlayColor: '#000000',
-				message: 'Loading...',
-				state: 'primary'
-			});
+            block('body', 'Loading...');
 
 			$.ajax({
 				url: app.baseUrl + 'site/to-wishlist',
@@ -66,19 +26,7 @@ $('.btn-remove-from-wishlist').click(function(e) {
 				dataType: 'json',
 				success: (s) => {
 					if (s.status == 'success') {
-						Swal.fire({
-					        text: s.message,
-					        icon: "success",
-					        timer: 1200,
-					        showConfirmButton: false,
-					        // onOpen: function() {
-					        //     Swal.showLoading()
-					        // }
-					    }).then(function(result) {
-					        if (result.dismiss === "timer") {
-								window.location.reload();
-					        }
-					    })
+						successReload(s)
 					}
 					else if (s.status == 'account-required') {
 						accountRequired(s);
@@ -86,17 +34,15 @@ $('.btn-remove-from-wishlist').click(function(e) {
 					else {
 						errorMessage(s)
 					}
-					KTApp.unblock(`body`);
+					unblock('body');
 				},
 				error: (e) => {
-					Swal.fire('Error', e.responseText, 'error');
-					KTApp.unblock(`body`);
+					errorMessage({errorMessage: e.responseText})
+					unblock('body');
 				}
 			});
         } 
     });
-
-	
 })
 
 
@@ -109,11 +55,7 @@ $('.btn-add-to-cart').click(function(e) {
 		
 	el.blur();
 
-	KTApp.block(`.table-responsive`, {
-		overlayColor: '#000000',
-		message: 'Loading...',
-		state: 'primary'
-	});
+	block('.table-responsive', 'Loading...');
 
 	$.ajax({
 		url: app.baseUrl + 'site/add-to-cart',
@@ -137,11 +79,11 @@ $('.btn-add-to-cart').click(function(e) {
 			else {
 				errorMessage(s)
 			}
-			KTApp.unblock(`.table-responsive`);
+			unblock('.table-responsive');
 		},
 		error: (e) => {
-			Swal.fire('Error', e.responseText, 'error');
-			KTApp.unblock(`.table-responsive`);
+			errorMessage({errorMessage: e.responseText})
+			unblock('.table-responsive');
 		}
 	});
 })

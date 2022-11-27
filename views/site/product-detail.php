@@ -7,14 +7,16 @@ use app\helpers\Url;
 use app\widgets\ActiveForm;
 use yii\widgets\ListView;
 use yii\widgets\Pjax;
+use app\models\Review;
+
 
 $this->title = 'Product Detail: ' . $product->mainAttribute;
 $this->params['activePage'] = 'shop';
 $this->params['breadcrumbs'][] = ['label' => 'Shop', 'url' => ['site/shop']];
 $this->params['breadcrumbs'][] = $product->mainAttribute;
 
-$this->addJsFile('frontend/js/product-detail', [
-    'app\assets\frontend\AppAsset'
+$this->addJsFile('frontend/js/product-detail', ['app\assets\frontend\AppAsset'], [
+    'type' => 'module'
 ]);
 
 $wishlist = in_array($product->id, $this->params['wishlistProductIds']);
@@ -151,7 +153,7 @@ $wishlist = in_array($product->id, $this->params['wishlistProductIds']);
                                 <?= App::if($product->totalPendingReview, function($total) use($product) {
                                     $total = Html::tag('label', number_format($total), ['class' => 'badge badge-info']);
 
-                                    return YiiHtml::a("You have {$total} pending reviews for this product.", ['site/my-reviews', 'product_id' => $product->id], ['class' => 'font-weight-bold']);
+                                    return YiiHtml::a("You have {$total} pending reviews for this product.", ['site/my-reviews', 'product_id' => $product->id, 'record_status' => Review::RECORD_INACTIVE], ['class' => 'font-weight-bold']);
                                 }) ?>
                                 <?php Pjax::begin(['timeout' => false]); ?>
                                     <?= ListView::widget([

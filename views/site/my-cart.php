@@ -49,7 +49,8 @@ $shipping = Cart::shipping();
                         'label' => 'Product',
                         'attribute' => 'productName',
                         'contentOptions' => ['class' => 'align-middle'],
-                        'format' => 'raw'
+                        'format' => 'raw',
+                        'value' => fn($model) => YiiHtml::a($model->productName, $model->productFrontendUrl, ['class' => 'text-dark']),
                     ],
                     'sale_price' => [
                         'label' => 'Price',

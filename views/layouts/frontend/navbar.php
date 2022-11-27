@@ -11,7 +11,7 @@ $activePage = $this->params['activePage'] ?? 'home';
 $totalWishlist = App::isLogin() ? App::identity('myTotalWishlist'): 0;
 $totalCart = App::isLogin() ? App::identity('myTotalCart'): 0;
 
-$this->addJsFile('frontend/js/navbar');
+$this->addJsFile('frontend/js/navbar', ['app\assets\frontend\AppAsset']);
 $this->registerJs(<<< JS
     navbarPoll({
         totalWishlist: {$totalWishlist},

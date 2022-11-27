@@ -1,3 +1,6 @@
+import { accountRequired, errorMessage, successMessage, block, unblock } from './library.js';
+
+
 $('.nav-tabs .nav-item').click(function() {
 	const link = $(this).data('link');
 
@@ -14,11 +17,7 @@ $('.btn-add-to-wishlist').click(function(e) {
 	el.blur();
 
 
-	KTApp.block(`.product-detail-container`, {
-		overlayColor: '#000000',
-		message: 'Loading...',
-		state: 'primary'
-	});
+	block('.product-detail-container', 'Loading...');
 
 	$.ajax({
 		url: app.baseUrl + 'site/to-wishlist',
@@ -27,18 +26,11 @@ $('.btn-add-to-wishlist').click(function(e) {
 		dataType: 'json',
 		success: (s) => {
 			if (s.status == 'success') {
-				Swal.fire({
-			        title: "Success",
-			        text: s.message,
-			        icon: "success",
-			        showCancelButton: true,
-			        confirmButtonText: "View Wishlist",
-			        cancelButtonText: "Close",
-			    }).then(function(result) {
-			        if (result.value) {
-			            window.location.href = app.baseUrl + 'my-wishlist';
-			        }
-			    });
+				successMessage({
+					message: s.message,
+					buttonText: "View Wishlist",
+					url: 'my-wishlist'
+				})
 				
 				if(s.action == 'save') {
 					$(el).html('Remove From Wishlist');
@@ -47,28 +39,17 @@ $('.btn-add-to-wishlist').click(function(e) {
 					$(el).html('Add To Wishlist');
 				}
 			}
-			else {
-				Swal.fire({
-			        title: "Account Required",
-			        text: s.errorSummary,
-			        icon: "warning",
-			        showCancelButton: true,
-			        confirmButtonText: "Sign In",
-			        cancelButtonText: "Sign Up",
-			    }).then(function(result) {
-			        if (result.value) {
-			            window.location.href = app.baseUrl + 'login';
-			        }
-			        else if (result.dismiss === "cancel") {
-			            window.location.href = app.baseUrl + 'signup';
-			        }
-			    });
+			else if (s.status == 'account-required') {
+				accountRequired(s);
 			}
-			KTApp.unblock(`.product-detail-container`);
+			else {
+				errorMessage(s)
+			}
+			unblock('.product-detail-container');
 		},
 		error: (e) => {
-			Swal.fire('Error', e.responseText, 'error');
-			KTApp.unblock(`.product-detail-container`);
+			errorMessage({errorMessage: e.responseText})
+			unblock('.product-detail-container');
 		}
 	});
 })

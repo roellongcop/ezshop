@@ -1,40 +1,4 @@
-const accountRequired = ({errorSummary}) => {
-	Swal.fire({
-        title: "Account Required",
-        text: errorSummary,
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: "Sign In",
-        cancelButtonText: "Sign Up",
-    }).then(function(result) {
-        if (result.value) {
-            window.location.href = app.baseUrl + 'login';
-        }
-        else if (result.dismiss === "cancel") {
-            window.location.href = app.baseUrl + 'signup';
-        }
-    });
-}
-
-const successMessage = ({ message, buttonText, url }) => {
-	Swal.fire({
-        title: "Success",
-        text: message,
-        icon: "success",
-        showCancelButton: true,
-        confirmButtonText: buttonText,
-        cancelButtonText: "Close",
-    }).then(function(result) {
-        if (result.value) {
-            window.location.href = app.baseUrl + url;
-        }
-    });
-}
-
-const errorMessage = ({errorSummary}) => {
-	Swal.fire('Error', errorSummary, 'error')
-}
-
+import { accountRequired, errorMessage, successMessage, block, unblock } from './library.js';
 
 $('.btn-add-to-wishlist').click(function(e) {
 	e.preventDefault();
@@ -45,11 +9,7 @@ $('.btn-add-to-wishlist').click(function(e) {
 	el.blur();
 
 
-	KTApp.block(`.product-item-${product_id}`, {
-		overlayColor: '#000000',
-		message: 'Loading...',
-		state: 'primary'
-	});
+	block(`.product-item-${product_id}`, 'Loading...');
 
 	$.ajax({
 		url: app.baseUrl + 'site/to-wishlist',
@@ -81,11 +41,11 @@ $('.btn-add-to-wishlist').click(function(e) {
 			else {
 				errorMessage(s)
 			}
-			KTApp.unblock(`.product-item-${product_id}`);
+			unblock(`.product-item-${product_id}`);
 		},
 		error: (e) => {
-			Swal.fire('Error', e.responseText, 'error');
-			KTApp.unblock(`.product-item-${product_id}`);
+			errorMessage({errorMessage: e.responseText})
+			unblock(`.product-item-${product_id}`);
 		}
 	});
 })
@@ -101,11 +61,7 @@ $('.btn-add-to-cart').click(function(e) {
 		
 	el.blur();
 
-	KTApp.block(`.product-item-${product_id}`, {
-		overlayColor: '#000000',
-		message: 'Loading...',
-		state: 'primary'
-	});
+	block(`.product-item-${product_id}`, 'Loading...');
 
 	$.ajax({
 		url: app.baseUrl + 'site/add-to-cart',
@@ -129,11 +85,11 @@ $('.btn-add-to-cart').click(function(e) {
 			else {
 				errorMessage(s)
 			}
-			KTApp.unblock(`.product-item-${product_id}`);
+			unblock(`.product-item-${product_id}`);
 		},
 		error: (e) => {
-			Swal.fire('Error', e.responseText, 'error');
-			KTApp.unblock(`.product-item-${product_id}`);
+			errorMessage({errorMessage: e.responseText})
+			unblock(`.product-item-${product_id}`);
 		}
 	});
 })

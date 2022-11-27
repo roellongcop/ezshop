@@ -1,7 +1,6 @@
 import { accountRequired, errorMessage, successReload, block, unblock } from './library.js';
 
 $('.btn-update-cart').on('click', function(e) {
-
 	const inputs = $('.qty-input');
 	let data = [];
 
@@ -31,8 +30,7 @@ $('.btn-update-cart').on('click', function(e) {
 			unblock('.cart-grid');
 		},
 		error: function(e) {
-			unblock('.cart-grid');
-			console.log(e);
+			errorMessage({errorMessage: e.responseText})
 		}
 	})
 });
@@ -55,7 +53,6 @@ $('.btn-remove-from-cart').click(function(e) {
     }).then(function(result) {
         if (result.value) {
 			block('body', 'Loading...');
-
 			$.ajax({
 				url: app.baseUrl + 'site/remove-from-cart',
 				data: {id},
@@ -71,11 +68,11 @@ $('.btn-remove-from-cart').click(function(e) {
 					else {
 						errorMessage(s)
 					}
-					KTApp.unblock(`body`);
+					unblock('body');
 				},
 				error: (e) => {
-					Swal.fire('Error', e.responseText, 'error');
-					KTApp.unblock(`body`);
+					errorMessage({errorMessage: e.responseText})
+					unblock('body');
 				}
 			});
         } 
