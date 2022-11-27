@@ -48,7 +48,7 @@ class Cart extends ActiveRecord
         return $this->setRules([
             [['product_id', 'user_id', 'quantity'], 'required'],
             [['product_id', 'user_id', 'quantity'], 'integer'],
-            [['color', 'size'], 'string', 'max' => 255],
+            [['color', 'size', 'session_id'], 'string', 'max' => 255],
         ]);
     }
 
@@ -138,6 +138,12 @@ class Cart extends ActiveRecord
         return App::if($this->product, fn($product) => Html::image($product->image, ['w' => $w]));
     }
 
+    public function getProductView($w=50)
+    {
+        return App::if($this->product, fn($product) => $product->getProductView($w));
+    }
+
+
     public function getProductFrontendUrl()
     {
         return App::if($this->product, fn($product) => $product->frontendUrl);
@@ -157,5 +163,47 @@ class Cart extends ActiveRecord
                 ->asArray()
                 ->all();
         });
+    }
+
+    public function getProductTableView()
+    {
+         return  implode('&nbsp', [
+            $model->productImage, 
+            YiiHtml::a($model->productName, $model->productFrontendUrl, ['class' => 'text-dark']),
+            Html::tag('small', implode(' | ', array_filter([$model->color, $model->size])), ['class' => 'text-muted font-weight-bold'])
+        ]);
+    }
+
+    public function getProductDisplayPrice()
+    {
+        if (($product = $this->product) != null) {
+            if ($product->isOnSale) {
+                return Html::tag('span', $product->sale_price . ' ('.Html::tag('small', App::formatter()->asPeso($product->regular_price), ['class' => 'line-through text-muted font-weight-bold']).')');
+            }
+            else {
+                return App::formatter()->asPeso($product->sale_price);
+            }
+        }
+    }
+
+    public function getTotal()
+    {
+        return $this->productSalePrice  *  $this->quantity;
+    }
+
+    public static function subtotal()
+    {
+        $carts = self::find()
+            ->where([
+                'user_id' => App::identity('id'),
+                'session_id' => App::session('id'),
+            ])
+            ->all();
+
+
+        $totals = App::foreach($carts, fn($cart) => $cart->total, false);
+
+        
+        return $totals ? array_sum($totals): 0;
     }
 }

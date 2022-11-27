@@ -3,7 +3,9 @@
 use app\helpers\App;
 use app\helpers\Html;
 
-$this->addJsFile('frontend/js/product');
+$this->addJsFile('frontend/js/product', [
+    'app\assets\frontend\AppAsset'
+]);
 $wishlist = in_array($product->id, $this->params['wishlistProductIds']);
 ?>
 

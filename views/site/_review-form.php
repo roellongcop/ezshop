@@ -4,7 +4,9 @@ use app\widgets\ActiveForm;
 use app\helpers\Url;
 use app\models\Review;
 
-$this->addJsFile('frontend/js/review-form');
+$this->addJsFile('frontend/js/review-form', [
+    'app\assets\frontend\AppAsset'
+]);
 
 $review = new Review();
 ?>

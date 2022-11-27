@@ -13,7 +13,9 @@ $this->params['activePage'] = 'my-account-details';
 $this->params['homeBreadcrumbs'] = YiiHtml::a('Dashboard', ['site/customer-dashboard'], ['class' => 'breadcrumb-item text-dark']);
 $this->params['breadcrumbs'][] = 'My Account Details';
 
-$this->addJsFile('frontend/js/my-account-details');
+$this->addJsFile('frontend/js/my-account-details', [
+    'app\assets\frontend\AppAsset'
+]);
 ?>
 <div class="container-fluid">
     <h2 class="text-center section-title position-relative text-uppercase mx-xl-5 mb-4">

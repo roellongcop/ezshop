@@ -13,7 +13,9 @@ $this->params['activePage'] = 'shop';
 $this->params['breadcrumbs'][] = ['label' => 'Shop', 'url' => ['site/shop']];
 $this->params['breadcrumbs'][] = $product->mainAttribute;
 
-$this->addJsFile('frontend/js/product-detail');
+$this->addJsFile('frontend/js/product-detail', [
+    'app\assets\frontend\AppAsset'
+]);
 
 $wishlist = in_array($product->id, $this->params['wishlistProductIds']);
 ?>

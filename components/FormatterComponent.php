@@ -141,7 +141,7 @@ class FormatterComponent extends \yii\i18n\Formatter
 
     public function asNumberFormat($num)
     {
-        return number_format($num);
+        return number_format($num, 2);
     }
 
     public function asUl($list)
@@ -175,6 +175,6 @@ class FormatterComponent extends \yii\i18n\Formatter
 
     public function asPeso($num=0)
     {
-        return '₱ ' . $this->asNumberFormat($num);
+        return '₱ ' . ($this->asNumberFormat($num));
     }
 }

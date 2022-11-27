@@ -26,7 +26,7 @@ class CartSearch extends Cart
     {
         return [
             [['id', 'product_id', 'user_id', 'quantity', 'created_by', 'updated_by'], 'integer'],
-            [['color', 'size', 'created_at', 'updated_at'], 'safe'],
+            [['color', 'size', 'created_at', 'updated_at', 'session_id'], 'safe'],
             [['keywords', 'pagination', 'date_range', 'record_status'], 'safe'],
             [['keywords'], 'trim'],
         ];
@@ -85,6 +85,11 @@ class CartSearch extends Cart
             'desc' => ['p.sale_price' => SORT_DESC],
         ];
 
+        $dataProvider->sort->attributes['total'] = [
+            'asc' => ['(p.sale_price * c.quantity)' => SORT_ASC],
+            'desc' => ['(p.sale_price * c.quantity)' => SORT_DESC],
+        ];
+
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
             $query->where('0=1');
@@ -96,6 +101,7 @@ class CartSearch extends Cart
             'c.id' => $this->id,
             'c.product_id' => $this->product_id,
             'c.user_id' => $this->user_id,
+            'c.session_id' => $this->session_id,
             'c.quantity' => $this->quantity,
             'c.record_status' => $this->record_status,
             'c.created_by' => $this->created_by,

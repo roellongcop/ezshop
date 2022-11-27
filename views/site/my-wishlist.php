@@ -13,7 +13,9 @@ $this->params['homeBreadcrumbs'] = YiiHtml::a('Dashboard', ['site/customer-dashb
 $this->params['breadcrumbs'][] = 'My Wishlist';
 $this->params['activePage'] = 'my-wishlist';
 
-$this->addJsFile('frontend/js/my-wishlist');
+$this->addJsFile('frontend/js/my-wishlist', [
+    'app\assets\frontend\AppAsset'
+]);
 ?>
 
 <div class="container-fluid">
@@ -48,7 +50,6 @@ $this->addJsFile('frontend/js/my-wishlist');
                     'product_name' => [
                         'label' => 'Product',
                         'attribute' => 'productName',
-                        'value' => fn($model) => YiiHtml::a($model->productName, $model->productFrontendUrl, ['class' => 'text-dark']),
                         'contentOptions' => ['class' => 'align-middle'],
                         'format' => 'raw'
                     ],

@@ -543,9 +543,20 @@ class SiteController extends Controller
 
     public function actionMyCart()
     {
+        if (($carts = App::post('cart')) != null) {
+
+            foreach ($carts as $id => $qty) {
+                Cart::updateAll(['quantity' => $qty], ['id' => $id]);
+            }
+
+            return $this->redirect(['my-cart']);
+        }
+
         $searchModel = new CartSearch([
-            'user_id' => App::identity("id")
+            'user_id' => App::identity("id"),
+            'session_id' => App::session('id')
         ]);
+
         $dataProvider = $searchModel->search(['CartSearch' => App::queryParams()]);
         $dataProvider->pagination->pageSize = 5;
 

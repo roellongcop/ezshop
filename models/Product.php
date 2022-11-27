@@ -6,6 +6,9 @@ use app\helpers\App;
 use app\helpers\ArrayHelper;
 use app\helpers\Url;
 use app\helpers\Html;
+use yii\helpers\Html as YiiHtml;
+
+
 use app\widgets\Anchor;
 use yii\db\Expression;
 
@@ -216,8 +219,8 @@ class Product extends ActiveRecord
             'description' => ['attribute' => 'description', 'format' => 'raw'],
             // 'tags' => ['attribute' => 'tags', 'format' => 'raw'],
             // 'gallery' => ['attribute' => 'gallery', 'format' => 'raw'],
-            'regular_price' => ['attribute' => 'regular_price', 'format' => 'numberFormat'],
-            'sale_price' => ['attribute' => 'sale_price', 'format' => 'numberFormat'],
+            'regular_price' => ['attribute' => 'regular_price', 'format' => 'peso'],
+            'sale_price' => ['attribute' => 'sale_price', 'format' => 'peso'],
             'sku' => ['attribute' => 'sku', 'format' => 'raw'],
             'quantity' => ['attribute' => 'quantity', 'format' => 'numberFormat'],
             'low_stock_threshold' => ['attribute' => 'low_stock_threshold', 'format' => 'numberFormat'],
@@ -525,6 +528,17 @@ class Product extends ActiveRecord
         }
 
         return 0;
+    }
+
+    public function getProductView($w=50)
+    {
+        return Html::tag('div',
+            implode('', [
+                Html::img($this->getImageUrl($w), ['class' => "img-fluid"]),
+                YiiHtml::a($this->name, $this->frontendUrl, ['class' => 'text-dark ml-2']),
+            ]),
+            ['class' => 'd-flex align-items-center justify-content-center']
+        );
     }
 }
 

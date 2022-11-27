@@ -83,7 +83,7 @@ JS);
                                 <?= number_format($totalWishlist) ?>
                             </span>
                         </a>
-                        <a href="" class="btn px-0 ml-3">
+                        <a href="<?= Url::toRoute(['site/my-cart']) ?>" class="btn px-0 ml-3">
                             <i class="fas fa-shopping-cart text-primary"></i>
                             <span class="badge text-secondary border border-secondary rounded-circle total-cart" style="padding-bottom: 2px;">
                                 <?= number_format($totalCart) ?>
