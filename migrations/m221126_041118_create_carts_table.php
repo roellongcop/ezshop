@@ -18,6 +18,7 @@ class m221126_041118_create_carts_table extends \app\migrations\Migration
         $this->createTable($this->tableName(), $this->attributes([
             'product_id' => $this->bigInteger(20)->notNull()->defaultValue(0),
             'user_id' => $this->bigInteger(20)->notNull()->defaultValue(0),
+            'session_id' => $this->string()->notNull(),
             'color' => $this->string(),
             'size' => $this->string(),
             'quantity' => $this->integer()->notNull()->defaultValue(0),
