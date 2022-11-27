@@ -516,6 +516,36 @@ class SiteController extends Controller
         );
     }
 
+    public function actionRemoveFromCart()
+    {
+        if (App::isGuest()) {
+            return $this->asJson([
+                'status' => 'account-required',
+                'errorSummary' => 'Adding item to cart needs an account.'
+            ]);
+        }
+
+        if (($cart = Cart::findOne(App::post('id'))) != null) {
+            if ($cart->delete()) {
+                return $this->asJson([
+                    'status' => 'success',
+                    'message' => 'Removed from Cart'
+                ]);
+            }
+            else {
+                return $this->asJson([
+                    'status' => 'failed',
+                    'errorSummary' => $cart->errorSummary
+                ]);
+            }
+        }
+
+        return $this->asJson([
+            'status' => 'failed',
+            'errorSummary' => 'Item not Found'
+        ]);
+    }
+
     public function actionAddToCart()
     {
         if (App::isGuest()) {
@@ -544,12 +574,14 @@ class SiteController extends Controller
     public function actionMyCart()
     {
         if (($carts = App::post('cart')) != null) {
-
-            foreach ($carts as $id => $qty) {
-                Cart::updateAll(['quantity' => $qty], ['id' => $id]);
+            foreach ($carts as $cart) {
+                Cart::updateAll(['quantity' => $cart['quantity']], ['id' => $cart['id']]);
             }
 
-            return $this->redirect(['my-cart']);
+            return $this->asJson([
+                'status' => 'success',
+                'message' => 'Cart Updated'
+            ]);
         }
 
         $searchModel = new CartSearch([

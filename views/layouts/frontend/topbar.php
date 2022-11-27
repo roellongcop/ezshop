@@ -75,14 +75,14 @@ $activePage = $this->params['activePage'] ?? 'home';
                 <span class="h1 text-uppercase text-dark bg-primary px-2 ml-n1">Furniture</span>
             </a>
         </div>
-        <div class="col-lg-4 col-6 text-left">
+        <div class="col-lg-5 col-6 text-left">
             <form action="<?= Url::toRoute(['site/shop']) ?>" method="get">
                 <?= Autocomplete::widget([
                     'canRoute' => true,
                     'url' => Url::toRoute(['site/find-products-by-keywords']),
                     'input' => <<< HTML
                         <div class="input-group">
-                            <input type="text" name="keywords" class="form-control" placeholder="Search for products">
+                            <input type="text" name="keywords" class="form-control p-4" placeholder="Search for products">
                             <div class="input-group-append">
                                 <span class="input-group-text bg-transparent text-primary">
                                     <i class="fa fa-search"></i>
@@ -93,7 +93,7 @@ $activePage = $this->params['activePage'] ?? 'home';
                 ]) ?>
             </form>
         </div>
-        <div class="col-lg-4 col-6 text-right">
+        <div class="col-lg-3 col-6 text-right">
             <p class="m-0">Customer Service</p>
             <h5 class="m-0">
                 <?= App::setting('aboutUs')->contact_no ?>

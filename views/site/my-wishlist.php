@@ -1,12 +1,9 @@
 <?php
 
 use app\helpers\App;
-use app\helpers\Url;
 use app\helpers\Html;
 use yii\helpers\Html as YiiHtml;
 use app\widgets\Grid;
-use app\widgets\Search;
-use app\widgets\ActiveForm;
 
 $this->title = 'My Wishlist';
 $this->params['homeBreadcrumbs'] = YiiHtml::a('Dashboard', ['site/customer-dashboard'], ['class' => 'breadcrumb-item text-dark']);
@@ -19,25 +16,16 @@ $this->addJsFile('frontend/js/my-wishlist', [
 ?>
 
 <div class="container-fluid">
-    <div class="my-3 text-center">
-        <div style="max-width: 500px;margin: 0 auto;">
-            <?php $form = ActiveForm::begin([
-                'id' => 'main-search-form',
-                'action' => ['site/my-wishlist'], 
-                'method' => 'get'
-            ]); ?>
-                <?= Search::widget([
-                    'url' => Url::toRoute(['site/find-wishlist-by-keywords']),
-                    'submitOnclick' => true,
-                    'model' => $searchModel,
-                ]) ?>
-            <?php ActiveForm::end(); ?>
-        </div>
-    </div>
-
     <div class="row px-xl-5">
         <div class="col-md-12 table-responsive">
             <?= Grid::widget([
+                'layout' => $this->render('_grid-layout', [
+                    'dataProvider' => $dataProvider,
+                    'searchModel' => $searchModel,
+                    'content' => $this->render('_grid-search-input', [
+                        'searchModel' => $searchModel
+                    ])
+                ]),
                 'columns' => [
                     'serial' => ['class' => 'yii\grid\SerialColumn'],
                     'photo' => [
@@ -75,10 +63,21 @@ $this->addJsFile('frontend/js/my-wishlist', [
                         'attribute' => 'productName',
                         'format' => 'raw',
                         'label' => 'Remove',
-                        'value' => fn($model) => Html::tag('button', '<i class="fa fa-times"></i>', [
-                            'type' => 'button',
-                            'class' => 'btn-remove-from-wishlist btn btn-sm btn-danger',
-                            'data-product_id' => $model->product_id,
+                        'value' => fn($model) => implode(' ', [
+                            Html::tag('button', '<i class="fa fa-times"></i>', [
+                                'type' => 'button',
+                                'class' => 'btn-remove-from-wishlist btn btn-sm btn-danger',
+                                'data-product_id' => $model->product_id,
+                                'title' => 'Remove From Cart',
+                                'data-toggle' => 'tooltip'
+                            ]),
+                            Html::tag('button', '<i class="fa fa-shopping-cart"></i>', [
+                                'type' => 'button',
+                                'class' => 'btn-add-to-cart btn btn-sm btn-success',
+                                'data-product_id' => $model->product_id,
+                                'title' => 'Add To Cart',
+                                'data-toggle' => 'tooltip'
+                            ])
                         ]),
                         'contentOptions' => ['class' => 'align-middle']
                     ],

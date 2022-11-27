@@ -5,8 +5,6 @@ use app\helpers\Url;
 use app\helpers\Html;
 use yii\helpers\Html as YiiHtml;
 use app\widgets\Grid;
-use app\widgets\Search;
-use app\widgets\ActiveForm;
 
 $this->title = 'My Reviews';
 $this->params['homeBreadcrumbs'] = YiiHtml::a('Dashboard', ['site/customer-dashboard'], ['class' => 'breadcrumb-item text-dark']);
@@ -16,25 +14,18 @@ $this->params['activePage'] = 'my-reviews';
 ?>
 
 <div class="container-fluid">
-    <div class="my-3 text-center">
-        <div style="max-width: 500px;margin: 0 auto;">
-            <?php $form = ActiveForm::begin([
-                'id' => 'main-search-form',
-                'action' => ['site/my-reviews'], 
-                'method' => 'get'
-            ]); ?>
-                <?= Search::widget([
-                    'url' => Url::toRoute(['site/find-reviews-by-keywords']),
-                    'submitOnclick' => true,
-                    'model' => $searchModel,
-                ]) ?>
-            <?php ActiveForm::end(); ?>
-        </div>
-    </div>
-
     <div class="row px-xl-5">
         <div class="col-md-12 table-responsive">
             <?= Grid::widget([
+                'layout' => $this->render('_grid-layout', [
+                    'dataProvider' => $dataProvider,
+                    'searchModel' => $searchModel,
+                    'content' => $this->render('_grid-search-input', [
+                        'searchModel' => $searchModel,
+                        'action' => ['site/my-reviews'],
+                        'url' => Url::toRoute(['site/find-reviews-by-keywords'])
+                    ])
+                ]),
                 'columns' => [
                     'serial' => ['class' => 'yii\grid\SerialColumn'],
                     'photo' => [
