@@ -132,7 +132,7 @@ $shipping = Cart::shipping();
                 ]
             ]); ?>
             <div class="text-right">
-                <button type="submit" class="btn btn-primary btn-lg btn-update-cart">
+                <button type="submit" class="btn btn-primary font-weight-bold py-2 text-uppercase btn-update-cart">
                     Update Cart
                 </button>
             </div>
