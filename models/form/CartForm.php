@@ -2,98 +2,57 @@
 
 namespace app\models\form;
 
-use Yii;
-use app\helpers\ArrayHelper;
+use app\models\Cart;
 
 class CartForm extends \yii\base\Model
 {
     public $product_id;
+    public $user_id;
     public $quantity;
     public $color;
     public $size;
 
-    public $data;
-    public $session;
-
     public function rules()
     {
         return [
-            [['product_id', 'quantity'], 'required'],
-            [['product_id', 'quantity'], 'integer'],
+            [['product_id', 'user_id', 'quantity'], 'required'],
+            [['product_id', 'user_id', 'quantity'], 'integer'],
             [['color', 'size'], 'string', 'max' => 255],
         ];
     }
 
-    public function init()
-    {
-        parent::init();
-        $this->session = Yii::$app->session;
-
-        $this->data = $this->session['cart'] ?? [];
-    }
-
-
-    public function addNewProduct()
-    {
-        $this->data[] = [
-            'product_id' => $this->quantity,
-            'quantity' => $this->quantity,
-            'color' => $this->color,
-            'size' => $this->size,
-        ];
-
-        $this->session['cart'] = $this->data;
-    }
 
     public function save()
     {
         if ($this->validate()) {
-            if ($this->data) {
+            $condition = [
+                'product_id' => $this->product_id,
+                'user_id' => $this->user_id,
+            ];
 
-                $exist = false;
-                foreach ($this->data as &$data) {
-                    if ($data['product_id'] == $this->product_id) {
-                        if ($this->color && $this->size) {
-                            if ($data['color'] == $this->color && $data['size'] == $this->size) {
-                                $data['quantity'] = $data['quantity'] + $this->quantity;
-                                $exist = true;
-                                break;
-                            }
-                        }
-                        elseif ($this->color && $this->size == null) {
-                            if ($data['color'] == $this->color) {
-                                $data['quantity'] = $data['quantity'] + $this->quantity;
-                                $exist = true;
-                                break;
-                            }
-                        }
-                        elseif ($this->size && $this->color == null) {
-                            if ($data['size'] == $this->size) {
-                                $data['quantity'] = $data['quantity'] + $this->quantity;
-                                $exist = true;
-                                break;
-                            }
-                        }
-                        else {
-                            $data['quantity'] = $data['quantity'] + $this->quantity;
-                            $exist = true;
-                            break;
-                        }
-                    }
-                }
+            if ($this->color) {
+                $condition['color'] = $this->color;
+            }
 
-                if ($exist) {
-                    $this->session['cart'] = $this->data;
-                }
-                else {
-                    $this->addNewProduct();
-                }
+            if ($this->size) {
+                $condition['size'] = $this->size;
+            }
+
+            $cart = Cart::findOne($condition) ?: new Cart($condition);
+
+            if ($cart->isNewRecord) {
+                $cart->quantity = $this->quantity;
             }
             else {
-                $this->addNewProduct();
+                $cart->quantity = $cart->quantity + $this->quantity;
             }
 
-            return $this->data;
+            if ($cart->save()) {
+                return $cart;
+            }
+
+
+            $this->addError('cart', $cart->errors);
         }
     }
 }
