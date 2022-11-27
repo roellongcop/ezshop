@@ -5,6 +5,7 @@ namespace app\models;
 use app\helpers\App;
 use app\helpers\Html;
 use app\widgets\Anchor;
+use app\models\form\user\BillingDetailForm;
 
 /**
  * This is the model class for table "{{%carts}}".
@@ -193,17 +194,47 @@ class Cart extends ActiveRecord
 
     public static function subtotal()
     {
-        $carts = self::find()
-            ->where([
-                'user_id' => App::identity('id'),
-                'session_id' => App::session('id'),
-            ])
-            ->all();
-
+        $carts = self::findAll([
+            'user_id' => App::identity('id'),
+            'session_id' => App::session('id'),
+        ]);
 
         $totals = App::foreach($carts, fn($cart) => $cart->total, false);
 
-        
         return $totals ? array_sum($totals): 0;
+    }
+
+    public function getAddedShipping()
+    {
+        return App::if($this->product, fn($product) => $product->added_shipping_fee);
+    }
+
+    public static function shipping()
+    {
+        $total = App::setting('shipping')->flat_rate;
+
+        $billing = new BillingDetailForm(['user_id' => App::identity('id')]);
+
+        $shipping = Shipping::findOne([
+            'province_id' => $billing->province_id,
+            'municipality_id' => $billing->city_id,
+        ]);
+
+        if ($shipping) {
+            $total += $shipping->rate;
+        }
+
+        $carts = self::findAll([
+            'user_id' => App::identity('id'),
+            'session_id' => App::session('id'),
+        ]);
+
+        $addedShipping = App::foreach($carts, fn($cart) => $cart->addedShipping, false);
+
+        if ($addedShipping) {
+            $total += array_sum($addedShipping);
+        }
+
+        return $total;
     }
 }

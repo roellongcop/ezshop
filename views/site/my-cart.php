@@ -18,6 +18,9 @@ $this->params['activePage'] = 'my-cart';
 $this->addJsFile('frontend/js/my-cart', [
     'app\assets\frontend\AppAsset'
 ]);
+
+$subtotal = Cart::subtotal();
+$shipping = Cart::shipping();
 ?>
 
 <div class="container-fluid">
@@ -143,20 +146,24 @@ $this->addJsFile('frontend/js/my-cart', [
                     <div class="d-flex justify-content-between mb-3">
                         <h6>Subtotal</h6>
                         <h6>
-                            <?= App::formatter('asPeso', Cart::subtotal()) ?>
+                            <?= App::formatter('asPeso', $subtotal) ?>
                         </h6>
                     </div>
                     <div class="d-flex justify-content-between">
                         <h6 class="font-weight-medium">Shipping
                         </h6>
-                        <h6 class="font-weight-medium">$10</h6>
+                        <h6 class="font-weight-medium">
+                            <?= App::formatter('asPeso', $shipping) ?>
+                        </h6>
                     </div>
-                    <small>May change depends on shipping address</small>
+                    <small>May change depends on your shipping address</small>
                 </div>
                 <div class="pt-2">
                     <div class="d-flex justify-content-between mt-2">
                         <h5>Total</h5>
-                        <h5>$160</h5>
+                        <h5>
+                            <?= App::formatter('asPeso', $subtotal + $shipping) ?>
+                        </h5>
                     </div>
                     <button class="btn btn-block btn-primary font-weight-bold my-3 py-3">Proceed To Checkout</button>
                 </div>
