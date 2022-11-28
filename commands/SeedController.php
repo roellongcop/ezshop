@@ -9,6 +9,10 @@ namespace app\commands;
 
 use Yii;
 use yii\helpers\Inflector;
+use app\models\Product;
+use app\models\ProductCategory;
+use Faker\Factory;
+use yii\db\Expression;
 
 /**
  * This command echoes the first argument that you have entered.
@@ -47,10 +51,10 @@ class SeedController extends Controller
     public function actionProduct($rows=1)
     {
         $data = [];
-        $faker = \Faker\Factory::create();
-        $totalProduct = \app\models\Product::find()->count();
+        $faker = Factory::create();
+        $totalProduct = Product::find()->count();
 
-        $categories = array_values(\app\models\ProductCategory::dropdown('id', 'name'));
+        $categories = array_values(ProductCategory::dropdown('id', 'name'));
 
         for ($i=1; $i <= $rows; $i++) { 
             $number = $totalProduct + $i;
@@ -61,17 +65,17 @@ class SeedController extends Controller
 
             if ($qty > $lst) {
                 if ($qty >= $hst) {
-                    $sts = \app\models\Product::THRESHOLD_HIGH;
+                    $sts = Product::THRESHOLD_HIGH;
                 }
                 else {
-                    $sts = \app\models\Product::THRESHOLD_SAFE;
+                    $sts = Product::THRESHOLD_SAFE;
                 }
             }
             else {
-                $sts = \app\models\Product::THRESHOLD_LOW;
+                $sts = Product::THRESHOLD_LOW;
             }
 
-            $image = \app\helpers\App::setting('image')->primary_logo;
+            $images = ['fQPBSLPa_P-1668920481', 'ZXtU3RLlQw-1668920890', 'GBSrhy6VNW-1668922286'];
 
 
             $data[] = [
@@ -87,21 +91,21 @@ class SeedController extends Controller
                 'high_stock_threshold' => $hst,
                 'stock_threshold_status' => $sts,
                 'sku' => "sku-{$number}",
-                'image' => $image,
+                'image' => $faker->randomElement($images),
                 'tags' => json_encode(['tag1', 'tag2']),
-                'gallery' => json_encode([$image, $image]),
+                'gallery' => json_encode([$faker->randomElement($images), $faker->randomElement($images)]),
                 'colors' => json_encode(['blue', 'red', 'green']),
                 'sizes' => json_encode(['small', 'medium', 'large']),
                 'token' => "tokeng-{$number}",
                 'slug' => \yii\helpers\Inflector::slug("Product Name {$number}"),
-                'record_status' => \app\models\Product::RECORD_ACTIVE,
+                'record_status' => Product::RECORD_ACTIVE,
                 'created_by' => 1,
                 'updated_by' => 1,
-                'created_at' => new \yii\db\Expression('UTC_TIMESTAMP'),
-                'updated_at' => new \yii\db\Expression('UTC_TIMESTAMP'),
+                'created_at' => new Expression('UTC_TIMESTAMP'),
+                'updated_at' => new Expression('UTC_TIMESTAMP'),
             ];
         }
 
-        \app\models\Product::batchInsert($data);
+        Product::batchInsert($data);
     }
 }

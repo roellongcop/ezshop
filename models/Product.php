@@ -464,8 +464,13 @@ class Product extends ActiveRecord
 
     public function getReviews()
     {
+        return $this->hasMany(Review::class, ['product_id' => 'id']);
+    }
+
+    public function getApprovedReviews()
+    {
         return $this->hasMany(Review::class, ['product_id' => 'id'])
-            ->orderBy(['id' => SORT_DESC]);
+        ->onCondition(['r.record_status' => self::RECORD_ACTIVE]);
     }
 
     public function getTotalReviews()

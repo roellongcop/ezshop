@@ -690,6 +690,13 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
             ->count();
     }
 
+    public function getMyTotalReviews()
+    {
+        return Review::find()
+            ->where(['user_id' => $this->id])
+            ->count();
+    }
+
     public function getMyTotalCart()
     {
         $total = Cart::find()

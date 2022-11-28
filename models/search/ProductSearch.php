@@ -59,7 +59,10 @@ class ProductSearch extends Product
      */
     public function search($params)
     {
-        $query = Product::find();
+        $query = Product::find()
+            ->alias('p')
+            ->groupBy('p.id')
+            ->joinWith('approvedReviews r');
 
         // add conditions that should always apply here
         $this->load($params);
@@ -80,24 +83,24 @@ class ProductSearch extends Product
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'id' => $this->id,
-            'regular_price' => $this->regular_price,
-            'sale_price' => $this->sale_price,
-            'quantity' => $this->quantity,
-            'low_stock_threshold' => $this->low_stock_threshold,
-            'high_stock_threshold' => $this->high_stock_threshold,
-            'stock_threshold_status' => $this->stock_threshold_status,
-            'added_shipping_fee' => $this->added_shipping_fee,
-            'record_status' => $this->record_status,
-            'created_by' => $this->created_by,
-            'updated_by' => $this->updated_by,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'p.id' => $this->id,
+            'p.regular_price' => $this->regular_price,
+            'p.sale_price' => $this->sale_price,
+            'p.quantity' => $this->quantity,
+            'p.low_stock_threshold' => $this->low_stock_threshold,
+            'p.high_stock_threshold' => $this->high_stock_threshold,
+            'p.stock_threshold_status' => $this->stock_threshold_status,
+            'p.added_shipping_fee' => $this->added_shipping_fee,
+            'p.record_status' => $this->record_status,
+            'p.created_by' => $this->created_by,
+            'p.updated_by' => $this->updated_by,
+            'p.created_at' => $this->created_at,
+            'p.updated_at' => $this->updated_at,
         ]);
 
 
-        $query->andFilterWhere(['like', 'name', $this->name])
-            ->andFilterWhere(['like', 'categories', $this->categories]);
+        $query->andFilterWhere(['like', 'p.name', $this->name])
+            ->andFilterWhere(['like', 'p.categories', $this->categories]);
 
 
         if ($this->price_range) {
@@ -105,7 +108,7 @@ class ProductSearch extends Product
             foreach ($this->price_range as $price_range) {
                 list($from, $to) = explode('-', $price_range);
 
-                $where[] = ['BETWEEN', 'sale_price', $from, $to];
+                $where[] = ['BETWEEN', 'p.sale_price', $from, $to];
             }
 
             $query->andFilterWhere($where);
@@ -114,7 +117,7 @@ class ProductSearch extends Product
         if ($this->colors) {
             $where = ['or'];
             foreach ($this->colors as $color) {
-                $where[] = ['LIKE', 'colors', $color];
+                $where[] = ['LIKE', 'p.colors', $color];
             }
 
             $query->andFilterWhere($where);
@@ -123,7 +126,7 @@ class ProductSearch extends Product
         if ($this->sizes) {
             $where = ['or'];
             foreach ($this->sizes as $size) {
-                $where[] = ['LIKE', 'sizes', $size];
+                $where[] = ['LIKE', 'p.sizes', $size];
             }
 
             $query->andFilterWhere($where);
@@ -131,13 +134,29 @@ class ProductSearch extends Product
         
                 
         $query->andFilterWhere(['or', 
-            ['like', 'name', $this->keywords],  
-            ['like', 'categories', $this->keywords],  
-            ['like', 'description', $this->keywords],  
-            ['like', 'tags', $this->keywords],  
+            ['like', 'p.name', $this->keywords],  
+            ['like', 'p.categories', $this->keywords],  
+            ['like', 'p.description', $this->keywords],  
+            ['like', 'p.tags', $this->keywords],  
         ]);
 
         $query->daterange($this->date_range);
+
+        if ($this->sort) {
+            if ($this->sort == 'latest') {
+                $query->orderBy(['p.id' => SORT_DESC]);
+            }
+            elseif ($this->sort == 'popularity') {
+                $query->orderBy(['COUNT("r.*")' => SORT_DESC]);
+            }
+            elseif ($this->sort == 'rating') {
+                $query->orderBy([
+                    '(AVG(`r`.`score`))' => SORT_DESC,
+                ]);
+            }
+        }
+
+        // dd($dataProvider->query->createCommand()->rawSql);
 
         return $dataProvider;
     }

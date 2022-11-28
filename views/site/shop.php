@@ -115,7 +115,7 @@ $this->addJsFile('frontend/js/shop', ['app\assets\frontend\AppAsset']);
                                 </div>
                             </div>
                             <div class="btn-group ml-2">
-                                <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">Showing</button>
+                                <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">Showing: <?= $searchModel->pagination ?></button>
                                 <div class="dropdown-menu dropdown-menu-right">
                                     <?= Html::foreach(App::params('pagination'), function($page) {
                                         return YiiHtml::a($page, Url::current(['pagination' => $page]), [
@@ -128,6 +128,7 @@ $this->addJsFile('frontend/js/shop', ['app\assets\frontend\AppAsset']);
                     </div>
                 </div>
             </div>
+
 
             <?= ListView::widget([
                 'dataProvider' => $dataProvider,

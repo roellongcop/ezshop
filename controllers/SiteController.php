@@ -283,8 +283,8 @@ class SiteController extends Controller
     public function actionShop()
     {
         $searchModel = new ProductSearch(['record_status' => Product::RECORD_ACTIVE]);
+        $searchModel->pagination = 9;
         $dataProvider = $searchModel->search(['ProductSearch' => App::queryParams()]);
-        $dataProvider->pagination->pageSize = 9;
 
         return $this->render('shop', [
             'dataProvider' => $dataProvider,

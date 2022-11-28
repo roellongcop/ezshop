@@ -64,7 +64,7 @@ $wishlist = in_array($product->id, $this->params['wishlistProductIds']);
                 </div>
                 <h3 class="font-weight-semi-bold mb-4">
                     <?= App::formatter('asPeso', $product->sale_price) ?>
-                    <?= App::if($product->isOnSale, Html::tag('small', number_format($product->regular_price), ['class' => 'text-muted line-through'])) ?>
+                    <?= App::if($product->isOnSale, Html::tag('small', App::formatter()->asPeso($product->regular_price), ['class' => 'text-muted line-through'])) ?>
                 </h3>
                 <p class="mb-4">
                     <?= $product->specification ?>
