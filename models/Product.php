@@ -118,6 +118,7 @@ class Product extends ActiveRecord
             [['description'], 'string'],
             [['regular_price', 'sale_price', 'added_shipping_fee'], 'number'],
             [['quantity', 'low_stock_threshold', 'high_stock_threshold', 'stock_threshold_status'], 'integer'],
+            [['quantity'], 'integer', 'min' => 0],
             [['name', 'image', 'sku'], 'string', 'max' => 255],
             [['categories', 'tags', 'gallery', 'colors', 'sizes'], 'safe'],
             [['low_stock_threshold', 'high_stock_threshold'], 'validateThresholdStock'],

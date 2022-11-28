@@ -45,7 +45,12 @@ const successReload = ({ message }) => {
 }
 
 const errorMessage = ({errorSummary}) => {
-	Swal.fire('Error', errorSummary, 'error')
+    Swal.fire({
+      title: 'Error', 
+      text: errorSummary,  
+      html:true
+        icon: "error",
+    });
 }
 
 const block = (container, message) => {

@@ -11,7 +11,7 @@ class CartTest extends \Codeception\Test\Unit
         return array_replace([
             'product_id' => 1,
             'user_id' => 1,
-            'session_id' => 1,
+            'session_id' => '1',
             'color' => 'Color',
             'size' => 'Size',
             'quantity' => 1,
@@ -19,10 +19,18 @@ class CartTest extends \Codeception\Test\Unit
         ], $replace);
     }
 
+
+
     public function testInvalidProductId()
     {
         $model = new Cart($this->data([
             'product_id' => 'invalid'
+        ]));
+        expect_not($model->save());
+        expect($model->errors)->hasKey('product_id');
+
+        $model = new Cart($this->data([
+            'product_id' => 9999
         ]));
         expect_not($model->save());
         expect($model->errors)->hasKey('product_id');
@@ -35,12 +43,29 @@ class CartTest extends \Codeception\Test\Unit
         ]));
         expect_not($model->save());
         expect($model->errors)->hasKey('user_id');
+
+
+        $model = new Cart($this->data([
+            'user_id' => 999999
+        ]));
+        expect_not($model->save());
+        expect($model->errors)->hasKey('user_id');
     }
 
     public function testCreateSuccess()
     {
         $model = new Cart($this->data());
+        $model->save();
+
         expect_that($model->save());
+    }
+
+
+    public function testCreateGreaterThanQuantity()
+    {
+        $model = new Cart($this->data(['quantity' => 99999999999999]));
+        expect_not($model->save());
+        expect($model->errors)->hasKey('quantity');
     }
 
     public function testNoInactiveDataAccessRoleUserCreateInactiveData()

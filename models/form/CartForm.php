@@ -4,6 +4,7 @@ namespace app\models\form;
 
 use app\models\Cart;
 use app\helpers\App;
+use app\helpers\Html;
 
 class CartForm extends \yii\base\Model
 {
@@ -55,7 +56,7 @@ class CartForm extends \yii\base\Model
             }
 
 
-            $this->addError('cart', $cart->errors);
+            $this->addError('cart', Html::errorSummary($cart, ['header' => '']));
         }
     }
 }

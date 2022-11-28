@@ -51,6 +51,9 @@ class Cart extends ActiveRecord
             [['product_id', 'user_id', 'quantity'], 'required'],
             [['product_id', 'user_id', 'quantity'], 'integer'],
             [['color', 'size', 'session_id'], 'string', 'max' => 255],
+            ['product_id', 'exist', 'targetRelation' => 'product'],
+            ['user_id', 'exist', 'targetRelation' => 'user'],
+            [['product_id', 'quantity'], 'validateQuantity'],
         ]);
     }
 
@@ -67,6 +70,15 @@ class Cart extends ActiveRecord
             'size' => 'Size',
             'quantity' => 'Quantity',
         ]);
+    }
+
+    public function validateQuantity($attribute, $params)
+    {
+        if (($product = $this->product) != null) {
+            if ($this->quantity > $product->quantity) {
+                $this->addError($attribute, 'Product quantity is less than cart quantity');
+            }
+        }
     }
 
     /**

@@ -164,7 +164,9 @@ class SiteController extends Controller
     {
         return $this->asJson(
             Product::findByKeywords($keywords, ['name'], 10, [
-                'record_status' => Product::RECORD_ACTIVE
+                'and',
+                ['record_status' => Product::RECORD_ACTIVE],
+                ['>', 'quantity', 0]
             ])
         );
     }
@@ -286,6 +288,7 @@ class SiteController extends Controller
         $searchModel = new ProductSearch(['record_status' => Product::RECORD_ACTIVE]);
         $searchModel->pagination = 9;
         $dataProvider = $searchModel->search(['ProductSearch' => App::queryParams()]);
+        $dataProvider->query->andWhere(['>', 'p.quantity', 0]);
 
         return $this->render('shop', [
             'dataProvider' => $dataProvider,
@@ -574,7 +577,7 @@ class SiteController extends Controller
 
         return $this->asJson([
             'status' => 'failed',
-            'errorSummary' => Html::errorSummary($model)
+            'errorSummary' => Html::errorSummary($model, ['encode' => false])
         ]);
     }
 

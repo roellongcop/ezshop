@@ -380,6 +380,7 @@ class Order extends ActiveRecord
 
                         if ($quantity !== false) {
                             $product->quantity = $product->quantity - $quantity;
+                            $product->quantity = $product->quantity > 0 ? $product->quantity: 0;
                             $product->save();
                         }
                     }
