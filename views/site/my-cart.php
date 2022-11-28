@@ -80,7 +80,7 @@ $shipping = Cart::shipping();
                                                 <i class="fa fa-minus"></i>
                                                 </button>
                                             </div>
-                                            <input max="{$model->productQuantity}" data-product-id="{$model->id}" type="text" class="form-control form-control-sm bg-secondary border-0 text-center qty-input" value="{$model->quantity}">
+                                            <input max="{$model->productQuantity}" data-product-id="{$model->id}" type="number" class="form-control form-control-sm bg-secondary border-0 text-center qty-input" value="{$model->quantity}">
                                             <div class="input-group-btn">
                                                 <button type="button" class="btn btn-sm btn-primary btn-plus">
                                                     <i class="fa fa-plus"></i>

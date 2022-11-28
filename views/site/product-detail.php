@@ -103,7 +103,7 @@ $wishlist = in_array($product->id, $this->params['wishlistProductIds']);
                                 <i class="fa fa-minus"></i>
                             </button>
                         </div>
-                        <input type="text" class="form-control bg-secondary border-0 text-center qty-input" value="1">
+                        <input max="<?= $product->quantity ?>" type="number" class="form-control bg-secondary border-0 text-center qty-input" value="1">
                         <div class="input-group-btn">
                             <button class="btn btn-primary btn-plus">
                                 <i class="fa fa-plus"></i>
