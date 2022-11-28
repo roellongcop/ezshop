@@ -5,7 +5,7 @@ namespace app\controllers;
 use Yii;
 use app\helpers\App;
 use app\models\Email;
-use app\models\EmailSearch;
+use app\models\search\EmailSearch;
 
 /**
  * EmailController implements the CRUD actions for Email model.
