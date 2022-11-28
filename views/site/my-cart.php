@@ -26,7 +26,10 @@ $shipping = Cart::shipping();
 <div class="container-fluid">
     <div class="row px-xl-5">
         <div class="col-lg-8 table-responsive mb-2 cart-grid">
-            <?php Pjax::begin(['timeout' => false]); ?>
+            <?php Pjax::begin([
+                'timeout' => false,
+                'linkSelector' => '.pagination a.page-item'
+            ]); ?>
                 <?= Grid::widget([
                     'layout' => $this->render('_grid-layout', [
                         'dataProvider' => $dataProvider,

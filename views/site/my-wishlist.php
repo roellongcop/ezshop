@@ -19,7 +19,10 @@ $this->addJsFile('frontend/js/my-wishlist', ['app\assets\frontend\AppAsset'], [
 <div class="container-fluid">
     <div class="row px-xl-5">
         <div class="col-md-12 table-responsive">
-            <?php Pjax::begin(['timeout' => false]); ?>
+            <?php Pjax::begin([
+                'timeout' => false,
+                'linkSelector' => '.pagination a.page-item'
+            ]); ?>
                 <?= Grid::widget([
                     'layout' => $this->render('_grid-layout', [
                         'dataProvider' => $dataProvider,
