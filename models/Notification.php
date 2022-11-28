@@ -29,6 +29,7 @@ class Notification extends ActiveRecord
 
     const TYPE_CHANGED_PASSWORD = 'notification_change_password';
     const TYPE_NEW_REVIEW = 'new_review';
+    const TYPE_NEW_ORDER = 'new_order';
 
     /**
      * {@inheritdoc}
@@ -59,7 +60,11 @@ class Notification extends ActiveRecord
             [['type'], 'string', 'max' => 128],
             [['user_id'], 'exist', 'targetRelation' => 'user'],
             ['status', 'in', 'range' => [self::STATUS_READ, self::STATUS_UNREAD]],
-            ['type', 'in', 'range' => [self::TYPE_CHANGED_PASSWORD, self::TYPE_NEW_REVIEW]],
+            ['type', 'in', 'range' => [
+                self::TYPE_CHANGED_PASSWORD, 
+                self::TYPE_NEW_REVIEW,
+                self::TYPE_NEW_ORDER,
+            ]],
         ]);
     }
 

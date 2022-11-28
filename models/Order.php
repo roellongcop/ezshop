@@ -4,6 +4,9 @@ namespace app\models;
 
 use app\widgets\Anchor;
 use app\helpers\App;
+use app\helpers\Url;
+use app\helpers\StringHelper;
+use app\helpers\ArrayHelper;
 use app\models\form\user\BillingDetailForm;
 
 /**
@@ -56,8 +59,8 @@ class Order extends ActiveRecord
     {
         return [
             'controllerID' => 'order',
-            'mainAttribute' => 'id',
-            'paramName' => 'id',
+            'mainAttribute' => 'order_no',
+            'paramName' => 'order_no',
         ];
     }
 
@@ -198,7 +201,7 @@ class Order extends ActiveRecord
             'shipping_province_id' => ['attribute' => 'shipping_province_id', 'format' => 'raw'],
             'shipping_municipality_id' => ['attribute' => 'shipping_municipality_id', 'format' => 'raw'],
             'shipping_zip' => ['attribute' => 'shipping_zip', 'format' => 'raw'],
-            'products' => ['attribute' => 'products', 'format' => 'raw'],
+            'products' => ['attribute' => 'products', 'format' => 'jsonEditor'],
             'subtotal' => ['attribute' => 'subtotal', 'format' => 'raw'],
             'shipping' => ['attribute' => 'shipping', 'format' => 'raw'],
             'total' => ['attribute' => 'total', 'format' => 'raw'],
@@ -226,7 +229,7 @@ class Order extends ActiveRecord
             'shipping_province_id:raw',
             'shipping_municipality_id:raw',
             'shipping_zip:raw',
-            'products:raw',
+            'products:jsonEditor',
             'subtotal:raw',
             'shipping:raw',
             'total:raw',
@@ -319,5 +322,81 @@ class Order extends ActiveRecord
         $this->order_no = $this->generateOrderNo();
 
         return true;
+    }
+
+    public function getBillingFullname()
+    {
+        return implode(' ', [
+            $this->billing_firstname,
+            $this->billing_lastname,
+        ]);
+    }
+
+    public function getTotalProducts()
+    {
+        if ($this->products && is_countable($this->products)) {
+            return number_format(count($this->products));
+        }
+    }
+
+    public function getFormattedTotal()
+    {
+        return App::formatter()->asPeso($this->total);
+    }
+
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+
+        if ($insert) {
+            $roles = [
+                Role::DEVELOPER,
+                Role::SUPERADMIN,
+                Role::ADMIN,
+            ];
+
+            if (($users = User::findAll(['role_id' => $roles])) != null) {
+                foreach ($users as $user) {
+                    $notification = new Notification([
+                        'status' => Notification::STATUS_UNREAD,
+                        'record_status' => Notification::RECORD_ACTIVE,
+                        'user_id' => $user->id,
+                        'type' => Notification::TYPE_NEW_ORDER,
+                        'link' => $this->getViewUrl(false, true),
+                        'message' => "New ordered by {$this->billingFullname} with a total price of {$this->formattedTotal}",
+                    ]);
+                    $notification->save();
+                }
+            }
+
+            $this->refresh();
+            if ($this->products) {
+                $data = ArrayHelper::map($this->products, 'product_id', 'quantity');
+                
+                if (($products = Product::findAll(array_keys($data))) != null) {
+                    foreach ($products as $product) {
+
+                        $quantity = $data[$product->id] ?? false;
+
+                        if ($quantity !== false) {
+                            $product->quantity = $product->quantity - $quantity;
+                            $product->save();
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public function getViewUrl($fullpath=true, $force = false)
+    {
+        if ($this->checkLinkAccess('view') || $force) {
+            $paramName = $this->paramName();
+            $url = [
+                implode('/', [$this->controllerID(), 'view']),
+                $paramName => $this->{$paramName}
+            ];
+            return Url::toRoute($url, $fullpath);
+        }
     }
 }

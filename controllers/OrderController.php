@@ -35,14 +35,14 @@ class OrderController extends Controller
 
     /**
      * Displays a single Order model.
-     * @param integer $id
+     * @param integer $order_no
      * @return mixed
      * @throws ForbiddenHttpException if the model cannot be found
      */
-    public function actionView($id)
+    public function actionView($order_no)
     {
         return $this->render('view', [
-            'model' => Order::controllerFind($id),
+            'model' => Order::controllerFind($order_no, 'order_no'),
         ]);
     }
 
@@ -71,9 +71,9 @@ class OrderController extends Controller
      * If duplication is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionDuplicate($id)
+    public function actionDuplicate($order_no)
     {
-        $originalModel = Order::controllerFind($id);
+        $originalModel = Order::controllerFind($order_no, 'order_no');
         $model = new Order();
         $model->attributes = $originalModel->attributes;
 
@@ -92,13 +92,13 @@ class OrderController extends Controller
     /**
      * Updates an existing Order model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
+     * @param integer $order_no
      * @return mixed
      * @throws ForbiddenHttpException if the model cannot be found
      */
-    public function actionUpdate($id)
+    public function actionUpdate($order_no)
     {
-        $model = Order::controllerFind($id);
+        $model = Order::controllerFind($order_no, 'order_no');
 
         if ($model->load(App::post()) && $model->save()) {
             App::success('Successfully Updated');
@@ -113,13 +113,13 @@ class OrderController extends Controller
     /**
      * Deletes an existing Order model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
+     * @param integer $order_no
      * @return mixed
      * @throws ForbiddenHttpException if the model cannot be found
      */
-    public function actionDelete($id)
+    public function actionDelete($order_no)
     {
-        $model = Order::controllerFind($id);
+        $model = Order::controllerFind($order_no, 'order_no');
 
         if($model->delete()) {
             App::success('Successfully Deleted');

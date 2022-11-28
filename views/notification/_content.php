@@ -1,3 +1,9 @@
+<?php
+
+use app\helpers\App;
+use \app\helpers\StringHelper;
+?>
+
 <div class="d-flex align-items-center mb-6">
     <!--begin::Symbol-->
     <div class="symbol symbol-40 symbol-light-primary mr-5">
@@ -19,10 +25,10 @@
     <!--begin::Text-->
     <div class="d-flex flex-column font-weight-bold">
         <a href="<?= $notification->viewUrl ?>" class="text-dark text-hover-primary mb-1 font-size-lg">
-            <?= $notification->label ?>
+            <?= $notification->label ?> (<?= App::formatter()->asAgo($notification->created_at) ?>)
         </a>
         <span class="text-muted">
-            <?= $notification->message ?>
+            <?= StringHelper::truncate($notification->message, 35) ?>
         </span>
     </div>
     <!--end::Text-->

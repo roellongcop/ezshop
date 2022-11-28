@@ -80,6 +80,11 @@ return [
             'id' => 1, 
             'type' => 'new_review', 
             'label' => 'Product Review'
+        ],
+        2 => [
+            'id' => 2, 
+            'type' => 'new_order', 
+            'label' => 'New Order'
         ]
     ],
     'user_status' => [

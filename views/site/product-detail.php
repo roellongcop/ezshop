@@ -113,6 +113,12 @@ $wishlist = in_array($product->id, $this->params['wishlistProductIds']);
                     <button class="btn btn-primary px-3 btn-add-to-cart" data-product_id="<?= $product->id ?>"><i class="fa fa-shopping-cart mr-1"></i> Add To
                         Cart</button>
                 </div>
+                <div class="pt-2">
+                    <?= App::if($product->added_shipping_fee, fn($fee) => Html::tag('div', 'Added Shipping Fee: ' . App::formatter()->asPeso($fee), ['class' => 'font-weight-bold'])) ?>
+
+
+                    <?= Html::tag('div', 'Stock: ' . number_format($product->quantity), ['class' => 'font-weight-bold']) ?> 
+                </div>
                 <div class="d-flex pt-2">
                     <strong class="text-dark mr-2">More on:</strong>
                     <div class="d-inline-flex">

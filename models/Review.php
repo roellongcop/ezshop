@@ -111,7 +111,7 @@ class Review extends ActiveRecord
                         'type' => Notification::TYPE_NEW_REVIEW,
                         // 'link' => Url::toRoute(['review/view', 'id' => $this->id]),
                         'link' => $this->getViewUrl(false, true),
-                        'message' => StringHelper::truncate($this->review, 35),
+                        'message' => $this->review,
                     ]);
                     $notification->save();
                 }

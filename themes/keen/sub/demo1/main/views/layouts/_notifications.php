@@ -60,7 +60,7 @@ $this->registerJs(<<< JS
             dataType: 'json',
             success: function(s) {
                 if(s.status == 'success') {
-                    $('.notification-content-container').html(s.content)
+                    $('.notification-content-container').html(s.content);
                 }
                 else {
                     Swal.fire('Error', s.errorSummary, 'error');
@@ -139,6 +139,10 @@ JS)
                        
                         
                     </div>
+
+                    <?= Html::a('View All', ['notification/index'], [
+                        'class' => 'btn btn-light-primary mt-5 font-weight-bold'
+                    ]) ?>
                     <!--end::Scroll-->
                 </div>
                 <!--end::Tabpane-->
