@@ -45,6 +45,14 @@ class OrderTest extends \Codeception\Test\Unit
         ], $replace);
     }
 
+    public function testInvalidShipTo()
+    {
+        $model = new Order($this->data());
+        $model->shipTo = 'invalid;';
+        expect_not($model->save());
+        expect($model->errors)->hasKey('shipTo');
+    }
+
     public function testInvalidBillingAddress()
     {
         $model = new Order($this->data(['billing_email' => 'invalid']));
@@ -76,7 +84,7 @@ class OrderTest extends \Codeception\Test\Unit
     public function testInvalidShippingProvinceId()
     {
         $model = new Order($this->data(['shipping_province_id' => 99999]));
-        $model->same = 0;
+        $model->shipTo = 'different';
         expect_not($model->save());
         expect($model->errors)->hasKey('shipping_province_id');
     }
@@ -84,7 +92,7 @@ class OrderTest extends \Codeception\Test\Unit
     public function testInvalidShippingMunicipalityId()
     {
         $model = new Order($this->data(['shipping_municipality_id' => 99999]));
-        $model->same = 0;
+        $model->shipTo = 'different';
         expect_not($model->save());
         expect($model->errors)->hasKey('shipping_municipality_id');
     }
@@ -93,7 +101,7 @@ class OrderTest extends \Codeception\Test\Unit
     public function testRequiredShippingDetailsWhenNotSameWithBilling()
     {
         $model = new Order($this->data());
-        $model->same = 0;
+        $model->shipTo = 'different';
         $model->shipping_firstname = '';
         $model->shipping_lastname = '';
         $model->shipping_email = '';

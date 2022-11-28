@@ -14,6 +14,7 @@ use app\models\Municipality;
 use app\models\Wishlist;
 use app\models\Review;
 use app\models\Cart;
+use app\models\Order;
 
 use app\models\search\ProductSearch;
 use app\models\search\ReviewSearch;
@@ -629,11 +630,46 @@ class SiteController extends Controller
 
     public function actionCheckout()
     {
-        $billing = new BillingDetailForm(['user_id' => App::identity('id')]);
+        $order = new Order([
+            'subtotal' => Cart::subtotal(),
+            'shipping' => Cart::shipping(),
+            'payment_mode' => Order::PAYMENT_COD
+        ]);
+        $order->setTheTotal();
+        $order->bindBillingDetails();
+        $order->bindProducts();
+
+        if (($post = App::post()) != null) {
+            $post['Order']['shipTo'] = $post['Order']['shipTo'] ?? 'same';
+
+            if ($order->load($order) && $order->validate()) {
+                dd($post);
+            }
+        }
+        // 'order_no' => '333',
+        // 'shipping_firstname' => 'Shipping Firstname',
+        // 'shipping_lastname' => 'Shipping Lastname',
+        // 'shipping_email' => 'shipping@email.com',
+        // 'shipping_mobile' => 'Shipping Mobile',
+        // 'shipping_address1' => 'Shipping Address1',
+        // 'shipping_province_id' => 1,
+        // 'shipping_municipality_id' => 1,
+        // 'shipping_zip' => 'Shipping Zip',
+        // 'products' => [
+        //     [
+        //         'product_id' => 1, 
+        //         'quantity' => 1, 
+        //         'price' => 1, 
+        //         'added_shipping_fee' => 1,
+        //         'color' => 'color', 
+        //         'size' => 'size', 
+        //         'name' => 'name'
+        //     ]
+        // ],
 
 
         return $this->render('checkout', [
-            'billing' => $billing
+            'order' => $order,
         ]);
     }
 }

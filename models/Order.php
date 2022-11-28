@@ -3,6 +3,8 @@
 namespace app\models;
 
 use app\widgets\Anchor;
+use app\helpers\App;
+use app\models\form\user\BillingDetailForm;
 
 /**
  * This is the model class for table "{{%orders}}".
@@ -40,7 +42,7 @@ class Order extends ActiveRecord
 {
     const PAYMENT_COD = 0;
 
-    public $same = 1;
+    public $shipTo = 'same';
 
     /**
      * {@inheritdoc}
@@ -65,22 +67,28 @@ class Order extends ActiveRecord
     public function rules()
     {
         return $this->setRules([
-            [['order_no', 'billing_firstname', 'billing_lastname', 'billing_email', 'billing_mobile', 'billing_address1', 'billing_zip', 'products', 'subtotal', 'shipping', 'total'], 'required'],
+            [['billing_firstname', 'billing_lastname', 'billing_email', 'billing_mobile', 'billing_address1', 'billing_zip', 'products', 'subtotal', 'shipping', 'total', 'billing_province_id', 'billing_municipality_id', 'shipTo'], 'required'],
 
-            [['shipping_firstname', 'shipping_lastname', 'shipping_email', 'shipping_mobile', 'shipping_address1', 'shipping_zip', 'shipping_province_id', 'shipping_municipality_id'], 'required', 'when' => fn($model) => !$model->same],
+            [['shipping_firstname', 'shipping_lastname', 'shipping_email', 'shipping_mobile', 'shipping_address1', 'shipping_zip', 'shipping_province_id', 'shipping_municipality_id'], 'required', 'when' => fn($model) => $model->shipTo != 'same'],
 
-            [['billing_province_id', 'billing_municipality_id', 'shipping_province_id', 'shipping_municipality_id', 'payment_mode', 'same'], 'integer'],
+            [['billing_province_id', 'billing_municipality_id', 'shipping_province_id', 'shipping_municipality_id', 'payment_mode'], 'integer'],
             [['products'], 'safe'],
             [['subtotal', 'shipping', 'total'], 'number'],
-            [['order_no', 'billing_firstname', 'billing_lastname', 'billing_email', 'billing_mobile', 'billing_address1', 'billing_zip', 'shipping_firstname', 'shipping_lastname', 'shipping_email', 'shipping_mobile', 'shipping_address1', 'shipping_zip'], 'string', 'max' => 255],
+            [['order_no', 'billing_firstname', 'billing_lastname', 'billing_email', 'billing_mobile', 'billing_address1', 'billing_address2', 'billing_zip', 'shipping_firstname', 'shipping_lastname', 'shipping_email', 'shipping_mobile', 'shipping_address1', 'shipping_address2', 'shipping_zip', 'shipTo'], 'string', 'max' => 255],
             [['order_no'], 'unique'],
             [['billing_email', 'shipping_email'], 'trim'],
             [['billing_email', 'shipping_email'], 'email'],
+
             ['billing_province_id', 'exist', 'targetRelation' => 'billingProvince'],
             ['billing_municipality_id', 'exist', 'targetRelation' => 'billingMunicipality'],
 
-            ['shipping_province_id', 'exist', 'targetRelation' => 'shippingProvince', 'when' => fn($model) => !$model->same],
-            ['shipping_municipality_id', 'exist', 'targetRelation' => 'shippingMunicipality', 'when' => fn($model) => !$model->same],
+            ['shipping_province_id', 'exist', 'targetRelation' => 'shippingProvince', 'when' => fn($model) => $model->shipTo != 'same'],
+            ['shipping_municipality_id', 'exist', 'targetRelation' => 'shippingMunicipality', 'when' => fn($model) => $model->shipTo != 'same'],
+
+            ['shipTo', 'in', 'range' => [
+                'same',
+                'different'
+            ]]
         ]);
     }
 
@@ -92,22 +100,25 @@ class Order extends ActiveRecord
         return $this->setAttributeLabels([
             'id' => 'ID',
             'order_no' => 'Order No',
+
             'billing_firstname' => 'Billing Firstname',
             'billing_lastname' => 'Billing Lastname',
             'billing_email' => 'Billing Email',
             'billing_mobile' => 'Billing Mobile',
             'billing_address1' => 'Billing Address1',
-            'billing_province_id' => 'Billing Province ID',
-            'billing_municipality_id' => 'Billing Municipality ID',
+            'billing_province_id' => 'Billing Province',
+            'billing_municipality_id' => 'Billing Municipality',
             'billing_zip' => 'Billing Zip',
+
             'shipping_firstname' => 'Shipping Firstname',
             'shipping_lastname' => 'Shipping Lastname',
             'shipping_email' => 'Shipping Email',
             'shipping_mobile' => 'Shipping Mobile',
             'shipping_address1' => 'Shipping Address1',
-            'shipping_province_id' => 'Shipping Province ID',
-            'shipping_municipality_id' => 'Shipping Municipality ID',
+            'shipping_province_id' => 'Shipping Province',
+            'shipping_municipality_id' => 'Shipping Municipality',
             'shipping_zip' => 'Shipping Zip',
+
             'products' => 'Products',
             'subtotal' => 'Subtotal',
             'shipping' => 'Shipping',
@@ -121,6 +132,11 @@ class Order extends ActiveRecord
         return $this->hasOne(Province::class, ['id' => 'billing_province_id']);
     }
 
+    public function getBillingProv()
+    {
+        return App::if($this->billingProvince, fn($province) => $province->prov);
+    }
+
     public function getBillingMunicipality()
     {
         return $this->hasOne(Province::class, ['id' => 'billing_municipality_id']);
@@ -129,6 +145,11 @@ class Order extends ActiveRecord
     public function getShippingProvince()
     {
         return $this->hasOne(Province::class, ['id' => 'shipping_province_id']);
+    }
+
+    public function getShippingProv()
+    {
+        return App::if($this->shippingProvince, fn($province) => $province->prov);
     }
 
     public function getShippingMunicipality()
@@ -220,5 +241,47 @@ class Order extends ActiveRecord
         ];
 
         return $behaviors;
+    }
+
+    public function bindBillingDetails()
+    {
+        $billing = new BillingDetailForm(['user_id' => App::identity('id')]);
+
+        $this->billing_firstname = $billing->first_name;
+        $this->billing_lastname = $billing->last_name;
+        $this->billing_email = $billing->email;
+        $this->billing_mobile = $billing->phone;
+        $this->billing_address1 = $billing->street;
+        $this->billing_zip = $billing->zip;
+        $this->billing_municipality_id = $billing->city_id;
+        $this->billing_province_id = $billing->province_id;
+    }
+
+    public function bindProducts()
+    {
+        $carts = Cart::findAll([
+            'user_id' => App::identity("id"),
+            'session_id' => App::session('id')
+        ]);
+
+        $products = App::foreach($carts, function($cart) {
+            return [
+                'product_id' => $cart->product_id, 
+                'quantity' => $cart->quantity, 
+                'price' => $cart->productSalePrice, 
+                'added_shipping_fee' => $cart->addedShipping,
+                'color' => $cart->color, 
+                'size' => $cart->size, 
+                'name' => $cart->productName, 
+            ];
+        }, false);
+
+        $this->products = $products ?: [];
+    }
+
+
+    public function setTheTotal()
+    {
+        $this->total = $this->subtotal + $this->shipping;
     }
 }

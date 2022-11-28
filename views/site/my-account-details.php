@@ -13,8 +13,8 @@ $this->params['activePage'] = 'my-account-details';
 $this->params['homeBreadcrumbs'] = YiiHtml::a('Dashboard', ['site/customer-dashboard'], ['class' => 'breadcrumb-item text-dark']);
 $this->params['breadcrumbs'][] = 'My Account Details';
 
-$this->addJsFile('frontend/js/my-account-details', [
-    'app\assets\frontend\AppAsset'
+$this->addJsFile('frontend/js/my-account-details', ['app\assets\frontend\AppAsset'], [
+    'type' => 'module'
 ]);
 ?>
 <div class="container-fluid">
