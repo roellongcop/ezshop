@@ -69,13 +69,15 @@ class Order extends ActiveRecord
         return $this->setRules([
             [['billing_firstname', 'billing_lastname', 'billing_email', 'billing_mobile', 'billing_address1', 'billing_zip', 'products', 'subtotal', 'shipping', 'total', 'billing_province_id', 'billing_municipality_id', 'shipTo'], 'required'],
 
-            [['shipping_firstname', 'shipping_lastname', 'shipping_email', 'shipping_mobile', 'shipping_address1', 'shipping_zip', 'shipping_province_id', 'shipping_municipality_id'], 'required', 'when' => fn($model) => $model->shipTo != 'same'],
+            [['shipping_firstname', 'shipping_lastname', 'shipping_email', 'shipping_mobile', 'shipping_address1', 'shipping_zip', 'shipping_province_id', 'shipping_municipality_id'], 'required', 'when' => fn($model) => $model->shipTo != 'same', 'enableClientValidation' => false],
 
             [['billing_province_id', 'billing_municipality_id', 'shipping_province_id', 'shipping_municipality_id', 'payment_mode'], 'integer'],
             [['products'], 'safe'],
             [['subtotal', 'shipping', 'total'], 'number'],
             [['order_no', 'billing_firstname', 'billing_lastname', 'billing_email', 'billing_mobile', 'billing_address1', 'billing_address2', 'billing_zip', 'shipping_firstname', 'shipping_lastname', 'shipping_email', 'shipping_mobile', 'shipping_address1', 'shipping_address2', 'shipping_zip', 'shipTo'], 'string', 'max' => 255],
+
             [['order_no'], 'unique'],
+
             [['billing_email', 'shipping_email'], 'trim'],
             [['billing_email', 'shipping_email'], 'email'],
 
@@ -139,7 +141,7 @@ class Order extends ActiveRecord
 
     public function getBillingMunicipality()
     {
-        return $this->hasOne(Province::class, ['id' => 'billing_municipality_id']);
+        return $this->hasOne(Municipality::class, ['id' => 'billing_municipality_id']);
     }
 
     public function getShippingProvince()
@@ -154,7 +156,7 @@ class Order extends ActiveRecord
 
     public function getShippingMunicipality()
     {
-        return $this->hasOne(Province::class, ['id' => 'shipping_municipality_id']);
+        return $this->hasOne(Municipality::class, ['id' => 'shipping_municipality_id']);
     }
 
     /**
@@ -285,5 +287,37 @@ class Order extends ActiveRecord
     public function setTheTotal()
     {
         $this->total = $this->subtotal + $this->shipping;
+    }
+
+    public function generateOrderNo()
+    {
+        $total = self::find()->count();
+        $order_no = implode('-', [str_pad($total + 1, 7, "0", STR_PAD_LEFT), time()]);
+
+        if (self::find()->where(['order_no' => $order_no])->exists()) {
+            return $this->generateOrderNo();
+        }
+
+        return $order_no;
+    }
+
+    public function beforeSave($insert)
+    {
+        if (!parent::beforeSave($insert)) {
+            return false;
+        }
+
+        if ($this->shipTo == 'same') {
+            $this->shipping = Cart::shipping($this->billing_province_id, $this->billing_municipality_id);
+        }
+        else {
+            $this->shipping = Cart::shipping($this->shipping_province_id, $this->shipping_municipality_id);
+        }
+
+        $this->setTheTotal();
+
+        $this->order_no = $this->generateOrderNo();
+
+        return true;
     }
 }

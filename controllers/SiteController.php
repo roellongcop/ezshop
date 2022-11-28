@@ -642,34 +642,49 @@ class SiteController extends Controller
         if (($post = App::post()) != null) {
             $post['Order']['shipTo'] = $post['Order']['shipTo'] ?? 'same';
 
-            if ($order->load($order) && $order->validate()) {
-                dd($post);
-            }
-        }
-        // 'order_no' => '333',
-        // 'shipping_firstname' => 'Shipping Firstname',
-        // 'shipping_lastname' => 'Shipping Lastname',
-        // 'shipping_email' => 'shipping@email.com',
-        // 'shipping_mobile' => 'Shipping Mobile',
-        // 'shipping_address1' => 'Shipping Address1',
-        // 'shipping_province_id' => 1,
-        // 'shipping_municipality_id' => 1,
-        // 'shipping_zip' => 'Shipping Zip',
-        // 'products' => [
-        //     [
-        //         'product_id' => 1, 
-        //         'quantity' => 1, 
-        //         'price' => 1, 
-        //         'added_shipping_fee' => 1,
-        //         'color' => 'color', 
-        //         'size' => 'size', 
-        //         'name' => 'name'
-        //     ]
-        // ],
+            if ($order->load($post) && $order->save()) {
+                App::success('Order Successfully Placed');
 
+                return $this->redirect(['my-orders']);
+            }
+            $order->flashErrors();
+        }
 
         return $this->render('checkout', [
             'order' => $order,
         ]);
+    }
+
+
+    public function actionComputeShipping()
+    {
+        if (App::isGuest()) {
+            return $this->asJson([
+                'status' => 'account-required',
+                'errorSummary' => 'Updating item to cart needs an account.'
+            ]);
+        }
+
+        $province_id = App::post('province_id');
+        $municipality_id = App::post('municipality_id');
+
+        if ($province_id && $municipality_id) {
+            $shipping = Cart::shipping($province_id, $municipality_id);
+            $subtotal = Cart::subtotal();
+
+            return $this->asJson([
+                'status' => 'success',
+                'subtotal' => $subtotal,
+                'shipping' => App::formatter()->asPeso($shipping),
+                'total' => App::formatter()->asPeso($shipping + $subtotal),
+
+            ]);
+        }
+
+
+        return $this->asJson([
+            'status' => 'error',
+            'message' => 'no data'
+        ]); 
     }
 }

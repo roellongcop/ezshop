@@ -178,7 +178,7 @@ class Cart extends ActiveRecord
     public function getProductTableViewWithQuantity()
     {
          return  implode('<br>', array_filter([
-            YiiHtml::a($this->productName . ' (x' . $this->quantity . ')', $this->productFrontendUrl, ['class' => 'text-dark']),
+            YiiHtml::a($this->productName . ' (x' . $this->quantity . ')', $this->productFrontendUrl, ['class' => 'text-dark', 'target' => '_blank']),
             Html::tag('small', implode(' | ', array_filter([$this->color, $this->size])), ['class' => 'text-muted font-weight-bold'])
         ]));
     }
@@ -217,15 +217,15 @@ class Cart extends ActiveRecord
         return App::if($this->product, fn($product) => $product->added_shipping_fee);
     }
 
-    public static function shipping()
+    public static function shipping($province_id='', $municipality_id='')
     {
         $total = App::setting('shipping')->flat_rate;
 
         $billing = new BillingDetailForm(['user_id' => App::identity('id')]);
 
         $shipping = Shipping::findOne([
-            'province_id' => $billing->province_id,
-            'municipality_id' => $billing->city_id,
+            'province_id' => $province_id ?: $billing->province_id,
+            'municipality_id' => $municipality_id ?: $billing->city_id,
         ]);
 
         if ($shipping) {
