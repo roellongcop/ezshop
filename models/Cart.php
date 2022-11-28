@@ -217,6 +217,7 @@ class Cart extends ActiveRecord
         $carts = self::findAll([
             'user_id' => App::identity('id'),
             'session_id' => App::session('id'),
+            'record_status' => self::RECORD_ACTIVE
         ]);
 
         $totals = App::foreach($carts, fn($cart) => $cart->total, false);
@@ -247,6 +248,7 @@ class Cart extends ActiveRecord
         $carts = self::findAll([
             'user_id' => App::identity('id'),
             'session_id' => App::session('id'),
+            'record_status' => self::RECORD_ACTIVE
         ]);
 
         $addedShipping = App::foreach($carts, fn($cart) => $cart->addedShipping, false);
@@ -256,5 +258,13 @@ class Cart extends ActiveRecord
         }
 
         return $total;
+    }
+
+    public static function clear()
+    {
+        self::updateAll(['record_status' => self::RECORD_INACTIVE], [
+            'user_id' => App::identity('id'),
+            'session_id' => App::session('id'),
+        ]);
     }
 }

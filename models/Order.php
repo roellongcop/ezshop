@@ -266,7 +266,8 @@ class Order extends ActiveRecord
     {
         $carts = Cart::findAll([
             'user_id' => App::identity("id"),
-            'session_id' => App::session('id')
+            'session_id' => App::session('id'),
+            'record_status' => self::RECORD_ACTIVE
         ]);
 
         $products = App::foreach($carts, function($cart) {
@@ -386,6 +387,8 @@ class Order extends ActiveRecord
                     }
                 }
             }
+
+            Cart::clear();
         }
     }
 

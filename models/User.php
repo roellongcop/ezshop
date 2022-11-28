@@ -702,7 +702,8 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
         $total = Cart::find()
             ->where([
                 'user_id' => $this->id,
-                'session_id' => App::session('id')
+                'session_id' => App::session('id'),
+                'record_status' => self::RECORD_ACTIVE
             ])
             ->sum('quantity');
 

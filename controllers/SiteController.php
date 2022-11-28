@@ -610,6 +610,7 @@ class SiteController extends Controller
 
         $dataProvider = $searchModel->search(['CartSearch' => App::queryParams()]);
         $dataProvider->pagination->pageSize = 5;
+        $dataProvider->query->andWhere(['c.record_status' => Cart::RECORD_ACTIVE]);
 
         return $this->render('my-cart', [
             'dataProvider' => $dataProvider,
