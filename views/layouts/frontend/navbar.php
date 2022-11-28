@@ -75,6 +75,10 @@ JS);
                         <?= YiiHtml::a('Checkout', ['site/checkout'], [
                             'class' => 'nav-item nav-link' . ($activePage == 'checkout' ? ' active': '')
                         ]) ?>
+
+                        <?= App::if(App::isGuest(), YiiHtml::a('Sign In', ['site/login'], [
+                            'class' => 'nav-item nav-link'
+                        ])) ?>
                     </div>
                     <div class="navbar-nav ml-auto py-0 d-none d-lg-block">
                         <a href="<?= Url::toRoute(['site/my-wishlist']) ?>" class="btn px-0">

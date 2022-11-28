@@ -179,7 +179,7 @@ class Cart extends ActiveRecord
     {
         if (($product = $this->product) != null) {
             if ($product->isOnSale) {
-                return Html::tag('span', $product->sale_price . ' ('.Html::tag('small', App::formatter()->asPeso($product->regular_price), ['class' => 'line-through text-muted font-weight-bold']).')');
+                return Html::tag('span', App::formatter()->asPeso($product->sale_price) . ' ('.Html::tag('small', App::formatter()->asPeso($product->regular_price), ['class' => 'line-through text-muted font-weight-bold']).')');
             }
             else {
                 return App::formatter()->asPeso($product->sale_price);

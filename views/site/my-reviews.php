@@ -19,7 +19,7 @@ $this->params['activePage'] = 'my-reviews';
         <div class="col-md-12 table-responsive">
             <?php Pjax::begin([
                 'timeout' => false,
-                'linkSelector' => '.pagination a.page-item'
+                'linkSelector' => '.pagination a.page-link'
             ]); ?>
                 <?= Grid::widget([
                     'layout' => $this->render('_grid-layout', [
