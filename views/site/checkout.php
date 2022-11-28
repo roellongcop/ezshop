@@ -11,7 +11,7 @@ $this->title = 'Checkout';
 $this->params['homeBreadcrumbs'] = YiiHtml::a('Dashboard', ['site/customer-dashboard'], ['class' => 'breadcrumb-item text-dark']);
 $this->params['breadcrumbs'][] = ['label' => 'My Cart', 'url' => ['site/my-cart']];
 $this->params['breadcrumbs'][] = 'Checkout';
-$this->params['activePage'] = 'my-cart';
+$this->params['activePage'] = 'checkout';
 
 $this->addJsFile('frontend/js/checkout', ['app\assets\frontend\AppAsset'], [
     'type' => 'module'
@@ -120,7 +120,7 @@ $this->addJsFile('frontend/js/checkout', ['app\assets\frontend\AppAsset'], [
                         $price = App::formatter()->asPeso($product['price']);
                         return <<< HTML
                             <div class="d-flex justify-content-between">
-                                <p>{$product['name']}</p>
+                                <p>{$product['productTableViewWithQuantity']}</p>
                                 <p>{$price}</p>
                             </div>
                         HTML;

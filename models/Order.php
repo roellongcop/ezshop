@@ -273,6 +273,8 @@ class Order extends ActiveRecord
                 'color' => $cart->color, 
                 'size' => $cart->size, 
                 'name' => $cart->productName, 
+                'productTableViewWithQuantity' => $cart->productTableViewWithQuantity, 
+                
             ];
         }, false);
 

@@ -169,10 +169,18 @@ class Cart extends ActiveRecord
 
     public function getProductTableView()
     {
-         return  implode('<br>', [
+         return  implode('<br>', array_filter([
             YiiHtml::a($this->productName, $this->productFrontendUrl, ['class' => 'text-dark']),
             Html::tag('small', implode(' | ', array_filter([$this->color, $this->size])), ['class' => 'text-muted font-weight-bold'])
-        ]);
+        ]));
+    }
+
+    public function getProductTableViewWithQuantity()
+    {
+         return  implode('<br>', array_filter([
+            YiiHtml::a($this->productName . ' (x' . $this->quantity . ')', $this->productFrontendUrl, ['class' => 'text-dark']),
+            Html::tag('small', implode(' | ', array_filter([$this->color, $this->size])), ['class' => 'text-muted font-weight-bold'])
+        ]));
     }
 
     public function getProductDisplayPrice()
