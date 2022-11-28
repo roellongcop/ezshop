@@ -19,9 +19,7 @@ $this->params['activePage'] = 'customer-dashboard';
                 <a href="<?= Url::toRoute(['site/my-cart']) ?>">
                     <h5 class="font-weight-semi-bold m-0">
                         My Shopping Cart
-                        <span class="badge badge-danger">
-                            <?= App::identity('myTotalCart') ?>
-                        </span>
+                        <?= App::if(App::identity('myTotalCart'), fn($total) => Html::tag('span', $total, ['class' => 'badge badge-danger'])) ?>
                     </h5>
                 </a>
             </div>
@@ -41,7 +39,7 @@ $this->params['activePage'] = 'customer-dashboard';
                     <h5 class="font-weight-semi-bold m-0">My Wishlist
 
                         <span class="badge badge-danger">
-                            <?= App::identity('myTotalWishlist') ?>
+                        <?= App::if(App::identity('myTotalWishlist'), fn($total) => Html::tag('span', $total, ['class' => 'badge badge-danger'])) ?>
                         </span>
                     </h5>
                 </a>
@@ -53,7 +51,7 @@ $this->params['activePage'] = 'customer-dashboard';
                 <a href="<?= Url::toRoute(['site/my-reviews']) ?>">
                     <h5 class="font-weight-semi-bold m-0">My Product Reviews
                         <span class="badge badge-danger">
-                            <?= App::identity('myTotalReviews') ?>
+                        <?= App::if(App::identity('myTotalReviews'), fn($total) => Html::tag('span', $total, ['class' => 'badge badge-danger'])) ?>
                         </span>
                         
                     </h5>
