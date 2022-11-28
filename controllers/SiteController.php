@@ -575,8 +575,10 @@ class SiteController extends Controller
             ]);
         }
 
+
         return $this->asJson([
             'status' => 'failed',
+            'model' => $model,
             'errorSummary' => Html::errorSummary($model, ['encode' => false])
         ]);
     }
@@ -594,7 +596,13 @@ class SiteController extends Controller
             }
 
             foreach ($carts as $cart) {
-                Cart::updateAll(['quantity' => $cart['quantity']], ['id' => $cart['id']]);
+                $cartModel = Cart::findOne($cart['id']);
+
+                if ($cartModel) {
+                    $cartModel->quantity = $cart['quantity'];
+                    $cartModel->save();
+                }
+                // Cart::updateAll(['quantity' => $cart['quantity']], ['id' => $cart['id']]);
             }
 
             return $this->asJson([

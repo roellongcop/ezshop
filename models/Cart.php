@@ -81,6 +81,11 @@ class Cart extends ActiveRecord
         }
     }
 
+    public function getProductQuantity()
+    {
+        return App::ifElse($this->product, fn($model) => $model->quantity, 0);
+    }
+
     /**
      * {@inheritdoc}
      * @return \app\models\query\CartQuery the active query used by this AR class.

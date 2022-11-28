@@ -91,12 +91,7 @@ $('.btn-add-to-cart').click(function(e) {
 				accountRequired(s);
 			}
 			else {
-				Swal.fire({
-			      title: 'Error', 
-			      // text: s.errorSummary,  
-			      html: s.errorSummary,
-		        icon: "error",
-		    });
+				errorMessage(s)
 			}
 			unblock('.product-detail-container');
 		},
