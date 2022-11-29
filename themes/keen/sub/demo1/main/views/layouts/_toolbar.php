@@ -10,7 +10,7 @@
     <?= $this->render('_notifications') ?>
     <!--end::Notifications-->
     <!--begin::Quick Actions-->
-    <?= $this->render('_quick_actions') ?>
+    <?php # $this->render('_quick_actions') ?>
     <!--end::Quick Actions-->
     <!--begin::Chat-->
     <?php #$this->render('_chat') ?>
