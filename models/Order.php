@@ -53,6 +53,7 @@ class Order extends ActiveRecord
     const STATUS_CANCELLED = 4;
 
     public $shipTo = 'same';
+    public $remarks;
 
     /**
      * {@inheritdoc}
@@ -82,7 +83,7 @@ class Order extends ActiveRecord
             [['shipping_firstname', 'shipping_lastname', 'shipping_email', 'shipping_mobile', 'shipping_address1', 'shipping_zip', 'shipping_province_id', 'shipping_municipality_id'], 'required', 'when' => fn($model) => $model->shipTo != 'same', 'enableClientValidation' => false],
 
             [['billing_province_id', 'billing_municipality_id', 'shipping_province_id', 'shipping_municipality_id', 'payment_mode', 'status'], 'integer'],
-            [['products'], 'safe'],
+            [['products', 'remarks'], 'safe'],
             [['subtotal', 'shipping', 'total'], 'number'],
             [['order_no', 'billing_firstname', 'billing_lastname', 'billing_email', 'billing_mobile', 'billing_address1', 'billing_address2', 'billing_zip', 'shipping_firstname', 'shipping_lastname', 'shipping_email', 'shipping_mobile', 'shipping_address1', 'shipping_address2', 'shipping_zip', 'shipTo'], 'string', 'max' => 255],
 
@@ -152,6 +153,12 @@ class Order extends ActiveRecord
             'shippingMunicipalityName' => 'Municipality',
             'statusBadge' => 'Status',
         ]);
+    }
+
+
+    public function getOrderLogs()
+    {
+        return $this->hasMany(OrderLog::class, ['order_id' => 'id']);
     }
 
     public function getBillingProvince()
@@ -433,6 +440,11 @@ class Order extends ActiveRecord
 
             Cart::clear();
         }
+
+
+        $this->remarks = $this->remarks ?: 'Order log at ' . App::formatter()->asDateToTimezone();
+
+        OrderLog::insertLog($this);
     }
 
     public function getViewUrl($fullpath=true, $force = false)

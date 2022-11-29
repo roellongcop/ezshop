@@ -31,7 +31,8 @@ class CartForm extends \yii\base\Model
             $condition = [
                 'product_id' => $this->product_id,
                 'user_id' => $this->user_id,
-                'session_id' => $this->session_id ?: App::session('id')
+                'session_id' => $this->session_id ?: App::session('id'),
+                'record_status' => Cart::RECORD_ACTIVE
             ];
 
             if ($this->color) {

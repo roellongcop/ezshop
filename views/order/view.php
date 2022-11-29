@@ -95,7 +95,22 @@ JS)
             <?php $this->beginContent('@app/views/layouts/_card_wrapper.php', [
                 'title' => 'Logs'
             ]) ?>
-               
+               <div class="timeline timeline-2">
+                    <div class="timeline-bar"></div>
+                    <?= App::foreach($model->orderLogs, fn($orderLog) => <<< HTML
+                        <div class="timeline-item">
+                            <span class="timeline-badge bg-{$orderLog->statusClass}"></span>
+                            <div class="timeline-content d-flex align-items-center justify-content-between">
+                                <span class="mr-3">{$orderLog->remarks}
+                                {$orderLog->statusBadge}
+                                <span class="text-muted font-italic text-right">
+                                    {$orderLog->ago}
+                                </span>
+                            </div>
+                        </div>
+
+                    HTML) ?>
+                </div>
             <?php $this->endContent() ?>
         </div>
     </div>
