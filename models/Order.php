@@ -45,6 +45,12 @@ class Order extends ActiveRecord
 {
     const PAYMENT_COD = 0;
 
+    const STATUS_PENDING = 0;
+    const STATUS_PROCESSING = 1;
+    const STATUS_DELIVERY = 2;
+    const STATUS_COMPLETED = 3;
+    const STATUS_CANCELLED = 4;
+
     public $shipTo = 'same';
 
     /**
@@ -74,7 +80,7 @@ class Order extends ActiveRecord
 
             [['shipping_firstname', 'shipping_lastname', 'shipping_email', 'shipping_mobile', 'shipping_address1', 'shipping_zip', 'shipping_province_id', 'shipping_municipality_id'], 'required', 'when' => fn($model) => $model->shipTo != 'same', 'enableClientValidation' => false],
 
-            [['billing_province_id', 'billing_municipality_id', 'shipping_province_id', 'shipping_municipality_id', 'payment_mode'], 'integer'],
+            [['billing_province_id', 'billing_municipality_id', 'shipping_province_id', 'shipping_municipality_id', 'payment_mode', 'status'], 'integer'],
             [['products'], 'safe'],
             [['subtotal', 'shipping', 'total'], 'number'],
             [['order_no', 'billing_firstname', 'billing_lastname', 'billing_email', 'billing_mobile', 'billing_address1', 'billing_address2', 'billing_zip', 'shipping_firstname', 'shipping_lastname', 'shipping_email', 'shipping_mobile', 'shipping_address1', 'shipping_address2', 'shipping_zip', 'shipTo'], 'string', 'max' => 255],
@@ -93,7 +99,14 @@ class Order extends ActiveRecord
             ['shipTo', 'in', 'range' => [
                 'same',
                 'different'
-            ]]
+            ]],
+            ['status', 'in', 'range' => [
+                self::STATUS_PENDING,
+                self::STATUS_PROCESSING,
+                self::STATUS_DELIVERY,
+                self::STATUS_COMPLETED,
+                self::STATUS_CANCELLED,
+            ]],
         ]);
     }
 
@@ -146,12 +159,12 @@ class Order extends ActiveRecord
 
     public function getBillingProvinceName()
     {
-        return App::if($this->billingProvince, fn($province) => $province->Province);
+        return App::if($this->billingProvince, fn($province) => $province->name);
     }
 
-    public function getBillingProv()
+    public function getBillingProvinceNo()
     {
-        return App::if($this->billingProvince, fn($province) => $province->prov);
+        return App::if($this->billingProvince, fn($province) => $province->no);
     }
 
     public function getBillingMunicipality()
@@ -161,7 +174,7 @@ class Order extends ActiveRecord
 
     public function getBillingMunicipalityName()
     {
-        return App::if($this->billingMunicipality, fn($municipality) => $municipality->Municipality);
+        return App::if($this->billingMunicipality, fn($municipality) => $municipality->name);
     }
 
 
@@ -172,12 +185,12 @@ class Order extends ActiveRecord
 
     public function getShippingProvinceName()
     {
-        return App::if($this->shippingProvince, fn($province) => $province->Province);
+        return App::if($this->shippingProvince, fn($province) => $province->name);
     }
 
-    public function getShippingProv()
+    public function getShippingProvinceNo()
     {
-        return App::if($this->shippingProvince, fn($province) => $province->prov);
+        return App::if($this->shippingProvince, fn($province) => $province->no);
     }
 
     public function getShippingMunicipality()
@@ -187,7 +200,7 @@ class Order extends ActiveRecord
 
     public function getShippingMunicipalityName()
     {
-        return App::if($this->shippingMunicipality, fn($municipality) => $municipality->Municipality);
+        return App::if($this->shippingMunicipality, fn($municipality) => $municipality->name);
     }
 
     /**

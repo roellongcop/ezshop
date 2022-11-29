@@ -36,6 +36,7 @@ $model = new \app\helpers\FixtureData(function($params) {
 		'subtotal' => 2,
 		'shipping' => 1,
 		'total' => 3,
+		'status' => Order::STATUS_PENDING,
 		'payment_mode' => Order::PAYMENT_COD,
 		'record_status' => Order::RECORD_ACTIVE,
         'created_by' => 1,

@@ -72,13 +72,13 @@ class ShippingSearch extends Shipping
         ]);
 
         $dataProvider->sort->attributes['provinceName'] = [
-            'asc' => ['p.Province' => SORT_ASC],
-            'desc' => ['p.Province' => SORT_DESC],
+            'asc' => ['p.name' => SORT_ASC],
+            'desc' => ['p.name' => SORT_DESC],
         ];
 
         $dataProvider->sort->attributes['municipalityName'] = [
-            'asc' => ['m.Municipality' => SORT_ASC],
-            'desc' => ['m.Municipality' => SORT_DESC],
+            'asc' => ['m.name' => SORT_ASC],
+            'desc' => ['m.name' => SORT_DESC],
         ];
 
         if (!$this->validate()) {
@@ -102,8 +102,8 @@ class ShippingSearch extends Shipping
         
                 
         $query->andFilterWhere(['or', 
-            ['like', 'p.Province', $this->keywords],  
-            ['like', 'm.Municipality', $this->keywords],  
+            ['like', 'p.name', $this->keywords],  
+            ['like', 'm.name', $this->keywords],  
             ['like', 's.rate', $this->keywords],  
         ]);
 

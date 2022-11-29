@@ -98,7 +98,7 @@ class Shipping extends ActiveRecord
 
     public function getProvinceName()
     {
-        return App::if($this->province, fn($province) => $province->Province);
+        return App::if($this->province, fn($province) => $province->name);
     }
 
     public function getMunicipality()
@@ -108,7 +108,7 @@ class Shipping extends ActiveRecord
 
     public function getMunicipalityName()
     {
-        return App::if($this->municipality, fn($municipality) => $municipality->Municipality);
+        return App::if($this->municipality, fn($municipality) => $municipality->name);
     }
 
     /**
@@ -150,6 +150,6 @@ class Shipping extends ActiveRecord
 
     public function getProvinceNo()
     {
-        return App::if($this->province, fn($province) => $province->prov);
+        return App::if($this->province, fn($province) => $province->no);
     }
 }

@@ -44,6 +44,7 @@ class m221127_115236_create_orders_table extends \app\migrations\Migration
             'total' => $this->decimal(11, 2)->notNull(),
 
             'payment_mode' => $this->tinyInteger(2)->notNull()->defaultValue(0),
+            'status' => $this->tinyInteger(2)->notNull()->defaultValue(0),
         ]));
 
         $this->createIndexes($this->tableName(), [

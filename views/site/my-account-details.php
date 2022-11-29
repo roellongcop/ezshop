@@ -40,7 +40,7 @@ $this->addJsFile('frontend/js/my-account-details', ['app\assets\frontend\AppAsse
                             <?= $form->field($billing, 'province_id')->dropDownList(Province::dropdown('id', 'Province'), [
                                 'prompt' => 'Select Province'
                             ]) ?>
-                            <?= $form->field($billing, 'city_id')->dropDownList(Municipality::dropdown('id', 'Municipality', ['prov' => $billing->prov])) ?>
+                            <?= $form->field($billing, 'city_id')->dropDownList(Municipality::dropdown('id', 'name', ['province_no' => $billing->provinceNo])) ?>
                             <?= $form->field($billing, 'street')->textInput(['maxlength' => true]) ?>
                             <?= $form->field($billing, 'zip')->textInput(['maxlength' => true]) ?>
                         </div>

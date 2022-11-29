@@ -58,8 +58,8 @@ class ShippingController extends Controller
         if ($province_id) {
             return $this->asJson([
                 'data' => App::if(Province::findOne($province_id), function($province) {
-                    return App::foreach(Municipality::findAll(['prov' => $province->prov]), function($municipality) {
-                        return App::tag('option', $municipality->Municipality, [
+                    return App::foreach(Municipality::findAll(['province_no' => $province->no]), function($municipality) {
+                        return App::tag('option', $municipality->name, [
                             'value' => $municipality->id
                         ]);
                     });

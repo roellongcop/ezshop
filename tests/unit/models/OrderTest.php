@@ -40,9 +40,18 @@ class OrderTest extends \Codeception\Test\Unit
             'subtotal' => 2,
             'shipping' => 1,
             'total' => 3,
+            'status' => Order::STATUS_PENDING,
             'payment_mode' => Order::PAYMENT_COD,
             'record_status' => Order::RECORD_ACTIVE,
         ], $replace);
+    }
+
+    public function testInvalidStatus()
+    {
+        $model = new Order($this->data());
+        $model->status = 999;
+        expect_not($model->save());
+        expect($model->errors)->hasKey('status');
     }
 
     public function testInvalidShipTo()
@@ -175,12 +184,12 @@ class OrderTest extends \Codeception\Test\Unit
         expect_that($model->save());
     }
 
-    public function testDeleteSuccess()
+    public function testCannotDeleteS()
     {
         $model = $this->tester->grabRecord('app\models\Order', [
             'record_status' => Order::RECORD_ACTIVE
         ]);
-        expect_that($model->delete());
+        expect_not($model->delete());
     }
 
     public function testActivateData()

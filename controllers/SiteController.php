@@ -301,8 +301,8 @@ class SiteController extends Controller
         if ($province_id) {
             return $this->asJson([
                 'data' => Html::if(Province::findOne($province_id), function($province) {
-                    return Html::foreach(Municipality::findAll(['prov' => $province->prov]), function($municipality) {
-                        return Html::tag('option', $municipality->Municipality, [
+                    return Html::foreach(Municipality::findAll(['province_no' => $province->no]), function($municipality) {
+                        return Html::tag('option', $municipality->name, [
                             'value' => $municipality->id
                         ]);
                     });

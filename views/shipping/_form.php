@@ -14,13 +14,13 @@ $this->addJsFile('js/shipping-form');
     <div class="row">
         <div class="col-md-5">
 			<?= $form->field($model, 'province_id')->dropDownList(
-                Province::dropdown('id', 'Province'), [
+                Province::dropdown('id', 'name'), [
                     'prompt' => 'Select Province'
                 ]
             ) ?>
 
 			<?= $form->field($model, 'municipality_id')->dropDownList(
-                ($model->provinceNo ? Municipality::dropdown('id', 'Municipality', ['prov' => $model->provinceNo]): [])
+                ($model->provinceNo ? Municipality::dropdown('id', 'name', ['province_no' => $model->provinceNo]): [])
             ) ?>
 
 			<?= $form->field($model, 'rate')->textInput(['maxlength' => true]) ?>

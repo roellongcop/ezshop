@@ -48,14 +48,14 @@ $this->addJsFile('frontend/js/checkout', ['app\assets\frontend\AppAsset'], [
                
 
                     <div class="col-md-6">
-                        <?= $form->field($order, 'billing_province_id')->dropDownList(Province::dropdown('id', 'Province'), [
+                        <?= $form->field($order, 'billing_province_id')->dropDownList(Province::dropdown('id', 'name'), [
                                 'prompt' => 'Select Province'
                             ]) ?>
                     </div>
 
                     <div class="col-md-6">
                         <?= $form->field($order, 'billing_municipality_id')->dropDownList(
-                            App::ifElse($order->billingProv, fn($prov) => Municipality::dropdown('id', 'Municipality', ['prov' => $prov]) ?: [], [])
+                            App::ifElse($order->billingProvinceNo, fn($province_no) => Municipality::dropdown('id', 'name', ['province_no' => $province_no]) ?: [], [])
                         ) ?>
                     </div>
                     <div class="col-md-6">
@@ -96,7 +96,7 @@ $this->addJsFile('frontend/js/checkout', ['app\assets\frontend\AppAsset'], [
                
 
                     <div class="col-md-6">
-                        <?= $form->field($order, 'shipping_province_id')->dropDownList(Province::dropdown('id', 'Province'), [
+                        <?= $form->field($order, 'shipping_province_id')->dropDownList(Province::dropdown('id', 'name'), [
                                 'prompt' => 'Select Province'
                             ]) ?>
                     </div>
