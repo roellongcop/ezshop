@@ -37,7 +37,7 @@ $this->addJsFile('frontend/js/my-account-details', ['app\assets\frontend\AppAsse
                             <?= $form->field($billing, 'phone')->textInput(['maxlength' => true]) ?>
                         </div>
                         <div class="col-md-6">
-                            <?= $form->field($billing, 'province_id')->dropDownList(Province::dropdown('id', 'Province'), [
+                            <?= $form->field($billing, 'province_id')->dropDownList(Province::dropdown('id', 'name'), [
                                 'prompt' => 'Select Province'
                             ]) ?>
                             <?= $form->field($billing, 'city_id')->dropDownList(Municipality::dropdown('id', 'name', ['province_no' => $billing->provinceNo])) ?>
