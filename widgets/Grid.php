@@ -13,7 +13,7 @@ class Grid extends BaseWidget
     public $actionColumns;
     public $columns;
     public $options = ['class' => 'table-responsive'];
-    public $pager = ['class' => 'yii\widgets\LinkPager'];
+    public $pager = ['class' => 'app\widgets\LinkPager'];
     public $searchModel;
     public $template = ['view', 'update', 'duplicate', 'delete'];
     public $controller;

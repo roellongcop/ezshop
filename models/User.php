@@ -697,6 +697,20 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
             ->count();
     }
 
+    public function getMyTotalPendingReviews()
+    {
+        return Review::find()
+            ->where(['user_id' => $this->id, 'record_status' => self::RECORD_INACTIVE])
+            ->count();
+    }
+
+    public function getMyTotalPendingOrders()
+    {
+        return Order::find()
+            ->where(['created_by' => $this->id, 'status' => Order::STATUS_PENDING])
+            ->count();
+    }
+
     public function getMyTotalCart()
     {
         $total = Cart::find()
