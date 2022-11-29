@@ -3,6 +3,7 @@
 namespace app\models;
 
 use app\widgets\Anchor;
+use app\helpers\Html;
 use app\helpers\App;
 use app\helpers\Url;
 use app\helpers\StringHelper;
@@ -472,5 +473,38 @@ class Order extends ActiveRecord
     public function getStatusBadge()
     {
         return Label::widget(['options' => App::params('order_status')[$this->status] ?? '']);
+    }
+
+    public function getStatusBadgeFront()
+    {
+        $data = App::params('order_status')[$this->status] ?? '';
+
+        if (!$data) {
+            return;
+        }
+
+
+        return Html::tag('label', $data['label'], [
+            'class' => 'badge badge-' . $data['class']
+        ]);
+    }
+
+    public function getShippingAddress1()
+    {
+        return $this->shipping_address1 ?: $this->billing_address1;
+    }
+
+
+    public function getCancelButton()
+    {
+        if ($this->status == self::STATUS_PENDING) {
+            return \yii\helpers\Html::a('Cancel', ['site/cancel-order', 'order_no' => $this->order_no],  [
+                'class' => 'btn btn-danger btn-sm', 
+                'data-confirm' => 'Cancel Order?',
+                'data-method' => 'post',
+            ]);
+        }
+
+        return '---';
     }
 }

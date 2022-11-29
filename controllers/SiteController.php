@@ -20,6 +20,7 @@ use app\models\search\ProductSearch;
 use app\models\search\ReviewSearch;
 use app\models\search\WishlistSearch;
 use app\models\search\CartSearch;
+use app\models\search\OrderSearch;
 
 use app\models\form\LoginForm;
 use app\models\form\PasswordResetForm;
@@ -698,5 +699,21 @@ class SiteController extends Controller
             'status' => 'error',
             'message' => 'no data'
         ]); 
+    }
+
+
+    public function actionMyOrders()
+    {
+        $searchModel = new OrderSearch([
+            'created_by' => App::identity("id"),
+        ]);
+
+        $dataProvider = $searchModel->search(['OrderSearch' => App::queryParams()]);
+        $dataProvider->pagination->pageSize = 5;
+
+        return $this->render('my-orders', [
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+        ]);
     }
 }
