@@ -51,43 +51,43 @@ class OrderController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
-    {
-        $model = new Order();
+    // public function _actionCreate()
+    // {
+    //     $model = new Order();
 
-        if ($model->load(App::post()) && $model->save()) {
-            App::success('Successfully Created');
+    //     if ($model->load(App::post()) && $model->save()) {
+    //         App::success('Successfully Created');
 
-            return $this->redirect($model->viewUrl);
-        }
+    //         return $this->redirect($model->viewUrl);
+    //     }
 
-        return $this->render('create', [
-            'model' => $model,
-        ]);
-    }
+    //     return $this->render('create', [
+    //         'model' => $model,
+    //     ]);
+    // }
 
     /**
      * Duplicates a new Order model.
      * If duplication is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionDuplicate($order_no)
-    {
-        $originalModel = Order::controllerFind($order_no, 'order_no');
-        $model = new Order();
-        $model->attributes = $originalModel->attributes;
+    // public function _actionDuplicate($order_no)
+    // {
+    //     $originalModel = Order::controllerFind($order_no, 'order_no');
+    //     $model = new Order();
+    //     $model->attributes = $originalModel->attributes;
 
-        if ($model->load(App::post()) && $model->save()) {
-            App::success('Successfully Duplicated');
+    //     if ($model->load(App::post()) && $model->save()) {
+    //         App::success('Successfully Duplicated');
 
-            return $this->redirect($model->viewUrl);
-        }
+    //         return $this->redirect($model->viewUrl);
+    //     }
 
-        return $this->render('duplicate', [
-            'model' => $model,
-            'originalModel' => $originalModel,
-        ]);
-    }
+    //     return $this->render('duplicate', [
+    //         'model' => $model,
+    //         'originalModel' => $originalModel,
+    //     ]);
+    // }
 
     /**
      * Updates an existing Order model.
@@ -96,19 +96,19 @@ class OrderController extends Controller
      * @return mixed
      * @throws ForbiddenHttpException if the model cannot be found
      */
-    public function actionUpdate($order_no)
-    {
-        $model = Order::controllerFind($order_no, 'order_no');
+    // public function _actionUpdate($order_no)
+    // {
+    //     $model = Order::controllerFind($order_no, 'order_no');
 
-        if ($model->load(App::post()) && $model->save()) {
-            App::success('Successfully Updated');
-            return $this->redirect($model->viewUrl);
-        }
+    //     if ($model->load(App::post()) && $model->save()) {
+    //         App::success('Successfully Updated');
+    //         return $this->redirect($model->viewUrl);
+    //     }
 
-        return $this->render('update', [
-            'model' => $model,
-        ]);
-    }
+    //     return $this->render('update', [
+    //         'model' => $model,
+    //     ]);
+    // }
 
     /**
      * Deletes an existing Order model.
@@ -117,19 +117,19 @@ class OrderController extends Controller
      * @return mixed
      * @throws ForbiddenHttpException if the model cannot be found
      */
-    public function actionDelete($order_no)
-    {
-        $model = Order::controllerFind($order_no, 'order_no');
+    // public function _actionDelete($order_no)
+    // {
+    //     $model = Order::controllerFind($order_no, 'order_no');
 
-        if($model->delete()) {
-            App::success('Successfully Deleted');
-        }
-        else {
-            App::danger(json_encode($model->errors));
-        }
+    //     if($model->delete()) {
+    //         App::success('Successfully Deleted');
+    //     }
+    //     else {
+    //         App::danger(json_encode($model->errors));
+    //     }
 
-        return $this->redirect($model->indexUrl);
-    }
+    //     return $this->redirect($model->indexUrl);
+    // }
 
     public function actionChangeRecordStatus()
     {

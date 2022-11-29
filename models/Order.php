@@ -106,35 +106,47 @@ class Order extends ActiveRecord
             'id' => 'ID',
             'order_no' => 'Order No',
 
-            'billing_firstname' => 'Billing Firstname',
-            'billing_lastname' => 'Billing Lastname',
-            'billing_email' => 'Billing Email',
-            'billing_mobile' => 'Billing Mobile',
-            'billing_address1' => 'Billing Address1',
-            'billing_province_id' => 'Billing Province',
-            'billing_municipality_id' => 'Billing Municipality',
-            'billing_zip' => 'Billing Zip',
+            'billing_firstname' => 'Firstname',
+            'billing_lastname' => 'Lastname',
+            'billing_email' => 'Email',
+            'billing_mobile' => 'Mobile',
+            'billing_address1' => 'Address1',
+            'billing_address2' => 'Address2',
+            'billing_province_id' => 'Province',
+            'billing_municipality_id' => 'Municipality',
+            'billing_zip' => 'Zip',
 
-            'shipping_firstname' => 'Shipping Firstname',
-            'shipping_lastname' => 'Shipping Lastname',
-            'shipping_email' => 'Shipping Email',
-            'shipping_mobile' => 'Shipping Mobile',
-            'shipping_address1' => 'Shipping Address1',
-            'shipping_province_id' => 'Shipping Province',
-            'shipping_municipality_id' => 'Shipping Municipality',
-            'shipping_zip' => 'Shipping Zip',
+            'shipping_firstname' => 'Firstname',
+            'shipping_lastname' => 'Lastname',
+            'shipping_email' => 'Email',
+            'shipping_mobile' => 'Mobile',
+            'shipping_address1' => 'Address1',
+            'shipping_address2' => 'Address2',
+            'shipping_province_id' => 'Province',
+            'shipping_municipality_id' => 'Municipality',
+            'shipping_zip' => 'Zip',
 
             'products' => 'Products',
             'subtotal' => 'Subtotal',
             'shipping' => 'Shipping',
             'total' => 'Total',
             'payment_mode' => 'Payment Mode',
+
+            'billingProvinceName' => 'Province',
+            'billingMunicipalityName' => 'Municipality',
+            'shippingProvinceName' => 'Province',
+            'shippingMunicipalityName' => 'Municipality'
         ]);
     }
 
     public function getBillingProvince()
     {
         return $this->hasOne(Province::class, ['id' => 'billing_province_id']);
+    }
+
+    public function getBillingProvinceName()
+    {
+        return App::if($this->billingProvince, fn($province) => $province->Province);
     }
 
     public function getBillingProv()
@@ -147,9 +159,20 @@ class Order extends ActiveRecord
         return $this->hasOne(Municipality::class, ['id' => 'billing_municipality_id']);
     }
 
+    public function getBillingMunicipalityName()
+    {
+        return App::if($this->billingMunicipality, fn($municipality) => $municipality->Municipality);
+    }
+
+
     public function getShippingProvince()
     {
         return $this->hasOne(Province::class, ['id' => 'shipping_province_id']);
+    }
+
+    public function getShippingProvinceName()
+    {
+        return App::if($this->shippingProvince, fn($province) => $province->Province);
     }
 
     public function getShippingProv()
@@ -160,6 +183,11 @@ class Order extends ActiveRecord
     public function getShippingMunicipality()
     {
         return $this->hasOne(Municipality::class, ['id' => 'shipping_municipality_id']);
+    }
+
+    public function getShippingMunicipalityName()
+    {
+        return App::if($this->shippingMunicipality, fn($municipality) => $municipality->Municipality);
     }
 
     /**
@@ -364,7 +392,7 @@ class Order extends ActiveRecord
                         'user_id' => $user->id,
                         'type' => Notification::TYPE_NEW_ORDER,
                         'link' => $this->getViewUrl(false, true),
-                        'message' => "New ordered by {$this->billingFullname} with a total price of {$this->formattedTotal}",
+                        'message' => "{$this->formattedTotal} total amount ordered by {$this->billingFullname}",
                     ]);
                     $notification->save();
                 }
@@ -402,5 +430,15 @@ class Order extends ActiveRecord
             ];
             return Url::toRoute($url, $fullpath);
         }
+    }
+
+    public function getCanDelete()
+    {
+        return false;
+    }
+
+    public function getPaymentMode()
+    {
+        return ($this->payment_mode == self::PAYMENT_COD) ? 'Cash on Delivery': '';
     }
 }

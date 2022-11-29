@@ -7,6 +7,7 @@ use app\helpers\Html;
 use yii\helpers\Html as YiiHtml;
 
 $activePage = $this->params['activePage'] ?? 'home';
+$keywords = App::get('keywords');
 ?>
 <!-- Topbar Start -->
 <div class="container-fluid">
@@ -82,7 +83,7 @@ $activePage = $this->params['activePage'] ?? 'home';
                     'url' => Url::toRoute(['site/find-products-by-keywords']),
                     'input' => <<< HTML
                         <div class="input-group">
-                            <input type="text" name="keywords" class="form-control p-4" placeholder="Search for products">
+                            <input value="{$keywords}" type="text" name="keywords" class="form-control p-4" placeholder="Search for products">
                             <div class="input-group-append">
                                 <span class="input-group-text bg-transparent text-primary">
                                     <i class="fa fa-search"></i>

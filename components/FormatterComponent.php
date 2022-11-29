@@ -162,9 +162,11 @@ class FormatterComponent extends \yii\i18n\Formatter
                 $result = array_merge($result, $this->asArrayFlatten($value)); 
             } 
             else { 
-                $result[$key] = $value; 
+                $result[$key] = ucwords(strtolower($value)); 
             } 
         } 
+
+        asort($result);
         return $result; 
     } 
 
