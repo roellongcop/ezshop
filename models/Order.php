@@ -149,7 +149,8 @@ class Order extends ActiveRecord
             'billingProvinceName' => 'Province',
             'billingMunicipalityName' => 'Municipality',
             'shippingProvinceName' => 'Province',
-            'shippingMunicipalityName' => 'Municipality'
+            'shippingMunicipalityName' => 'Municipality',
+            'statusBadge' => 'Status',
         ]);
     }
 

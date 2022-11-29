@@ -78,5 +78,7 @@ $(document).ready(function() {
             tr.css('border', '');
             tr.css('background', '');
         }
-    })
+    }) 
 })
+
+
