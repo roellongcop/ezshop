@@ -113,3 +113,8 @@ div.required label.control-label:after {
 .breadcrumb {
   margin-bottom: 0;
 }
+
+.order-total-products {
+  overflow: auto;
+    max-height: 20em;
+}

@@ -37,10 +37,7 @@ $this->params['activePage'] = 'customer-dashboard';
                 <h1 class="fas fa-bookmark text-primary m-0 mr-3"></h1>
                 <a href="<?= Url::toRoute(['site/my-wishlist']) ?>">
                     <h5 class="font-weight-semi-bold m-0">My Wishlist
-
-                        <span class="badge badge-danger">
                         <?= App::if(App::identity('myTotalWishlist'), fn($total) => Html::tag('span', $total, ['class' => 'badge badge-danger'])) ?>
-                        </span>
                     </h5>
                 </a>
             </div>
@@ -50,10 +47,7 @@ $this->params['activePage'] = 'customer-dashboard';
                 <h1 class="fas fa-star-half-alt text-primary m-0 mr-3"></h1>
                 <a href="<?= Url::toRoute(['site/my-reviews']) ?>">
                     <h5 class="font-weight-semi-bold m-0">My Product Reviews
-                        <span class="badge badge-danger">
                         <?= App::if(App::identity('myTotalReviews'), fn($total) => Html::tag('span', $total, ['class' => 'badge badge-danger'])) ?>
-                        </span>
-                        
                     </h5>
                 </a>
             </div>

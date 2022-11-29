@@ -13,6 +13,8 @@ $this->params['breadcrumbs'][] = ['label' => 'Orders', 'url' => $model->indexUrl
 $this->params['breadcrumbs'][] = $model->mainAttribute;
 $this->params['searchModel'] = new OrderSearch();
 $this->params['wrapCard'] = false; 
+
+$this->registerCss(".detail-view{margin-top: 0;}");
 ?>
 <div class="order-view-page">
     <?= Anchors::widget([
@@ -28,6 +30,7 @@ $this->params['wrapCard'] = false;
                 <?= Detail::widget([
                     'model' => $model,
                     'attributes' => [
+                        'statusBadge:raw',
                         'order_no:raw',
                         'paymentMode:raw',
                         [
@@ -49,31 +52,38 @@ $this->params['wrapCard'] = false;
             <?php $this->beginContent('@app/views/layouts/_card_wrapper.php', [
                 'title' => 'Products'
             ]) ?>
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>NAME</th>
-                            <th>QUANTITY</th>
-                            <th>PRICE</th>
-                            <th>TOTAL</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?= App::foreach($model->products, function($product, $key) {
-                            $total = $product['quantity'] * $product['price'];
-                            return <<< HTML
-                                <tr>
-                                    <td>{$key}</td>
-                                    <td>{$product['name']}</td>
-                                    <td>{$product['quantity']}</td>
-                                    <td>{$product['price']}</td>
-                                    <td>{$total}</td>
-                                </tr>
-                            HTML;
-                        }) ?>
-                    </tbody>
-                </table>
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>NAME</th>
+                                <th>ADDED SHIPPING</th>
+                                <th>QUANTITY</th>
+                                <th>PRICE</th>
+                                <th>TOTAL</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?= App::foreach($model->products, function($product, $key) {
+                                $total = App::formatter()->asPeso($product['quantity'] * $product['price']);
+                                $price = App::formatter()->asPeso($product['price']);
+                                $added_shipping_fee = App::formatter()->asPeso($product['added_shipping_fee']);
+                                $serial = $key + 1;
+                                return <<< HTML
+                                    <tr>
+                                        <td>{$serial}</td>
+                                        <td>{$product['productTableViewWithQuantity']}</td>
+                                        <td>{$added_shipping_fee}</td>
+                                        <td>{$product['quantity']}</td>
+                                        <td>{$price}</td>
+                                        <td>{$total}</td>
+                                    </tr>
+                                HTML;
+                            }) ?>
+                        </tbody>
+                    </table>
+                </div>
                 
             <?php $this->endContent() ?>
         </div>

@@ -11,6 +11,9 @@ class Label extends BaseWidget
      */
     public function run()
     {
+        if (!$this->options) {
+            return;
+        }
         return $this->render('label', [
             'options' => $this->options
         ]);

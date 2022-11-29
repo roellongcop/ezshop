@@ -138,9 +138,11 @@ $shipping = Cart::shipping();
                 ]); ?>
             <?php Pjax::end(); ?>
             <div class="text-right">
-                <button type="submit" class="btn btn-primary font-weight-bold py-2 text-uppercase btn-update-cart">
-                    Update Cart
-                </button>
+                <?= App::if($dataProvider->totalCount, <<< HTML
+                    <button type="submit" class="btn btn-primary font-weight-bold py-2 text-uppercase btn-update-cart">
+                        Update Cart
+                    </button>
+                HTML) ?>
             </div>
         </div>
         <div class="col-lg-4">

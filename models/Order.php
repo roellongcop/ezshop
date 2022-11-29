@@ -7,6 +7,7 @@ use app\helpers\App;
 use app\helpers\Url;
 use app\helpers\StringHelper;
 use app\helpers\ArrayHelper;
+use app\widgets\Label;
 use app\models\form\user\BillingDetailForm;
 
 /**
@@ -453,5 +454,10 @@ class Order extends ActiveRecord
     public function getPaymentMode()
     {
         return ($this->payment_mode == self::PAYMENT_COD) ? 'Cash on Delivery': '';
+    }
+
+    public function getStatusBadge()
+    {
+        return Label::widget(['options' => App::params('order_status')[$this->status] ?? '']);
     }
 }
