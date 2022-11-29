@@ -118,3 +118,7 @@ div.required label.control-label:after {
   overflow: auto;
     max-height: 20em;
 }
+
+.badge {
+      border-radius: 5px;
+}
