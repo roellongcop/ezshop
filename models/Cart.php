@@ -244,6 +244,7 @@ class Cart extends ActiveRecord
         $shipping = Shipping::findOne([
             'province_id' => $province_id ?: $billing->province_id,
             'municipality_id' => $municipality_id ?: $billing->city_id,
+            'record_status' => Shipping::RECORD_ACTIVE
         ]);
 
         if ($shipping) {
