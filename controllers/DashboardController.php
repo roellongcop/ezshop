@@ -18,6 +18,7 @@ use app\models\UserMeta;
 use app\models\VisitLog;
 use app\models\Visitor;
 use app\models\Order;
+use app\models\Cart;
 use app\helpers\ArrayHelper;
 use app\models\search\DashboardSearch;
 
@@ -110,12 +111,32 @@ class DashboardController extends Controller
             ->groupBy('year')
             ->asArray()
             ->all();
+
+        $bestSeller = Cart::find()
+            ->alias('c')
+            ->joinWith('product p')
+            ->select(['p.name as product_name', 'COUNT("c.*") as total'])
+            ->where([
+                'c.record_status' => Cart::CART_ORDERED,
+                'DATE_FORMAT(c.created_at, "%Y")' => $year
+            ])
+            ->groupBy(['c.product_id'])
+            ->orderBy(['total' => SORT_DESC])
+            ->limit(3)
+            ->asArray()
+            ->all();
+
+        $totalBestSeller = $bestSeller ? array_sum(array_values(ArrayHelper::map($bestSeller, 'product_name', 'total'))): 0;
+
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'monthlySales' => $monthlySales,
             'totalMontlySales' => $totalMontlySales,
             'year' => $year,
             'years' => $years,
+            'bestSeller' => $bestSeller,
+            'totalBestSeller' => $totalBestSeller,
         ]);
     }
 
@@ -159,6 +180,41 @@ class DashboardController extends Controller
             'months' => array_keys($monthlyOrders),
             'totals' => array_values($monthlyOrders),
             'totalOrders' => array_sum(array_values($monthlyOrders))
+        ]);
+    }
+
+    public function actionBestSeller($year='')
+    {
+        $year = $year ?: App::formatter()->asDateToTimezone('', 'Y');
+
+        $bestSeller = Cart::find()
+            ->alias('c')
+            ->joinWith('product p')
+            ->select(['p.name as product_name', 'COUNT("c.*") as total'])
+            ->where([
+                'c.record_status' => Cart::CART_ORDERED,
+                'DATE_FORMAT(c.created_at, "%Y")' => $year
+            ])
+            ->groupBy(['c.product_id'])
+            ->orderBy(['total' => SORT_DESC])
+            ->limit(3)
+            ->asArray()
+            ->all();
+
+        if (!$bestSeller) {
+            return $this->asJson([
+                'status' => 'success',
+                'data' => [],
+                'labels' => [],
+            ]);
+        }
+
+        $bestSeller = ArrayHelper::map($bestSeller, 'product_name', 'total');
+
+        return $this->asJson([
+            'status' => 'success',
+            'labels' => array_keys($bestSeller),
+            'data' => array_values($bestSeller),
         ]);
     }
 }

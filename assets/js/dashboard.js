@@ -1,4 +1,4 @@
-var _initStatsWidget2 = function() {
+var _initStatsWidget2 = function({data, labels}) {
     var element = document.getElementById("kt_stats_widget_2_chart");
 
     if (!element) {
@@ -13,20 +13,14 @@ var _initStatsWidget2 = function() {
         type: 'doughnut',
         data: {
             datasets: [{
-                data: [
-                    35, 30, 35
-                ],
+                data: data,
                 backgroundColor: [
                     KTAppSettings['colors']['gray']['gray-300'],
                     KTAppSettings['colors']['gray']['gray-400'],
                     KTAppSettings['colors']['theme']['base']['primary']
                 ]
             }],
-            labels: [
-                'Angular',
-                'CSS',
-                'HTML'
-            ]
+            labels: labels
         },
         options: {
             cutoutPercentage: 75,
@@ -201,8 +195,6 @@ var _initStatsWidget3 = function({data, categories}) {
     chart.render();
 }
 
-_initStatsWidget2();
-
 
 $.ajax({
     url: app.baseUrl + "dashboard/monthly-orders",
@@ -219,6 +211,28 @@ $.ajax({
             });
 
             $('.total-orders').html(s.totalOrders);
+        }
+    },
+    error: (e) => {
+        console.log(e)
+    }
+})
+
+
+
+$.ajax({
+    url: app.baseUrl + "dashboard/best-seller",
+    method: 'get',
+    data: {
+        year: $('.dashboard-page').data('year'),
+    },
+    dataType: 'json',
+    success: function(s) {
+        if (s.status == 'success') {
+            _initStatsWidget2({
+                data: s.data,
+                labels: s.labels
+            });
         }
     },
     error: (e) => {

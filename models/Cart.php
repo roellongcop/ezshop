@@ -25,6 +25,8 @@ use app\models\form\user\BillingDetailForm;
  */
 class Cart extends ActiveRecord
 {
+    const CART_ACTIVE = 1;
+    const CART_ORDERED = 0;
     /**
      * {@inheritdoc}
      */
