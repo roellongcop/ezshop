@@ -207,14 +207,19 @@ _initStatsWidget2();
 $.ajax({
     url: app.baseUrl + "dashboard/monthly-orders",
     method: 'get',
+    data: {
+        year: $('.dashboard-page').data('year'),
+    },
     dataType: 'json',
     success: function(s) {
-        _initStatsWidget3({
-            data: s.totals,
-            categories: s.months
-        });
+        if (s.status == 'success') {
+            _initStatsWidget3({
+                data: s.totals,
+                categories: s.months
+            });
 
-        $('.total-orders').html(s.totalOrders);
+            $('.total-orders').html(s.totalOrders);
+        }
     },
     error: (e) => {
         console.log(e)

@@ -13,7 +13,10 @@ use app\widgets\SearchButton;
 /* @var $form app\widgets\ActiveForm */
 $modules = App::access('searchModels');
 $model->modules = $model->modules ?: array_keys($modules);
+
+if (count($model->modules) < 20) {
 $modules['*checkAll'] = ['name' => 'Check All', 'tags' => 'onclick="checkAllAccessModule(this)"'];
+}
 ksort($modules);
 ?>
 <?php $form = ActiveForm::begin([
@@ -37,6 +40,7 @@ ksort($modules);
             'Last Year',
         ]
     ]) ?>
+
     <?= Filter::widget([
         'data' => $modules,
         'title' => 'Module',
@@ -44,10 +48,7 @@ ksort($modules);
         'model' => $model,
         'form' => $form,
     ]) ?>
-    <?= RecordStatusFilter::widget([
-        'model' => $model,
-        'form' => $form,
-    ]) ?>
+  
     <?= Pagination::widget([
         'model' => $model,
         'form' => $form,

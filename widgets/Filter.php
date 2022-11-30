@@ -64,6 +64,10 @@ class Filter extends BaseWidget
                 'form' => $this->form,
                 'data' => $this->data,
                 'name' => $this->name,
+                'options' => [
+                    'class' => 'kt-selectpicker form-control',
+                    'tabindex' => 'null',
+                ],
                 'multiple' => true
             ]), ['class' => 'mt-5']);
         }

@@ -60,6 +60,7 @@ class DashboardController extends Controller
     {
         $year = $year ?: App::formatter()->asDateToTimezone('', 'Y');
 
+
         $searchModel = new DashboardSearch();
 
         if (($queryParams = App::queryParams()) != null) {
@@ -72,7 +73,9 @@ class DashboardController extends Controller
                 ]);
             }
             else {
-                return $this->redirect(['index']);
+                if (! App::queryParams('year')) {
+                    return $this->redirect(['index']);
+                }
             }
         }
 
@@ -87,20 +90,32 @@ class DashboardController extends Controller
             ->asArray()
             ->all();
 
-
-        $max = max(array_keys(ArrayHelper::map($monthlySales, 'average', 'month')));
-        $totalMontlySales = 0;
-        foreach ($monthlySales as &$data) {
-            $totalMontlySales += $data['average'];
-            $data['percent'] = number_format(($data['average'] / $max) * 100, 2);
-            $data['average'] = App::formatter()->asPeso($data['average']);
-            $data['month'] = App::params('months')[$data['month']];
+        if ($monthlySales) {
+            $max = max(array_keys(ArrayHelper::map($monthlySales, 'average', 'month')));
+            $totalMontlySales = 0;
+            foreach ($monthlySales as &$data) {
+                $totalMontlySales += $data['average'];
+                $data['percent'] = number_format(($data['average'] / $max) * 100, 2);
+                $data['average'] = App::formatter()->asPeso($data['average']);
+                $data['month'] = App::params('months')[$data['month']];
+            }
+        }
+        else {
+            $monthlySales = [];
+            $totalMontlySales = 0;
         }
 
+        $years = Order::find()
+            ->select(['DATE_FORMAT(created_at, "%Y") as year'])
+            ->groupBy('year')
+            ->asArray()
+            ->all();
         return $this->render('index', [
             'searchModel' => $searchModel,
             'monthlySales' => $monthlySales,
-            'totalMontlySales' => $totalMontlySales
+            'totalMontlySales' => $totalMontlySales,
+            'year' => $year,
+            'years' => $years,
         ]);
     }
 
@@ -123,6 +138,15 @@ class DashboardController extends Controller
             ->orderBy(['month' => SORT_ASC])
             ->asArray()
             ->all();
+
+        if (!$monthlyOrders) {
+            return $this->asJson([
+                'status' => 'success',
+                'months' => [],
+                'totals' => [],
+                'totalOrders' => 0
+            ]);
+        }
 
         foreach ($monthlyOrders as &$data) {
             $data['month'] = App::params('months')[$data['month']];
