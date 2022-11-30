@@ -52,8 +52,28 @@ class SiteController extends Controller
         'to-wishlist',
         'add-to-cart',
         'navbar-poll',
-        'product-detail'
+        'product-detail',
+        'test'
     ];
+
+    public function actionTest()
+    {
+        $data = \app\models\Training::samples();
+
+        $data = array_merge(['dummy' => ['']], $data);
+        // dd($data);
+
+
+        $classifier = new \Phpml\Classification\NaiveBayes();
+        $classifier->train(array_values($data), array_keys($data));
+
+        $var1 = $classifier->predict(['buy', 'product']);
+        // return 'a'
+
+
+        var_dump('var1', $var1);
+        dd($data);
+    }
 
     public function behaviors()
     {
