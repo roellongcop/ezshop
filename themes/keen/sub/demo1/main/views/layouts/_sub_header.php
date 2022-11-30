@@ -42,6 +42,7 @@ use app\widgets\ExportButton;
             <!--begin::Dropdown-->
             <?= Html::exportButton($this->params) ?>
             <?= Html::createButton($this->params) ?>
+            <?= $this->params['headerButtons'] ?? '' ?>
         </div>
         <!--end::Toolbar-->
     </div>

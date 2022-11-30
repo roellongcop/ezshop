@@ -4,27 +4,19 @@
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 use app\helpers\App;
-use app\helpers\Html;
-use app\helpers\Url;
 
 $this->title = 'Dashboard';
 $this->params['searchModel'] = $searchModel; 
 $this->params['wrapCard'] = false;
 
 $this->addJsFile('js/dashboard', ['app\themes\keen\sub\demo1\main\assets\AppAsset']);
+
+$this->params['headerButtons'] = $this->render('_dropdown-year', [
+	'year' => $year,
+	'years' => $years,
+]);
 ?>
 <div class="dashboard-page" data-year="<?= $year ?>">
-	<div class="dropdown text-right mb-2">
-	    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-	        Year: <?= $year ?>
-	    </button>
-	    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-	    	<?= App::foreach($years, fn($y) => Html::tag('a', $y['year'], [
-	    		'class' => 'dropdown-item',
-	    		'href' => Url::current(['year' => $y['year']])
-	    	])) ?>
-	    </div>
-	</div>
 
 	<div class="row">
 		<div class="col-lg-4">
