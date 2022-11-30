@@ -1025,4 +1025,9 @@ abstract class ActiveRecord extends \yii\db\ActiveRecord
     {
         return App::formatter()->asAgo($this->updated_at);
     }
+
+    public function getCreatedAt()
+    {
+        return App::formatter()->asDateToTimezone($this->created_at);
+    }
 }

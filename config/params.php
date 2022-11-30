@@ -93,6 +93,11 @@ return [
             'id' => 2, 
             'type' => 'new_order', 
             'label' => 'New Order'
+        ],
+        3 => [
+            'id' => 3, 
+            'type' => 'cancel_order', 
+            'label' => 'Cancel Order'
         ]
     ],
     'user_status' => [

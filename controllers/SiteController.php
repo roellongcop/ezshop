@@ -732,4 +732,15 @@ class SiteController extends Controller
 
         return $this->redirect(['my-orders']);
     }
+
+
+    public function actionViewOrder($order_no='')
+    {
+        if ($order_no && ($order = Order::findOne(['order_no' => $order_no])) != null) {
+            return $this->render('view-order', [
+                'order' => $order
+            ]);
+        }
+        return $this->redirect(['my-orders']);
+    }
 }

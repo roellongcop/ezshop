@@ -30,6 +30,7 @@ class Notification extends ActiveRecord
     const TYPE_CHANGED_PASSWORD = 'notification_change_password';
     const TYPE_NEW_REVIEW = 'new_review';
     const TYPE_NEW_ORDER = 'new_order';
+    const TYPE_CANCEL_ORDER = 'cancel_order';
 
     /**
      * {@inheritdoc}
@@ -64,6 +65,7 @@ class Notification extends ActiveRecord
                 self::TYPE_CHANGED_PASSWORD, 
                 self::TYPE_NEW_REVIEW,
                 self::TYPE_NEW_ORDER,
+                self::TYPE_CANCEL_ORDER,
             ]],
         ]);
     }

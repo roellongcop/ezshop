@@ -33,6 +33,17 @@ class OrderBehavior extends \yii\base\Behavior
 
         if ($order->shipTo == 'same') {
             $this->owner->shipping = Cart::shipping($order->billing_province_id, $order->billing_municipality_id);
+
+
+            $this->owner->shipping_firstname = $this->owner->billing_firstname;
+            $this->owner->shipping_lastname = $this->owner->billing_lastname;
+            $this->owner->shipping_email = $this->owner->billing_email;
+            $this->owner->shipping_mobile = $this->owner->billing_mobile;
+            $this->owner->shipping_address1 = $this->owner->billing_address1;
+            $this->owner->shipping_address2 = $this->owner->billing_address2;
+            $this->owner->shipping_province_id = $this->owner->billing_province_id;
+            $this->owner->shipping_municipality_id = $this->owner->billing_municipality_id;
+            $this->owner->shipping_zip = $this->owner->billing_zip;
         }
         else {
             $this->owner->shipping = Cart::shipping($order->shipping_province_id, $order->shipping_municipality_id);
@@ -106,6 +117,29 @@ class OrderBehavior extends \yii\base\Behavior
                             $product->save();
                         }
                     }
+                }
+            }
+        }
+
+        if ($order->status == Order::STATUS_CANCELLED) {
+
+            $roles = [
+                Role::DEVELOPER,
+                Role::SUPERADMIN,
+                Role::ADMIN,
+            ];
+
+            if (($users = User::findAll(['role_id' => $roles])) != null) {
+                foreach ($users as $user) {
+                    $notification = new Notification([
+                        'status' => Notification::STATUS_UNREAD,
+                        'record_status' => Notification::RECORD_ACTIVE,
+                        'user_id' => $user->id,
+                        'type' => Notification::TYPE_CANCEL_ORDER,
+                        'link' => $order->getViewUrl(false, true),
+                        'message' => "{$order->billingFullname} cancelled his/her order",
+                    ]);
+                    $notification->save();
                 }
             }
         }

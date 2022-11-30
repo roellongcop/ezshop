@@ -197,7 +197,8 @@ class Order extends ActiveRecord
 
     public function getShippingProvinceName()
     {
-        return App::if($this->shippingProvince, fn($province) => $province->name);
+        $name = App::if($this->shippingProvince, fn($province) => $province->name);
+        return $name ?: $this->billingProvinceName;
     }
 
     public function getShippingProvinceNo()
@@ -212,7 +213,8 @@ class Order extends ActiveRecord
 
     public function getShippingMunicipalityName()
     {
-        return App::if($this->shippingMunicipality, fn($municipality) => $municipality->name);
+        $name = App::if($this->shippingMunicipality, fn($municipality) => $municipality->name);
+        return $name ?: $this->billingMunicipalityName;
     }
 
     /**
@@ -442,7 +444,7 @@ class Order extends ActiveRecord
     }
 
 
-    public function getCancelButton()
+    public function getCancelButton($default='---')
     {
         if ($this->status == self::STATUS_PENDING) {
             return \yii\helpers\Html::a('Cancel', ['site/cancel-order', 'order_no' => $this->order_no],  [
@@ -452,7 +454,7 @@ class Order extends ActiveRecord
             ]);
         }
 
-        return '---';
+        return $default;
     }
 
     public function process()

@@ -64,21 +64,24 @@ $this->addJsFile('js/order');
             ]) ?>
                <div class="timeline timeline-2">
                     <div class="timeline-bar"></div>
-                    <?= App::foreach($model->orderLogs, fn($orderLog) => <<< HTML
-                        <div class="timeline-item">
-                            <span class="timeline-badge bg-{$orderLog->statusClass}"></span>
-                            <div class="timeline-content d-flex align-items-center justify-content-between">
-                                <span class="mr-3">
-                                {$orderLog->remarks} | <span class="font-weight-bold">{$orderLog->updatedByEmail}</span>
+                    <?= App::foreach($model->orderLogs, function($orderLog, $key) {
+                        $class = $key == 0 ? '': 'pt-7';
+                        return <<< HTML
+                            <div class="timeline-item pb-0 {$class}">
+                                <span class="timeline-badge bg-{$orderLog->statusClass}"></span>
+                                <div class="timeline-content d-flex align-items-center justify-content-between">
+                                    <span class="mr-3">
+                                    {$orderLog->remarks} | <span class="font-weight-bold">{$orderLog->updatedByEmail}</span>
 
-                                {$orderLog->statusBadge}</span>
-                                <span class="text-muted font-italic text-right">
-                                    {$orderLog->ago}
-                                </span>
+                                    {$orderLog->statusBadge}</span>
+                                    <span class="text-muted font-italic text-right">
+                                        {$orderLog->ago}
+                                    </span>
+                                </div>
                             </div>
-                        </div>
-
-                    HTML) ?>
+                            <small class="ml-10 mt-0 font-weight-bold mb-3">{$orderLog->createdAt}</small>
+                        HTML;
+                    }) ?>
                 </div>
             <?php $this->endContent() ?>
         </div>
