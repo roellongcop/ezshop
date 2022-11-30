@@ -2,6 +2,7 @@
 
 use app\widgets\ActiveForm;
 use app\widgets\DataList;
+use app\widgets\InputList;
 use app\models\Training;
 
 /* @var $this yii\web\View */
@@ -18,8 +19,15 @@ use app\models\Training;
                 'attribute' => 'intent',
                 'data' => Training::filter('intent')
             ]) ?>
-			<?= $form->field($model, 'response')->textInput(['maxlength' => true]) ?>
-			<?= $form->field($model, 'suggestion')->textarea(['rows' => 6]) ?>
+
+            <label>Response</label>
+            <?= InputList::widget([
+                'label' => 'Response',
+                'name' => 'Training[response][]',
+                'data' => $model->response
+            ]) ?>
+
+			<?php # $form->field($model, 'suggestion')->textarea(['rows' => 6]) ?>
         </div>
     </div>
     <div class="form-group">

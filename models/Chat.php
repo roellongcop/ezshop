@@ -73,7 +73,8 @@ class Chat extends ActiveRecord
             ['type', 'in', 'range' => [
                 self::TYPE_CHATBOT,
                 self::TYPE_USER,
-            ]]
+            ]],
+            [['message'], 'trim']
         ]);
     }
 
@@ -186,13 +187,15 @@ class Chat extends ActiveRecord
 
     public static function response($training)
     {
-        $chat = new self([
-            'session_id' => App::session('id'),
-            'type' => self::TYPE_CHATBOT,
-            'message' => $training->response,
-            'status' => self::ANSWERED 
-        ]);
-        $chat->save();
+        foreach ($training->response as $response) {
+            $chat = new self([
+                'session_id' => App::session('id'),
+                'type' => self::TYPE_CHATBOT,
+                'message' => $response,
+                'status' => self::ANSWERED 
+            ]);
+            $chat->save();
+        }
     }
 
     public static function dummy()

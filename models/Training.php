@@ -47,8 +47,9 @@ class Training extends ActiveRecord
         return $this->setRules([
             [['query', 'intent', 'response'], 'required'],
             [['suggestion'], 'string'],
-            [['query', 'intent', 'response'], 'string', 'max' => 255],
+            [['query', 'intent'], 'string', 'max' => 255],
             [['query'], 'unique'],
+            [['response'], 'safe']
         ]);
     }
 
@@ -90,7 +91,7 @@ class Training extends ActiveRecord
                 }
             ],
             'intent' => ['attribute' => 'intent', 'format' => 'raw'],
-            'response' => ['attribute' => 'response', 'format' => 'raw'],
+            'response' => ['attribute' => 'response', 'format' => 'ul'],
             'suggestion' => ['attribute' => 'suggestion', 'format' => 'raw'],
         ];
     }
@@ -100,7 +101,7 @@ class Training extends ActiveRecord
         return [
             'query:raw',
             'intent:raw',
-            'response:raw',
+            'response:ul',
             'suggestion:raw',
         ];
     }
@@ -129,6 +130,8 @@ class Training extends ActiveRecord
 
     public function predict($query='')
     {
+        $query = trim($query);
+        
         $data = array_merge(['dummy' => ['']], self::samples());
         $labels = array_keys($data);
         $samples = $this->nestedUppercase(array_values($data));
@@ -143,5 +146,14 @@ class Training extends ActiveRecord
             'predict' => $predict,
             'training' => self::findOne($id)
         ];
+    }
+
+    public function behaviors()
+    {
+        $behaviors = parent::behaviors();
+        $behaviors['JsonBehavior']['fields'] = [
+            'response', 
+        ];
+        return $behaviors;
     }
 }
