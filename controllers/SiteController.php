@@ -804,6 +804,13 @@ class SiteController extends Controller
     }
 
 
+    public function nestedUppercase($value) {
+        if (is_array($value)) {
+            return array_map([$this, 'nestedUppercase'], $value);
+        }
+        return strtoupper($value);
+    }
+
     public function actionSendNewMessage()
     {
         if (($post = App::post()) != null) {
@@ -815,11 +822,11 @@ class SiteController extends Controller
 
             $data = array_merge(['dummy' => ['']], Training::samples());
             $labels = array_keys($data);
-            $samples = array_values($data);
+            $samples = $this->nestedUppercase(array_values($data));
 
             $classifier = new NaiveBayes();
             $classifier->train($samples, $labels);
-            $predict = $classifier->predict(explode(' ', $post['message']));
+            $predict = $classifier->predict(explode(' ', strtoupper($post['message'])));
 
             $id = array_search($predict, $labels, true);
 
