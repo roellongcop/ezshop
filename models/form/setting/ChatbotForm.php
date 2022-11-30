@@ -11,7 +11,9 @@ class ChatbotForm extends SettingForm
     public $name;
     public $photo;
     public $welcome_message;
+    public $default_message;
     public $theme_color;
+
     
     /**
      * @return array the validation rules.
@@ -19,8 +21,8 @@ class ChatbotForm extends SettingForm
     public function rules()
     {
         return [
-            [['name', 'photo', 'welcome_message', 'theme_color'], 'required'],
-            [['name', 'photo', 'welcome_message', 'theme_color'], 'string'],
+            [['name', 'photo', 'welcome_message', 'default_message', 'theme_color'], 'required'],
+            [['name', 'photo', 'welcome_message', 'default_message', 'theme_color'], 'string'],
         ];
     }
 
@@ -43,6 +45,10 @@ class ChatbotForm extends SettingForm
             'welcome_message' => [
                 'name' => 'welcome_message',
                 'default' => 'Good day! \n What can I do for you today?'
+            ],
+            'default_message' => [
+                'name' => 'default_message',
+                'default' => 'Sorry I can\'t understand your query right now'
             ],
             'theme_color' => [
                 'name' => 'theme_color',

@@ -156,14 +156,14 @@ div.required label.control-label:after {
   font-weight: 500;
   font-size: smaller;
   text-align: right;
-  margin-right: 10px;
+  margin-right: 20px;
 }
 
 .chat-msg.user > .timeSent {
   font-weight: 500;
   font-size: smaller;
   text-align: left;
-  margin-left: 10px;
+  margin-left: 20px;
 }
 
 .btn-scroller {
@@ -173,4 +173,8 @@ div.required label.control-label:after {
   color: #495057;
   border-color: #6c757d;
   border-radius: 25px;
+}
+
+.chat-submit:focus {
+  outline: none;
 }
