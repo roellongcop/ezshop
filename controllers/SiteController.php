@@ -716,4 +716,20 @@ class SiteController extends Controller
             'searchModel' => $searchModel,
         ]);
     }
+
+    public function actionCancelOrder($order_no='')
+    {
+        if ($order_no && ($order = Order::findOne(['order_no' => $order_no])) != null) {
+            $order->remarks = 'Cancelled Order';
+            $order->status = Order::STATUS_CANCELLED;
+            if ($order->save()) {
+                App::success('Order Cancelled');
+            }
+            else {
+                App::danger($order->errorSummary);
+            }
+        }
+
+        return $this->redirect(['my-orders']);
+    }
 }

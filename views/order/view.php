@@ -101,8 +101,10 @@ JS)
                         <div class="timeline-item">
                             <span class="timeline-badge bg-{$orderLog->statusClass}"></span>
                             <div class="timeline-content d-flex align-items-center justify-content-between">
-                                <span class="mr-3">{$orderLog->remarks}
-                                {$orderLog->statusBadge}
+                                <span class="mr-3">
+                                {$orderLog->remarks} | <span class="font-weight-bold">{$model->billingFullname}</span>
+
+                                {$orderLog->statusBadge}</span>
                                 <span class="text-muted font-italic text-right">
                                     {$orderLog->ago}
                                 </span>

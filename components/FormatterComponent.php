@@ -177,6 +177,6 @@ class FormatterComponent extends \yii\i18n\Formatter
 
     public function asPeso($num=0)
     {
-        return '₱ ' . ($this->asNumberFormat($num));
+        return '₱' . ($this->asNumberFormat($num));
     }
 }

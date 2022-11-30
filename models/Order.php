@@ -295,6 +295,9 @@ class Order extends ActiveRecord
         $behaviors['JsonBehavior']['fields'] = [
             'products', 
         ];
+        $behaviors['OrderBehavior'] = [
+            'class' => 'app\behaviors\OrderBehavior'
+        ];
 
         return $behaviors;
     }
@@ -344,38 +347,7 @@ class Order extends ActiveRecord
         $this->total = $this->subtotal + $this->shipping;
     }
 
-    public function generateOrderNo()
-    {
-        $total = self::find()->count();
-        $order_no = implode('-', [str_pad($total + 1, 7, "0", STR_PAD_LEFT), time()]);
-
-        if (self::find()->where(['order_no' => $order_no])->exists()) {
-            return $this->generateOrderNo();
-        }
-
-        return $order_no;
-    }
-
-    public function beforeSave($insert)
-    {
-        if (!parent::beforeSave($insert)) {
-            return false;
-        }
-
-        if ($this->shipTo == 'same') {
-            $this->shipping = Cart::shipping($this->billing_province_id, $this->billing_municipality_id);
-        }
-        else {
-            $this->shipping = Cart::shipping($this->shipping_province_id, $this->shipping_municipality_id);
-        }
-
-        $this->setTheTotal();
-
-        $this->order_no = $this->generateOrderNo();
-
-        return true;
-    }
-
+    
     public function getBillingFullname()
     {
         return implode(' ', [
@@ -396,57 +368,6 @@ class Order extends ActiveRecord
         return App::formatter()->asPeso($this->total);
     }
 
-    public function afterSave($insert, $changedAttributes)
-    {
-        parent::afterSave($insert, $changedAttributes);
-
-        if ($insert) {
-            $roles = [
-                Role::DEVELOPER,
-                Role::SUPERADMIN,
-                Role::ADMIN,
-            ];
-
-            if (($users = User::findAll(['role_id' => $roles])) != null) {
-                foreach ($users as $user) {
-                    $notification = new Notification([
-                        'status' => Notification::STATUS_UNREAD,
-                        'record_status' => Notification::RECORD_ACTIVE,
-                        'user_id' => $user->id,
-                        'type' => Notification::TYPE_NEW_ORDER,
-                        'link' => $this->getViewUrl(false, true),
-                        'message' => "{$this->formattedTotal} total amount ordered by {$this->billingFullname}",
-                    ]);
-                    $notification->save();
-                }
-            }
-
-            $this->refresh();
-            if ($this->products) {
-                $data = ArrayHelper::map($this->products, 'product_id', 'quantity');
-                
-                if (($products = Product::findAll(array_keys($data))) != null) {
-                    foreach ($products as $product) {
-
-                        $quantity = $data[$product->id] ?? false;
-
-                        if ($quantity !== false) {
-                            $product->quantity = $product->quantity - $quantity;
-                            $product->quantity = $product->quantity > 0 ? $product->quantity: 0;
-                            $product->save();
-                        }
-                    }
-                }
-            }
-
-            Cart::clear();
-        }
-
-
-        $this->remarks = $this->remarks ?: 'Order log at ' . App::formatter()->asDateToTimezone();
-
-        OrderLog::insertLog($this);
-    }
 
     public function getViewUrl($fullpath=true, $force = false)
     {
