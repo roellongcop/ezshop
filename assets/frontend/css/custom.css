@@ -122,3 +122,14 @@ div.required label.control-label:after {
 .badge {
       border-radius: 5px;
 }
+
+.order-total-products::-webkit-scrollbar  {
+    width: 4px;
+    background-color: #FFFFFF; 
+}
+
+.order-total-products::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
+    background-color: #E4E6EF; 
+}

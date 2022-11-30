@@ -69,6 +69,11 @@ class OrderSearch extends Order
             ]
         ]);
 
+        $dataProvider->sort->attributes['products'] = [
+            'asc' => ['LENGTH(products)' => SORT_ASC],
+            'desc' => ['LENGTH(products)' => SORT_DESC],
+        ];
+
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
             $query->where('0=1');

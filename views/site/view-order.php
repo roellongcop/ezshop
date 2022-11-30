@@ -106,26 +106,27 @@ $this->params['activePage'] = 'checkout';
         <div class="col-lg-4">
             <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Order Total</span></h5>
             <div class="bg-light p-30 mb-5">
-                <?= App::foreach($order->products, function($product) {
-                    $price = App::formatter()->asPeso($product['price']);
-                    $productModel = Product::findOne($product['product_id']);
-                    $productName = $productModel ? implode(' ', [
-                        Html::image($productModel->image, ['w' => 50], ['class' => 'img-fluid']),
-                        Html::tag('a', $productModel->name, [
-                            'target' => '_blank',
-                            'class' => 'text-dark',
-                            'href' => $productModel->frontendUrl
-                        ])
-                    ]): $product['name'];
+                <div class="border-bottom order-total-products">
+                    <?= App::foreach($order->products, function($product) {
+                        $price = App::formatter()->asPeso($product['price']);
+                        $productModel = Product::findOne($product['product_id']);
+                        $productName = $productModel ? implode(' ', [
+                            Html::image($productModel->image, ['w' => 50], ['class' => 'img-fluid']),
+                            implode('<br>', array_filter([
+                                YiiHtml::a($productModel->name . ' (x' . $product['quantity'] . ')', $productModel->frontendUrl, ['class' => 'text-dark', 'target' => '_blank']),
+                                Html::tag('small', implode(' | ', array_filter([$product['color'], $product['size']])), ['class' => 'text-muted font-weight-bold'])
+                            ]))
+                        ]): $product['name'];
 
 
-                    return <<< HTML
-                        <div class="d-flex justify-content-between">
-                            <p>{$productName}</p>
-                            <p>{$price}</p>
-                        </div>
-                    HTML;
-                }) ?>
+                        return <<< HTML
+                            <div class="d-flex justify-content-between">
+                                <p>{$productName}</p>
+                                <p>{$price}</p>
+                            </div>
+                        HTML;
+                    }) ?>
+                </div>
                 <div class="border-bottom pt-3 pb-2">
                     <div class="d-flex justify-content-between mb-3">
                         <h6>Subtotal</h6>
