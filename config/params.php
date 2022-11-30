@@ -11,6 +11,20 @@ return [
         4 => [ 'id' => 4, 'label' => 'Cancelled', 'class' => 'danger'],
         5 => [ 'id' => 5, 'label' => 'Void', 'class' => 'dark'],
     ],
+    'months' => [
+        1 => 'January',
+        2 => 'February',
+        3 => 'March',
+        4 => 'April',
+        5 => 'May',
+        6 => 'JUne',
+        7 => 'July',
+        8 => 'August',
+        9 => 'September',
+        10 => 'October',
+        11 => 'November',
+        12 => 'December',
+    ],
     'customer_links' => [
         [
             'label' => 'My Dashboard', 

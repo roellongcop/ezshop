@@ -17,7 +17,10 @@ use app\models\User;
 use app\models\UserMeta;
 use app\models\VisitLog;
 use app\models\Visitor;
+use app\models\Order;
+use app\helpers\ArrayHelper;
 use app\models\search\DashboardSearch;
+
 /**
  * BackupController implements the CRUD actions for Backup model.
  */
@@ -53,11 +56,10 @@ class DashboardController extends Controller
      * Lists all Backup models.
      * @return mixed
      */
-    public function actionIndex()
+    public function actionIndex($year='')
     {
-        if (App::identity('isCustomer')) {
-            return $this->redirect(['site/customer-dashboard']);
-        }
+        $year = $year ?: App::formatter()->asDateToTimezone('', 'Y');
+
         $searchModel = new DashboardSearch();
 
         if (($queryParams = App::queryParams()) != null) {
@@ -74,13 +76,65 @@ class DashboardController extends Controller
             }
         }
 
+        $monthlySales = Order::find()
+            ->select(['MONTH(created_at) AS month', 'AVG(total) as average'])
+            ->where([
+                'status' => Order::STATUS_COMPLETED,
+                'DATE_FORMAT(created_at, "%Y")' => $year
+            ])
+            ->groupBy('month')
+            ->orderBy(['month' => SORT_ASC])
+            ->asArray()
+            ->all();
+
+
+        $max = max(array_keys(ArrayHelper::map($monthlySales, 'average', 'month')));
+        $totalMontlySales = 0;
+        foreach ($monthlySales as &$data) {
+            $totalMontlySales += $data['average'];
+            $data['percent'] = number_format(($data['average'] / $max) * 100, 2);
+            $data['average'] = App::formatter()->asPeso($data['average']);
+            $data['month'] = App::params('months')[$data['month']];
+        }
+
         return $this->render('index', [
-            'searchModel' => $searchModel
+            'searchModel' => $searchModel,
+            'monthlySales' => $monthlySales,
+            'totalMontlySales' => $totalMontlySales
         ]);
     }
 
     public function actionInActiveData()
     {
         # dont delete; use in condition if user has access to in-active data
+    }
+
+    public function actionMonthlyOrders($year='')
+    {
+        $year = $year ?: App::formatter()->asDateToTimezone('', 'Y');
+
+        $monthlyOrders = Order::find()
+            ->select(['MONTH(created_at) AS month', 'COUNT("*") as total'])
+            ->where([
+                'status' => Order::STATUS_COMPLETED,
+                'DATE_FORMAT(created_at, "%Y")' => $year
+            ])
+            ->groupBy('month')
+            ->orderBy(['month' => SORT_ASC])
+            ->asArray()
+            ->all();
+
+        foreach ($monthlyOrders as &$data) {
+            $data['month'] = App::params('months')[$data['month']];
+        }
+
+        $monthlyOrders = ArrayHelper::map($monthlyOrders, 'month', 'total');
+
+        return $this->asJson([
+            'status' => 'success',
+            'months' => array_keys($monthlyOrders),
+            'totals' => array_values($monthlyOrders),
+            'totalOrders' => array_sum(array_values($monthlyOrders))
+        ]);
     }
 }
