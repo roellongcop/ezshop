@@ -165,3 +165,12 @@ div.required label.control-label:after {
   text-align: left;
   margin-left: 10px;
 }
+
+.btn-scroller {
+  position: absolute;
+  bottom: 1em;
+  right: 8em;
+  color: #495057;
+  border-color: #6c757d;
+  border-radius: 25px;
+}

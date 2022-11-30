@@ -15,6 +15,11 @@ const chat = createApp({
 			content: []
 		});
 
+		const showScrollable = ref(false);
+
+		const minimumMessageId = ref(1);
+
+
 		const TYPE_CHATBOT = 0;
 	    const TYPE_USER = 1;
 
@@ -28,6 +33,8 @@ const chat = createApp({
 				success: (response) => {
 					messages.value = response.messages || [];
 					totalMessages.value = response.totalMessages;
+					minimumMessageId.value = response.minimumMessageId || 1;
+
 					unblock('#chatbot');
 
 					scrollToBottom();
@@ -99,7 +106,7 @@ const chat = createApp({
 		const chatState = () => {
 			return {
 				maxMessageId: Math.max(...messages.value.map(message => message.id)),
-				minMessageId: Math.min(...messages.value.map(message => message.id)),
+				// minMessageId: Math.min(...messages.value.map(message => message.id)),
 				totalMessages: totalMessages.value
 			}
 		}
@@ -131,9 +138,59 @@ const chat = createApp({
 			});
 		}
 
-		const messageScroll = () => {
-			console.log(conversationsContainer.value.scrollTop)
-			console.log(conversationsContainer.value.scrollHeight)
+		const isScrollable = (ele) => {
+		    // Compare the height to see if the element has scrollable content
+		    const hasScrollableContent = ele.scrollHeight > ele.clientHeight;
+
+		    // It's not enough because the element's `overflow-y` style can be set as
+		    // * `hidden`
+		    // * `hidden !important`
+		    // In those cases, the scrollbar isn't shown
+		    const overflowYStyle = window.getComputedStyle(ele).overflowY;
+		    const isOverflowHidden = overflowYStyle.indexOf('hidden') !== -1;
+
+		    return hasScrollableContent && !isOverflowHidden;
+		}
+
+		const messageScroll = (e) => {
+
+		    if (e.target.scrollTop == 0 && isScrollable(e.target)) {
+	    		const minMessageId = Math.min(...messages.value.map(message => message.id));
+	    		const lastMessageElement = document.getElementById('message-id-' + minMessageId);
+
+		    	if (minMessageId > minimumMessageId.value) {
+			    	block('.chat-box-body', 'Loading Messages...');
+
+			    	$.ajax({
+			    		url: app.baseUrl + 'site/load-previous-messages',
+			    		data: {minMessageId},
+			    		method: 'post',
+			    		dataType: 'json',
+			    		success: (response) => {
+			    			if (response.status == 'success') {
+					    		const sm = response.messages.concat(messages.value);
+					    		messages.value = sm;
+
+					    		nextTick(() => {
+					    			conversationsContainer.value.scrollTop = lastMessageElement.offsetTop;
+					    		});
+					    	}
+							unblock('.chat-box-body');
+			    		},
+			    		error: (e) => {
+							unblock('.chat-box-body',);
+			    			console.log(e)
+			    		}
+			    	})
+		    	}
+		    }
+
+		    if(conversationsContainer.value.scrollHeight - conversationsContainer.value.scrollTop > 1000) {
+		    	showScrollable.value = true;
+		    }
+		    else {
+		    	showScrollable.value = false;
+		    }
 		}
 
 		onMounted(() => {
@@ -142,6 +199,10 @@ const chat = createApp({
 			    $("#chat-circle").toggle('scale');
 			    $(".chat-box").toggle('scale');
 			    scrollToBottom();
+			})
+			$(".chat-box-toggle").click(function() {
+			    $("#chat-circle").toggle('scale');
+			    $(".chat-box").toggle('scale');
 			})
 		});
 
@@ -155,7 +216,9 @@ const chat = createApp({
 			conversationsContainer,
 			messageScroll,
 			messageFormState,
-			messageStyle
+			messageStyle,
+			showScrollable,
+			scrollToBottom
 		}
 	}
 });

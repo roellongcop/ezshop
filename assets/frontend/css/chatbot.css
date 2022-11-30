@@ -142,7 +142,7 @@
     padding:15px; 
     height:370px;
     overflow-y:scroll;
-    padding-bottom: 3em;
+    padding-bottom: 4em;
   }
 
   .chat-logs::-webkit-scrollbar-track

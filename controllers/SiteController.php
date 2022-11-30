@@ -57,6 +57,7 @@ class SiteController extends Controller
         'init-chatbot-data',
         'send-new-message',
         'chat-poll',
+        'load-previous-messages',
         // 'test'
     ];
 
@@ -786,10 +787,17 @@ class SiteController extends Controller
             ->where(['session_id' => App::session('id')])
             ->count();
 
+        $minimumMessageId = Chat::find()
+            ->where(['session_id' => App::session('id')])
+            ->min('id');
+
+            
+
         return $this->asJson([
             'status' => 'success',
             'messages' => array_reverse($messages),
-            'totalMessages' => $totalMessages
+            'totalMessages' => $totalMessages,
+            'minimumMessageId' => $minimumMessageId,
         ]);
     }
 
@@ -867,6 +875,36 @@ class SiteController extends Controller
         return $this->asJson([
             'status' => 'failed',
             'errorSummary' => 'no changes'
+        ]);
+    }
+
+    public function actionLoadPreviousMessages()
+    {
+        if (($post = App::post()) != null) {
+            $minMessageId = (int) (App::post('minMessageId') ?: 1);
+
+            $messages = Chat::find()
+                ->where(['session_id' => App::session('id')])
+                ->andWhere(['<', 'id', $minMessageId])
+                ->orderBy(['id' => SORT_DESC])
+                ->limit(20)
+                ->all();
+
+            if ($messages) {
+                return $this->asJson([
+                    'status' => 'success',
+                    'messages' => array_reverse($messages)
+                ]);
+            }
+            return $this->asJson([
+                'status' => 'failed',
+                'errorSummary' => 'no messages'
+            ]);
+        }
+
+        return $this->asJson([
+            'status' => 'failed',
+            'errorSummary' => 'No post data'
         ]);
     }
 }
