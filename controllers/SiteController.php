@@ -90,6 +90,12 @@ class SiteController extends Controller
             ]
         ];
 
+        $behaviors['ChatbotFilter'] = [
+            'class' => 'app\filters\ChatbotFilter',
+        ];
+
+        
+
         return $behaviors;
     }
 

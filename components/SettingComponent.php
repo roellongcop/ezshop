@@ -10,6 +10,7 @@ use app\models\form\setting\SystemSettingForm;
 use app\models\form\setting\AboutUsForm;
 use app\models\form\setting\SocialMediaForm;
 use app\models\form\setting\ShippingForm;
+use app\models\form\setting\ChatbotForm;
 
 class SettingComponent extends \yii\base\Component
 {
@@ -20,6 +21,7 @@ class SettingComponent extends \yii\base\Component
     public $aboutUs;
     public $socialMedia;
     public $shipping;
+    public $chatbot;
 
     public $theme;
 
@@ -34,6 +36,7 @@ class SettingComponent extends \yii\base\Component
         $this->aboutUs = new AboutUsForm();
         $this->socialMedia = new SocialMediaForm();
         $this->shipping = new ShippingForm();
+        $this->chatbot = new ChatbotForm();
 
         $this->theme = Theme::findOne($this->system->theme);
     }

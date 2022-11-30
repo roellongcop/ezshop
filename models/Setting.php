@@ -58,6 +58,10 @@ class Setting extends ActiveRecord
             'label' => 'Shipping', 
             'icon' => '<i class="fas fa-truck"></i>'
         ],
+        'chatbot' => [
+            'label' => 'Chatbot', 
+            'icon' => '<i class="fas fa-robot"></i>'
+        ],
     ];
 
     public $options;

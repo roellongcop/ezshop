@@ -14,6 +14,7 @@ use app\models\form\setting\SystemSettingForm;
 use app\models\form\setting\AboutUsForm;
 use app\models\form\setting\SocialMediaForm;
 use app\models\form\setting\ShippingForm;
+use app\models\form\setting\ChatbotForm;
 
 use app\models\form\user\MySettingForm;
 use app\models\search\SettingSearch;
@@ -187,6 +188,10 @@ class SettingController extends Controller
 
             case 'shipping':
                 $model = new ShippingForm();
+                break;
+
+            case 'chatbot':
+                $model = new ChatbotForm();
                 break;
             
             default:
