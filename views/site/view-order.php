@@ -106,7 +106,7 @@ $this->params['activePage'] = 'checkout';
         <div class="col-lg-4">
             <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Order Total</span></h5>
             <div class="bg-light p-30 mb-5">
-                <div class="border-bottom order-total-products">
+                <div class="border-bottom order-total-products" style="max-height: 27em;">
                     <?= App::foreach($order->products, function($product) {
                         $price = App::formatter()->asPeso($product['price']);
                         $productModel = Product::findOne($product['product_id']);
