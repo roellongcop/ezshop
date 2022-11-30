@@ -65,7 +65,7 @@ $this->params['headerButtons'] = $this->render('_dropdown-year', [
 				<!--begin::Body-->
 				<div class="card-body d-flex align-items-center justify-content-between px-5 flex-wrap">
 					<!--begin::Label-->
-					<span class="font-weight-bolder display5 text-dark-75 pl-5 pr-10">
+					<span class="font-weight-bolder display5 text-dark-75 pl-5 pr-10" title="<?= number_format($totalBestSeller) ?> Individual Orders" data-toggle="tooltip">
 						<?= number_format($totalBestSeller) ?>
 					</span>
 					<!--end::Label-->
@@ -89,7 +89,9 @@ $this->params['headerButtons'] = $this->render('_dropdown-year', [
 						<!--end::legends-->
 						<!--begin::Chart-->
 						<div class="d-flex flex-center position-relative">
-							<div class="font-weight-bolder font-size-h5 text-muted position-absolute">8,345</div>
+							<div class="font-weight-bolder font-size-h5 text-muted position-absolute" title="<?= number_format($totalQuantityBestSeller) ?> Quantity Orders" data-toggle="tooltip">
+								<?= number_format($totalQuantityBestSeller) ?>
+							</div>
 							<canvas id="kt_stats_widget_2_chart" style="height: 110px; width: 110px;"></canvas>
 						</div>
 						<!--end::Chart-->

@@ -35,7 +35,8 @@ $this->addJsFile('js/order');
         <div class="col-md-6">
             <?php $this->beginContent('@app/views/layouts/_card_wrapper.php', [
                 'title' => 'Order Details',
-                'toolbar' => $model->changeStatusMenu
+                'toolbar' => $model->changeStatusMenu,
+                'stretch' => true
             ]) ?>
                 <?= Detail::widget([
                     'model' => $model,
@@ -60,7 +61,8 @@ $this->addJsFile('js/order');
         </div>
         <div class="col-md-6">
             <?php $this->beginContent('@app/views/layouts/_card_wrapper.php', [
-                'title' => 'Logs'
+                'title' => 'Logs',
+                'stretch' => true
             ]) ?>
                <div class="timeline timeline-2">
                     <div class="timeline-bar"></div>
@@ -74,7 +76,7 @@ $this->addJsFile('js/order');
                                     {$orderLog->remarks} | <span class="font-weight-bold">{$orderLog->updatedByEmail}</span>
 
                                     {$orderLog->statusBadge}</span>
-                                    <span class="text-muted font-italic text-right">
+                                    <span class="text-muted text-right">
                                         {$orderLog->ago}
                                     </span>
                                 </div>

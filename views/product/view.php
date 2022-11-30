@@ -24,7 +24,8 @@ $this->params['wrapCard'] = false;
     <div class="row">
         <div class="col-md-6">
             <?php $this->beginContent('@app/views/layouts/_card_wrapper.php', [
-                'title' => 'General Information'
+                'title' => 'General Information',
+                'stretch' => true
             ]) ?>
                 <?= Detail::widget([
                     'model' => $model,
@@ -41,7 +42,8 @@ $this->params['wrapCard'] = false;
         </div>
         <div class="col-md-6">
             <?php $this->beginContent('@app/views/layouts/_card_wrapper.php', [
-                'title' => 'Inventory'
+                'title' => 'Inventory',
+                'stretch' => true
             ]) ?>
                 <?= Detail::widget([
                     'model' => $model,
@@ -60,7 +62,8 @@ $this->params['wrapCard'] = false;
     <div class="row">
         <div class="col-md-6">
             <?php $this->beginContent('@app/views/layouts/_card_wrapper.php', [
-                'title' => 'Other Details'
+                'title' => 'Other Details',
+                'stretch' => true
             ]) ?>
                 <?= Detail::widget([
                     'model' => $model,
@@ -73,7 +76,8 @@ $this->params['wrapCard'] = false;
         </div>
         <div class="col-md-6">
             <?php $this->beginContent('@app/views/layouts/_card_wrapper.php', [
-                'title' => 'System Data'
+                'title' => 'System Data',
+                'stretch' => true
             ]) ?>
                 <?= Detail::widget([
                     'model' => $model,
@@ -87,7 +91,8 @@ $this->params['wrapCard'] = false;
         
         <div class="col-md-3">
             <?php $this->beginContent('@app/views/layouts/_card_wrapper.php', [
-                'title' => 'Main Image'
+                'title' => 'Main Image',
+                'stretch' => true
             ]) ?>
                 <div class="text-center">
                     <?= Html::image($model->image, ['w' => 200], ['class' => 'img-fluid']) ?>
@@ -96,7 +101,8 @@ $this->params['wrapCard'] = false;
         </div>
         <div class="col-md-9">
             <?php $this->beginContent('@app/views/layouts/_card_wrapper.php', [
-                'title' => 'Gallery'
+                'title' => 'Gallery',
+                'stretch' => true
             ]) ?>
                 <div class="row">
                     <?= Html::ifElse($model->imageFiles, function($files) {

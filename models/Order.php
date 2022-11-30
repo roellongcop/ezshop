@@ -6,8 +6,6 @@ use app\widgets\Anchor;
 use app\helpers\Html;
 use app\helpers\App;
 use app\helpers\Url;
-use app\helpers\StringHelper;
-use app\helpers\ArrayHelper;
 use app\widgets\Label;
 use app\models\form\user\BillingDetailForm;
 

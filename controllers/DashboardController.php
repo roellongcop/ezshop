@@ -115,7 +115,7 @@ class DashboardController extends Controller
         $bestSeller = Cart::find()
             ->alias('c')
             ->joinWith('product p')
-            ->select(['p.name as product_name', 'COUNT("c.*") as total'])
+            ->select(['p.name as product_name', 'COUNT("c.*") as total', 'SUM(c.quantity) as quantity'])
             ->where([
                 'c.record_status' => Cart::CART_ORDERED,
                 'DATE_FORMAT(c.created_at, "%Y")' => $year
@@ -127,6 +127,7 @@ class DashboardController extends Controller
             ->all();
 
         $totalBestSeller = $bestSeller ? array_sum(array_values(ArrayHelper::map($bestSeller, 'product_name', 'total'))): 0;
+        $totalQuantityBestSeller = $bestSeller ? array_sum(array_values(ArrayHelper::map($bestSeller, 'product_name', 'quantity'))): 0;
 
 
         return $this->render('index', [
@@ -137,6 +138,7 @@ class DashboardController extends Controller
             'years' => $years,
             'bestSeller' => $bestSeller,
             'totalBestSeller' => $totalBestSeller,
+            'totalQuantityBestSeller' => $totalQuantityBestSeller,
         ]);
     }
 
