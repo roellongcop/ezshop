@@ -4,6 +4,7 @@ use app\widgets\Anchors;
 use app\widgets\Detail;
 use app\widgets\ActiveForm;
 use app\models\search\OrderSearch;
+use app\models\Product;
 use app\helpers\App;
 use app\helpers\Html;
 
@@ -147,10 +148,13 @@ $this->addJsFile('js/order');
                             $price = App::formatter()->asPeso($product['price']);
                             $added_shipping_fee = App::formatter()->asPeso($product['added_shipping_fee']);
                             $serial = $key + 1;
+                            $productModel = Product::findOne($product['product_id']);
+                            $productName = $productModel ? Html::a($productModel->name, $productModel->viewUrl, ['target' => '_blank']): $product['name'];
+
                             return <<< HTML
                                 <tr>
                                     <td>{$serial}</td>
-                                    <td>{$product['productTableViewWithQuantity']}</td>
+                                    <td>{$productName}</td>
                                     <td>{$added_shipping_fee}</td>
                                     <td>{$product['quantity']}</td>
                                     <td>{$price}</td>
