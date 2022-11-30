@@ -52,6 +52,7 @@ class Order extends ActiveRecord
     const STATUS_DELIVERY = 2;
     const STATUS_COMPLETED = 3;
     const STATUS_CANCELLED = 4;
+    const STATUS_VOID = 5;
 
     public $shipTo = 'same';
     public $remarks;
@@ -109,6 +110,7 @@ class Order extends ActiveRecord
                 self::STATUS_DELIVERY,
                 self::STATUS_COMPLETED,
                 self::STATUS_CANCELLED,
+                self::STATUS_VOID,
             ]],
         ]);
     }
@@ -396,6 +398,30 @@ class Order extends ActiveRecord
         return Label::widget(['options' => App::params('order_status')[$this->status] ?? '']);
     }
 
+    public function getStatusLabel()
+    {
+        $data = App::params('order_status')[$this->status] ?? '';
+
+        if (!$data) {
+            return;
+        }
+
+
+        return $data['label'] ?? '';
+    }
+
+    public function getStatusClass()
+    {
+        $data = App::params('order_status')[$this->status] ?? '';
+
+        if (!$data) {
+            return;
+        }
+
+
+        return $data['class'] ?? '';
+    }
+
     public function getStatusBadgeFront()
     {
         $data = App::params('order_status')[$this->status] ?? '';
@@ -427,5 +453,58 @@ class Order extends ActiveRecord
         }
 
         return '---';
+    }
+
+    public function process()
+    {
+        if ($this->status == self::STATUS_PENDING) {
+            $this->status = self::STATUS_PROCESSING;
+            $this->save();
+        }
+    }
+
+    public function getChangeStatusMenu()
+    {
+        $status = [];
+
+        switch ($this->status) {
+            case self::STATUS_PROCESSING:
+                $status[] = self::STATUS_DELIVERY;
+                $status[] = self::STATUS_COMPLETED;
+                $status[] = self::STATUS_VOID;
+                break;
+            
+            case self::STATUS_DELIVERY:
+                $status[] = self::STATUS_COMPLETED;
+                $status[] = self::STATUS_VOID;
+                break;
+
+            default:
+                // code...
+                break;
+        }
+
+        $actions = App::foreach($status, function($s) {
+            $param = App::params('order_status')[$s];
+            return Html::tag('a', $param['label'], [
+                'href' => '#',
+                'class' => 'dropdown-item',
+                'data-status' => $s,
+                'data-label' => $param['label'],
+            ]);
+        });
+
+        return $actions ? <<< HTML
+            <div class="dropdown">
+                <button class="btn btn-{$this->statusClass} dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {$this->statusLabel}
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    {$actions}
+                </div>
+            </div>
+        HTML: '';
+
+        // <a class="dropdown-item" href="#">Action</a>
     }
 }

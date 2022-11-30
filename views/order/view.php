@@ -14,50 +14,15 @@ $this->params['breadcrumbs'][] = $model->mainAttribute;
 $this->params['searchModel'] = new OrderSearch();
 $this->params['wrapCard'] = false; 
 
-$this->registerCss(<<< CSS
-    .detail-view{margin-top: 0;}
-    .app-iconbox {
-        box-shadow: rgb(0 0 0 / 30%) 0px 1px 4px 0
-    }
-    
-    .dataTables_filter {
-        text-align: right;
-    }
-    .dataTables_filter label,
-    .dataTables_length label {
-        display: inline-flex;
-    }
-
-    .dataTables_filter input {
-        margin-top: -5px;
-        margin-left: 5px;
-    }
-    .dataTables_length select{
-        margin-top: -5px;
-        margin-left: 5px;
-        margin-right: 5px;
-    }
-    .dataTables_paginate {
-        float: right;
-    }
-    .th-file {
-        width: 80% !important;
-    }
-CSS);
+$this->addCssFile('css/order');
 
 $this->registerJsFile(App::publishedUrl("/plugins/custom/datatables/datatables.bundle.js"), [
     'depends' => [
-        'yii\web\YiiAsset',
-        'yii\bootstrap\BootstrapAsset',
+        'app\themes\keen\sub\demo1\main\assets\AppAsset',
     ]
 ]);
+$this->addJsFile('js/order');
 
-$this->registerJs(<<< JS
-    $('.datatable').DataTable({
-        pageLength: 5,
-        order: [[0, 'desc']]
-    });
-JS)
 ?>
 <div class="order-view-page">
     <?= Anchors::widget([
@@ -68,7 +33,8 @@ JS)
     <div class="row">
         <div class="col-md-6">
             <?php $this->beginContent('@app/views/layouts/_card_wrapper.php', [
-                'title' => 'Order Details'
+                'title' => 'Order Details',
+                'toolbar' => $model->changeStatusMenu
             ]) ?>
                 <?= Detail::widget([
                     'model' => $model,
@@ -102,7 +68,7 @@ JS)
                             <span class="timeline-badge bg-{$orderLog->statusClass}"></span>
                             <div class="timeline-content d-flex align-items-center justify-content-between">
                                 <span class="mr-3">
-                                {$orderLog->remarks} | <span class="font-weight-bold">{$model->billingFullname}</span>
+                                {$orderLog->remarks} | <span class="font-weight-bold">{$orderLog->updatedByEmail}</span>
 
                                 {$orderLog->statusBadge}</span>
                                 <span class="text-muted font-italic text-right">

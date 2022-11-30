@@ -89,8 +89,8 @@ class OrderBehavior extends \yii\base\Behavior
     public function eventAfterUpdate($event)
     {
         $order = $this->owner;
+        $order->refresh();
         
-
         if ($order->status == Order::STATUS_PROCESSING) {
             if ($order->products) {
                 $data = ArrayHelper::map($order->products, 'product_id', 'quantity');

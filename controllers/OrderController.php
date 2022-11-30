@@ -41,8 +41,11 @@ class OrderController extends Controller
      */
     public function actionView($order_no)
     {
+        $model = Order::controllerFind($order_no, 'order_no');
+        $model->process();
+
         return $this->render('view', [
-            'model' => Order::controllerFind($order_no, 'order_no'),
+            'model' => $model,
         ]);
     }
 

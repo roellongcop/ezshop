@@ -120,6 +120,8 @@ class OrderLog extends ActiveRecord
         ]);
 
         $log->save();
+
+        // $log->flashErrors();
     }
 
     public function getStatusBadge()

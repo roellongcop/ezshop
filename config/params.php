@@ -5,10 +5,11 @@ return [
     'pagination' => [25 => 25, 50 => 50, 75 => 75, 100 => 100],
     'order_status' => [
         0 => [ 'id' => 0, 'label' => 'Pending', 'class' => 'warning'],
-        1 => [ 'id' => 1, 'label' => 'Processing', 'class' => 'secondary'],
+        1 => [ 'id' => 1, 'label' => 'Processing', 'class' => 'info'],
         2 => [ 'id' => 2, 'label' => 'Delivery', 'class' => 'primary'],
         3 => [ 'id' => 3, 'label' => 'Completed', 'class' => 'success'],
         4 => [ 'id' => 4, 'label' => 'Cancelled', 'class' => 'danger'],
+        5 => [ 'id' => 5, 'label' => 'Void', 'class' => 'dark'],
     ],
     'customer_links' => [
         [
