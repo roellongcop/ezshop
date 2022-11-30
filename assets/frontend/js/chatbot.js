@@ -48,29 +48,31 @@ const chat = createApp({
 		}
 
 		const sendNewMessage = () => {
-			let message = messageModel.value;
-			messageModel.value = '';
+			if (messageModel.value) {
+				let message = messageModel.value;
+				messageModel.value = '';
 
-			messageFormState.isSending = true;
-			messageFormState.content.push(message);
+				messageFormState.isSending = true;
+				messageFormState.content.push(message);
 
-			scrollToBottom();
-			$.ajax({
-				url: app.baseUrl + 'site/send-new-message',
-				data: {message: message},
-				dataType: 'json',
-				method: 'post',
-				success: (response) => {
-					if (response.status == 'success') {
-			    		
-			    	}
-					unblock('.messages-body');
-				},
-				error: (e) => {
-					unblock('.messages-body');
-					messageFormState.isSending = false;
+				scrollToBottom();
+				$.ajax({
+					url: app.baseUrl + 'site/send-new-message',
+					data: {message: message},
+					dataType: 'json',
+					method: 'post',
+					success: (response) => {
+						if (response.status == 'success') {
+				    		
+				    	}
+						unblock('.messages-body');
+					},
+					error: (e) => {
+						unblock('.messages-body');
+						messageFormState.isSending = false;
+					}
+				})
 				}
-			})
 		}
 
 		const poll = () => {
