@@ -14,6 +14,7 @@ class ChatTest extends \Codeception\Test\Unit
             'session_id' => '123',
             'message' => 'Message',
             'status' => Chat::ANSWERED,
+            'type' => Chat::TYPE_CHATBOT,
             'record_status' => Chat::RECORD_ACTIVE
         ], $replace);
     }
@@ -52,13 +53,22 @@ class ChatTest extends \Codeception\Test\Unit
         expect_that($model->save());
     }
 
-    public function testInvalidRStatus()
+    public function testInvalidStatus()
     {
         $data = $this->data(['status' => 9999999]);
 
         $model = new Chat($data);
         expect_not($model->save());
         expect($model->errors)->hasKey('status');
+    }
+
+    public function testInvalidType()
+    {
+        $data = $this->data(['type' => 9999999]);
+
+        $model = new Chat($data);
+        expect_not($model->save());
+        expect($model->errors)->hasKey('type');
     }
 
     public function testCreateSuccess()

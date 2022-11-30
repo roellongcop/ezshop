@@ -133,3 +133,9 @@ div.required label.control-label:after {
     -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
     background-color: #E4E6EF; 
 }
+
+
+.chatbot-photo {
+  width: 40px;
+  border-radius: 50px;
+}

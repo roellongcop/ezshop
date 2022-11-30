@@ -15,6 +15,7 @@ use app\models\Wishlist;
 use app\models\Review;
 use app\models\Cart;
 use app\models\Order;
+use app\models\Chat;
 
 use app\models\search\ProductSearch;
 use app\models\search\ReviewSearch;
@@ -53,10 +54,12 @@ class SiteController extends Controller
         'add-to-cart',
         'navbar-poll',
         'product-detail',
-        'test'
+        'init-chatbot-data',
+        'send-new-message'
+        // 'test'
     ];
 
-    public function actionTest()
+    /*public function actionTest()
     {
         $data = \app\models\Training::samples();
 
@@ -73,7 +76,7 @@ class SiteController extends Controller
 
         var_dump('var1', $var1);
         dd($data);
-    }
+    }*/
 
     public function behaviors()
     {
@@ -768,5 +771,46 @@ class SiteController extends Controller
             ]);
         }
         return $this->redirect(['my-orders']);
+    }
+
+    public function actionInitChatbotData()
+    {
+        $messages = Chat::find()
+            ->where(['session_id' => App::session('id')])
+            ->limit(20)
+            ->orderBy(['id' => SORT_DESC])
+            ->all();
+
+        return $this->asJson([
+            'status' => 'success',
+            'messages' => array_reverse($messages)
+        ]);
+    }
+
+
+    public function actionSendNewMessage()
+    {
+        if (($post = App::post()) != null) {
+            $chat = new Chat([
+                'session_id' => App::session('id'),
+                'type' => Chat::TYPE_USER,
+                'message' => $post['message']
+            ]);
+
+            if ($chat->save()) {
+                return $this->asJson([
+                    'status' => 'success',
+                ]);
+            }
+            return $this->asJson([
+                'status' => 'failed',
+                'errorSummary' => $chat->errorSummary
+            ]);
+        }
+
+        return $this->asJson([
+            'status' => 'failed',
+            'errorSummary' => 'No post data'
+        ]);
     }
 }

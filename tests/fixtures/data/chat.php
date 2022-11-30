@@ -10,6 +10,7 @@ $model = new \app\helpers\FixtureData(function($params) {
 		'session_id' => '123',
 		'message' => 'Message',
 		'status' => Chat::ANSWERED,
+		'type' => Chat::TYPE_CHATBOT,
 		'record_status' => Chat::RECORD_ACTIVE,
         'created_by' => 1,
         'updated_by' => 1,

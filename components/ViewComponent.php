@@ -19,6 +19,8 @@ class ViewComponent extends \yii\web\View
             'api' => Url::base(true) . '/api/v1/',
             'csrfToken' => App::request('csrfToken'),
             'csrfParam' => App::request('csrfParam'),
+            'chatbot' => App::setting('chatbot'),
+            'chatbotPhotoUrl' => App::setting('chatbot')->photoUrl,
             // 'params' => App::params(),
         ]);
     }

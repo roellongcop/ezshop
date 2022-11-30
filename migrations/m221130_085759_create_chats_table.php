@@ -21,6 +21,7 @@ class m221130_085759_create_chats_table extends \app\migrations\Migration
             'session_id' => $this->string()->notNull(),
             'message' => 'MEDIUMTEXT',
             'status' => $this->tinyInteger(20)->notNull()->defaultValue(0),
+            'type' => $this->tinyInteger(20)->notNull()->defaultValue(0),
         ]));
 
         $this->createIndexes($this->tableName(), [

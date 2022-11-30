@@ -23,6 +23,11 @@ class Chat extends ActiveRecord
 {
     const ANSWERED = 0;
     const UN_ANSWERED = 1;
+
+    const TYPE_CHATBOT = 0;
+    const TYPE_USER = 1;
+
+    
     /**
      * {@inheritdoc}
      */
@@ -46,8 +51,8 @@ class Chat extends ActiveRecord
     public function rules()
     {
         return $this->setRules([
-            [['user_id', 'reply_id', 'status'], 'integer'],
-            [['session_id'], 'required'],
+            [['user_id', 'reply_id', 'status', 'type'], 'integer'],
+            [['session_id', 'type'], 'required'],
             [['message'], 'string'],
             [['session_id'], 'string', 'max' => 255],
             ['user_id', 'exist', 'targetRelation' => 'user', 'when' => fn($model) => $model->user_id],
@@ -55,6 +60,10 @@ class Chat extends ActiveRecord
             ['status', 'in', 'range' => [
                 self::ANSWERED,
                 self::UN_ANSWERED,
+            ]],
+            ['type', 'in', 'range' => [
+                self::TYPE_CHATBOT,
+                self::TYPE_USER,
             ]]
         ]);
     }

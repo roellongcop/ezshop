@@ -9,6 +9,7 @@ use app\helpers\Html;
     	
 	<div class="row">
 		<div class="col-md-8">
+			<?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 			<?= $form->field($model, 'welcome_message')->textarea(['rows' => 8]) ?>
 			<?= $form->field($model, 'theme_color')->textInput(['type' => 'color']) ?>
 		</div>

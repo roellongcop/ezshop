@@ -2,10 +2,13 @@
 
 namespace app\models\form\setting;
 
+use app\helpers\Url;
+
 class ChatbotForm extends SettingForm
 {
     const NAME = 'chatbot-settings';
 
+    public $name;
     public $photo;
     public $welcome_message;
     public $theme_color;
@@ -16,14 +19,23 @@ class ChatbotForm extends SettingForm
     public function rules()
     {
         return [
-            [['photo', 'welcome_message', 'theme_color'], 'required'],
-            [['photo', 'welcome_message', 'theme_color'], 'string'],
+            [['name', 'photo', 'welcome_message', 'theme_color'], 'required'],
+            [['name', 'photo', 'welcome_message', 'theme_color'], 'string'],
         ];
+    }
+
+    public function getPhotoUrl()
+    {
+        return Url::image($this->photo, ['w' => 50]);
     }
 
     public function default()
     {
         return [
+            'name' => [
+                'name' => 'name',
+                'default' => 'Chatbot'
+            ],
             'photo' => [
                 'name' => 'photo',
                 'default' => 'token-default-image_200'

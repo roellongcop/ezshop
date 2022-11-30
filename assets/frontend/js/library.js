@@ -64,7 +64,54 @@ const unblock = (container) => {
     KTApp.unblock(container);
 }
 
+
+const { ref } = Vue;
+
+const appState = ref({
+    isLoading: true
+});
+
+const request = ( url, params = {}, method = 'GET', signal) => {
+    url = app.baseUrl + url;
+    params[app.csrfParam] = app.csrfToken
+
+    let options = {
+        method,
+    };
+
+    if (signal) {
+        options.signal = signal;
+    }
+
+    if ( 'GET' === method ) {
+        url += '?' + ( new URLSearchParams( params ) ).toString();
+    } else {
+        options.body = JSON.stringify(params);
+        options.headers = {
+            'Content-Type': 'application/json'
+        }
+    }
+    
+    return fetch( url, options ).then( response => response.json() );
+};
+const get = ( url, params, signal='' ) => request( url, params, 'GET', signal );
+const post = ( url, params, signal='' ) => request( url, params, 'POST', signal );
+
+const sweetAlert = (title='Title', icon='success', timer=1000) => {
+    Swal.fire({
+        icon: icon,
+        title: title,
+        showConfirmButton: false,
+        timer: timer
+    });
+}
+
+
 export {
+    appState,
+    get,
+    post,
+    sweetAlert,
     accountRequired,
     errorMessage,
     successMessage,

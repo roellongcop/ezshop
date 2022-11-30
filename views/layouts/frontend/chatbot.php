@@ -1,33 +1,36 @@
 <?php
 
+use app\helpers\App;
 
 $this->addCssFile('frontend/css/chatbot');
+$this->registerJsFile(App::publishedUrl('/vue3/vue.global.js', Yii::getAlias('@app/assets')));
+$this->addJsFile('frontend/js/chatbot', ['app\assets\frontend\AppAsset'], ['type' => 'module']);
 
 $this->registerJs(<<< JS
     $(function() {
   var INDEX = 0; 
-  $("#chat-submit").click(function(e) {
-    e.preventDefault();
-    var msg = $("#chat-input").val(); 
-    if(msg.trim() == ''){
-      return false;
-    }
-    generate_message(msg, 'self');
-    var buttons = [
-        {
-          name: 'Existing User',
-          value: 'existing'
-        },
-        {
-          name: 'New User',
-          value: 'new'
-        }
-      ];
-    setTimeout(function() {      
-      generate_message(msg, 'user');  
-    }, 1000)
+  // $("#chat-submit").click(function(e) {
+  //   e.preventDefault();
+  //   var msg = $("#chat-input").val(); 
+  //   if(msg.trim() == ''){
+  //     return false;
+  //   }
+  //   generate_message(msg, 'self');
+  //   var buttons = [
+  //       {
+  //         name: 'Existing User',
+  //         value: 'existing'
+  //       },
+  //       {
+  //         name: 'New User',
+  //         value: 'new'
+  //       }
+  //     ];
+  //   setTimeout(function() {      
+  //     generate_message(msg, 'user');  
+  //   }, 1000)
     
-  })
+  // })
   
   function generate_message(msg, type) {
     INDEX++;
@@ -106,27 +109,35 @@ $this->registerJs(<<< JS
 JS)
 ?>
 
-    <div id="chat-circle" class="btn btn-raised">
+<div id="chatbot">
+    
+    <div id="chat-circle" class="btn btn-raised" :style="{background: chatbot.theme_color}">
         <div id="chat-overlay"></div>
         <i class="fab fa-rocketchat"></i>
     </div>
 
     <div class="chat-box">
-        <div class="chat-box-header">
-            ChatBot
+        <div class="chat-box-header" :style="{background: chatbot.theme_color}">
+            <img :src="chatbotPhotoUrl" class="img-fluid chatbot-photo">
+            {{chatbot.name}}
             <span class="chat-box-toggle"><i class="far fa-window-close"></i></span>
         </div>
         <div class="chat-box-body">
             <div class="chat-box-overlay">   
             </div>
             <div class="chat-logs">
-
-            </div><!--chat-log -->
+                <div v-for="message in messages" :key="message.id" :class="messageClass(message)" class="chat-msg">
+                    <div class="cm-msg-text">
+                        {{message.message}}
+                    </div>
+                </div>
             </div>
+        </div>
         <div class="chat-input">      
-        <form>
-            <input type="text" id="chat-input" placeholder="Send a message..."/>
-            <button type="submit" class="chat-submit" id="chat-submit"><i class="fab fa-telegram-plane"></i></button>
-        </form>      
+            <form @submit.prevent="sendNewMessage">
+                <input type="text" id="chat-input" v-model="messageModel" placeholder="Send a message..."/>
+                <button type="submit" class="chat-submit" id="chat-submit"><i class="fab fa-telegram-plane" :style="{color: chatbot.theme_color}"></i></button>
+            </form>      
         </div>
     </div>
+</div>
