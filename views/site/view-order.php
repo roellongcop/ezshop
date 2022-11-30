@@ -16,6 +16,7 @@ $this->params['activePage'] = 'checkout';
     
     <div class="row px-xl-5">
         <div class="col-lg-12">
+            <?= $order->statusBadgeFront ?>
             <?= $order->getCancelButton('') ?>
         </div>
     </div>
