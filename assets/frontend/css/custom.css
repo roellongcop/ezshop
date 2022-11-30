@@ -173,6 +173,7 @@ div.required label.control-label:after {
   color: #495057;
   border-color: #6c757d;
   border-radius: 25px;
+  background-color: #fff;
 }
 
 .chat-submit:focus {
