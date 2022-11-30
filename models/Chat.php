@@ -93,6 +93,27 @@ class Chat extends ActiveRecord
         ]);
     }
 
+    public function beforeSave($insert)
+    {
+        if (!parent::beforeSave($insert)) {
+            return false;
+        }
+        $replace = $this->replace();
+
+        $this->message = str_replace(array_keys($replace), array_values($replace), $this->message);
+
+        return true;
+    }
+
+    public function replace()
+    {
+        $chatbot = App::setting('chatbot');
+
+        return [
+            '[CHATBOT_NAME]' => $chatbot->name
+        ];
+    }
+
     public function getReply()
     {
         return $this->hasOne(Chat::class, ['id' => 'reply_id']);

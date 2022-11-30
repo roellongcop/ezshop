@@ -131,7 +131,7 @@ class Training extends ActiveRecord
     public function predict($query='')
     {
         $query = trim($query);
-        
+
         $data = array_merge(['dummy' => ['']], self::samples());
         $labels = array_keys($data);
         $samples = $this->nestedUppercase(array_values($data));
