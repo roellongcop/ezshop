@@ -99,19 +99,16 @@ class OrderController extends Controller
      * @return mixed
      * @throws ForbiddenHttpException if the model cannot be found
      */
-    // public function _actionUpdate($order_no)
-    // {
-    //     $model = Order::controllerFind($order_no, 'order_no');
+    public function actionUpdate($order_no)
+    {
+        $model = Order::controllerFind($order_no, 'order_no');
 
-    //     if ($model->load(App::post()) && $model->save()) {
-    //         App::success('Successfully Updated');
-    //         return $this->redirect($model->viewUrl);
-    //     }
+        if ($model->load(App::post()) && $model->save()) {
+            App::success('Successfully Updated');
+        }
 
-    //     return $this->render('update', [
-    //         'model' => $model,
-    //     ]);
-    // }
+        return $this->redirect($model->viewUrl);
+    }
 
     /**
      * Deletes an existing Order model.

@@ -53,6 +53,7 @@ class OrderLog extends ActiveRecord
                 Order::STATUS_DELIVERY,
                 Order::STATUS_COMPLETED,
                 Order::STATUS_CANCELLED,
+                Order::STATUS_VOID,
             ]],
             ['order_id', 'exist', 'targetRelation' => 'order']
         ]);
@@ -121,7 +122,7 @@ class OrderLog extends ActiveRecord
 
         $log->save();
 
-        // $log->flashErrors();
+        $log->flashErrors();
     }
 
     public function getStatusBadge()
