@@ -33,7 +33,6 @@ use app\models\form\CartForm;
 use app\models\form\user\BillingDetailForm;
 
 use yii\web\NotFoundHttpException;
-use Phpml\Classification\NaiveBayes;
 
 class SiteController extends Controller
 {
@@ -804,12 +803,7 @@ class SiteController extends Controller
     }
 
 
-    public function nestedUppercase($value) {
-        if (is_array($value)) {
-            return array_map([$this, 'nestedUppercase'], $value);
-        }
-        return strtoupper($value);
-    }
+    
 
     public function actionSendNewMessage()
     {
@@ -820,17 +814,9 @@ class SiteController extends Controller
                 'message' => $post['message']
             ]);
 
-            $data = array_merge(['dummy' => ['']], Training::samples());
-            $labels = array_keys($data);
-            $samples = $this->nestedUppercase(array_values($data));
+            $training = (new Training())->predict($post['message']);
 
-            $classifier = new NaiveBayes();
-            $classifier->train($samples, $labels);
-            $predict = $classifier->predict(explode(' ', strtoupper($post['message'])));
-
-            $id = array_search($predict, $labels, true);
-
-            if (($training = Training::findOne($id)) != null) {
+            if ($training['training']) {
                 $chat->status = Chat::ANSWERED;
             }
             else {
@@ -838,30 +824,16 @@ class SiteController extends Controller
             }
 
             if ($chat->save()) {
-                if ($training) {
-                    $chatbot = new Chat([
-                        'session_id' => App::session('id'),
-                        'type' => Chat::TYPE_CHATBOT,
-                        'message' => $training->response,
-                        'status' => Chat::ANSWERED 
-                    ]);
-                    $chatbot->save();
+                if ($training['training']) {
+                    Chat::response($training['training']);
                 }
 
-                if ($predict === 'dummy') {
-                    $chatbot = new Chat([
-                        'session_id' => App::session('id'),
-                        'type' => Chat::TYPE_CHATBOT,
-                        'message' => App::setting('chatbot')->default_message,
-                        'status' => Chat::ANSWERED 
-                    ]);
-                    $chatbot->save();
+                if ($training['predict'] === 'dummy') {
+                    Chat::dummy();
                 }
                 return $this->asJson([
                     'status' => 'success',
-                    'id' => $id,
-                    'predict' => $predict,
-                    'labels' => $labels,
+                    // 'labels' => $training,
                 ]);
             }
             return $this->asJson([

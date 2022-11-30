@@ -183,4 +183,26 @@ class Chat extends ActiveRecord
             return date('h:i A', strtotime($this->createdAt));
         }
     }
+
+    public static function response($training)
+    {
+        $chat = new self([
+            'session_id' => App::session('id'),
+            'type' => self::TYPE_CHATBOT,
+            'message' => $training->response,
+            'status' => self::ANSWERED 
+        ]);
+        $chat->save();
+    }
+
+    public static function dummy()
+    {
+        $chat = new Chat([
+            'session_id' => App::session('id'),
+            'type' => Chat::TYPE_CHATBOT,
+            'message' => App::setting('chatbot')->default_message,
+            'status' => Chat::ANSWERED 
+        ]);
+        $chat->save();
+    }
 }

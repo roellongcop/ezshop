@@ -4,6 +4,7 @@ namespace app\models;
 
 use app\widgets\Anchor;
 use app\helpers\ArrayHelper;
+use Phpml\Classification\NaiveBayes;
 
 /**
  * This is the model class for table "{{%trainings}}".
@@ -116,5 +117,31 @@ class Training extends ActiveRecord
         $models = ArrayHelper::map($models, 'id', 'explodedQuery');
 
         return $models;
+    }
+
+    public function nestedUppercase($value) 
+    {
+        if (is_array($value)) {
+            return array_map([$this, 'nestedUppercase'], $value);
+        }
+        return strtoupper($value);
+    }
+
+    public function predict($query='')
+    {
+        $data = array_merge(['dummy' => ['']], self::samples());
+        $labels = array_keys($data);
+        $samples = $this->nestedUppercase(array_values($data));
+
+        $classifier = new NaiveBayes();
+        $classifier->train($samples, $labels);
+        $predict = $classifier->predict(explode(' ', strtoupper($query)));
+
+        $id = array_search($predict, $labels, true);
+
+        return [
+            'predict' => $predict,
+            'training' => self::findOne($id)
+        ];
     }
 }

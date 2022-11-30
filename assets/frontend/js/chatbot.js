@@ -5,7 +5,7 @@ const { reactive, ref, createApp, onMounted, nextTick, computed } = Vue;
 const chat = createApp({
 	setup() {
 		const messages = ref([]);
-		const messageModel = ref([]);
+		const messageModel = ref('');
 		const chatbot = ref(app.chatbot);
 		const chatbotPhotoUrl = ref(app.chatbotPhotoUrl);
 		const totalMessages = ref(0);
