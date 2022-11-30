@@ -4,7 +4,7 @@ $params = require __DIR__ . '/params.php';
 
 $config = [
     'id' => 'yii2-basic-starter',
-    'name' => 'Yii2 Basic Starter Template',
+    'name' => 'MS Furniture',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log', 'queue'],
     'aliases' => [
