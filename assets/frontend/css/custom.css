@@ -139,3 +139,29 @@ div.required label.control-label:after {
   width: 40px;
   border-radius: 50px;
 }
+
+.cm-msg-text-placeholder {
+    background: white;
+    padding: 10px 15px 10px 15px;
+    color: #666;
+    max-width: 75%;
+    float: right;
+    right: 10px;
+    position: relative;
+    margin-bottom: 20px;
+    border-radius: 30px;
+}
+
+.chat-msg.self > .timeSent {
+  font-weight: 500;
+  font-size: smaller;
+  text-align: right;
+  margin-right: 10px;
+}
+
+.chat-msg.user > .timeSent {
+  font-weight: 500;
+  font-size: smaller;
+  text-align: left;
+  margin-left: 10px;
+}

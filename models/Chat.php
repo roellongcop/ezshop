@@ -3,6 +3,7 @@
 namespace app\models;
 
 use app\widgets\Anchor;
+use app\helpers\App;
 
 /**
  * This is the model class for table "{{%chats}}".
@@ -34,6 +35,14 @@ class Chat extends ActiveRecord
     public static function tableName()
     {
         return '{{%chats}}';
+    }
+
+    public function fields()
+    {
+        $fields = parent::fields();
+        $fields['timeSent'] = 'timeSent';
+
+        return $fields;
     }
 
     public function config()
@@ -131,5 +140,47 @@ class Chat extends ActiveRecord
             'session_id:raw',
             'message:raw',
         ];
+    }
+
+    public function dateDiff($date1, $date2, $format="days")
+    {
+        $date1 = new \DateTime($date1);
+        $date2 = new \DateTime($date2);
+
+        $diff = $date1->diff($date2);
+
+        return $diff->{$format};
+    }
+
+    public function getTimeSent()
+    {
+        $start = date("Y-m-d", strtotime(App::formatter()->asDateToTimezone('', 'Y-m-d H:i:s'))); 
+        $end = date("Y-m-d", strtotime($this->created_at)); 
+
+        $day   = $this->dateDiff($start, $end);
+        $month = $this->dateDiff($start, $end, 'm');
+        $year  = $this->dateDiff($start, $end, 'y');
+
+        if ($year > 1) {
+            return implode(' AT ', [
+                date('M d, Y', strtotime($this->createdAt)),
+                date('h:i A', strtotime($this->createdAt)),
+            ]);
+        }
+        elseif ($month > 1 || $day >= 6) {
+            return implode(' AT ', [
+                date('M d', strtotime($this->createdAt)),
+                date('h:i A', strtotime($this->createdAt)),
+            ]);
+        }
+        elseif ($day > 1 || $start != $end) {
+            return implode(' AT ', [
+                date('D', strtotime($this->createdAt)),
+                date('h:i A', strtotime($this->createdAt)),
+            ]);
+        }
+        else {
+            return date('h:i A', strtotime($this->createdAt));
+        }
     }
 }

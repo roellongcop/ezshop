@@ -6,6 +6,13 @@ $this->addCssFile('frontend/css/chatbot');
 $this->registerJsFile(App::publishedUrl('/vue3/vue.global.js', Yii::getAlias('@app/assets')));
 $this->addJsFile('frontend/js/chatbot', ['app\assets\frontend\AppAsset'], ['type' => 'module']);
 
+$themeColor = App::setting('chatbot')->theme_color;
+$this->registerCss(<<< CSS
+    .chat-logs::-webkit-scrollbar-thumb
+      {
+        background-color: {$themeColor};
+      }
+CSS);
 $this->registerJs(<<< JS
     $(function() {
   var INDEX = 0; 
@@ -95,10 +102,7 @@ $this->registerJs(<<< JS
     generate_message(name, 'self');
   })
   
-  $("#chat-circle").click(function() {    
-    $("#chat-circle").toggle('scale');
-    $(".chat-box").toggle('scale');
-  })
+  
   
   $(".chat-box-toggle").click(function() {
     $("#chat-circle").toggle('scale');
@@ -125,17 +129,27 @@ JS)
         <div class="chat-box-body">
             <div class="chat-box-overlay">   
             </div>
-            <div class="chat-logs">
+            <div class="chat-logs" ref="conversationsContainer" @scroll="messageScroll">
                 <div v-for="message in messages" :key="message.id" :class="messageClass(message)" class="chat-msg">
-                    <div class="cm-msg-text">
+                    <div class="timeSent">{{message.timeSent}}</div>
+                    <div class="cm-msg-text" :style="messageStyle(message)">
                         {{message.message}}
+                    </div>
+                </div>
+
+                <div v-if="messageFormState.content.length">
+                    <div v-for="(content, index) in messageFormState.content" :key="index" class="chat-msg self">
+                        <div class="timeSent">Just now</div>
+                        <div class="cm-msg-text-placeholder">
+                            {{content}}
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="chat-input">      
             <form @submit.prevent="sendNewMessage">
-                <input type="text" id="chat-input" v-model="messageModel" placeholder="Send a message..."/>
+                <input autocomplete="off" maxlength="225" type="text" id="chat-input" v-model="messageModel" placeholder="Send a message..."/>
                 <button type="submit" class="chat-submit" id="chat-submit"><i class="fab fa-telegram-plane" :style="{color: chatbot.theme_color}"></i></button>
             </form>      
         </div>

@@ -4,11 +4,16 @@ const { reactive, ref, createApp, onMounted, nextTick, computed } = Vue;
 
 const chat = createApp({
 	setup() {
-		const controller = ref(new AbortController());
 		const messages = ref([]);
 		const messageModel = ref([]);
 		const chatbot = ref(app.chatbot);
 		const chatbotPhotoUrl = ref(app.chatbotPhotoUrl);
+		const totalMessages = ref(0);
+		const conversationsContainer = ref('');
+		const messageFormState = reactive({
+			isSending: false,
+			content: []
+		});
 
 		const TYPE_CHATBOT = 0;
 	    const TYPE_USER = 1;
@@ -20,67 +25,124 @@ const chat = createApp({
 				url: app.baseUrl + 'site/init-chatbot-data',
 				method: 'get',
 				dataType: 'json',
-				success: (s) => {
-					messages.value = s.messages || [];
+				success: (response) => {
+					messages.value = response.messages || [];
+					totalMessages.value = response.totalMessages;
 					unblock('#chatbot');
 
-					// scrollToBottom();
-					// poll();
+					scrollToBottom();
+					poll();
 				},
 				error: (e) => {
 					console.log(e)
-					unblock('chatbot');
+					unblock('#chatbot');
 				}
 			})
 		}
 
 		const sendNewMessage = () => {
-			// const content = _content ? _content: messageForm.value.content;
-			// const attachments = _attachments ? _attachments: [];
+			let message = messageModel.value;
+			messageModel.value = '';
 
-			// if (content || attachments.length) {
-			// 	messageFormState.isSending = true;
+			messageFormState.isSending = true;
+			messageFormState.content.push(message);
 
-			// 	let contentPlaceholder = '';
-			// 	if (content) {
-			// 		if (attachments.length) {
-			// 			contentPlaceholder = 'Sending "' + truncateString(content) + '" with ' + attachments.length + ' attachments';
-			// 		}
-			// 		else {
-			// 			contentPlaceholder = truncateString(content);
-			// 		}
-			// 	}
-			// 	else {
-			// 		contentPlaceholder = 'Sending ' + attachments.length + ' attachments';
-			// 	}
-			// 	messageFormState.content.push(contentPlaceholder);
-
-			// 	resetMessageForm();
-			// 	scrollToBottom();
+			scrollToBottom();
 			$.ajax({
 				url: app.baseUrl + 'site/send-new-message',
-				data: {message: messageModel.value},
+				data: {message: message},
 				dataType: 'json',
 				method: 'post',
-				success: (s) => {
-					if (s.status == 'success') {
+				success: (response) => {
+					if (response.status == 'success') {
 			    		
 			    	}
 					unblock('.messages-body');
 				},
 				error: (e) => {
 					unblock('.messages-body');
-					// messageFormState.isSending = false;
+					messageFormState.isSending = false;
 				}
 			})
+		}
+
+		const poll = () => {
+			$.ajax({
+				url: app.baseUrl + 'site/chat-poll',
+				data: chatState(),
+				dataType: 'json',
+				method: 'post',
+				success: (response) => {
+					if (response.status == 'success') {
+			       		if ("totalMessages" in response) {
+							totalMessages.value = response.totalMessages || 0;
+						}
+
+						if ("messages" in response) {
+							let sm = messages.value.concat(response.messages);
+							messages.value = sm;
+						}
+			       	}
+
+			  		scrollToBottom(false);
+
+					messageFormState.isSending = false;
+					messageFormState.content = [];
+			       	poll();
+				},
+				error: (e) => {
+		    		console.log(e);
+				}
+			})
+		}
+
+		const chatState = () => {
+			return {
+				maxMessageId: Math.max(...messages.value.map(message => message.id)),
+				minMessageId: Math.min(...messages.value.map(message => message.id)),
+				totalMessages: totalMessages.value
+			}
 		}
 
 		const messageClass = (message) => {
 			return message.type == TYPE_CHATBOT ? 'user': 'self';
 		}
 
+		const messageStyle = (message) => {
+			return message.type == TYPE_CHATBOT ? {}: {background: chatbot.value.theme_color};
+		}
+
+
+		const scrollToBottom = (force = true) => {
+	  		nextTick(() => {
+	  			if (force) {
+	  				// conversationsContainer.value.scrollTo({
+  					// 	top: conversationsContainer.value.scrollHeight,
+  					// 	behavior: 'smooth'
+  					// });
+  					conversationsContainer.value.scrollTop = conversationsContainer.value.scrollHeight;
+	  			}
+	  			else {
+	  				if(conversationsContainer.value.scrollHeight - conversationsContainer.value.scrollTop <= 1000) {
+
+		  				conversationsContainer.value.scrollTop = conversationsContainer.value.scrollHeight;
+	  				}
+	  			}
+			});
+		}
+
+		const messageScroll = () => {
+			console.log(conversationsContainer.value.scrollTop)
+			console.log(conversationsContainer.value.scrollHeight)
+		}
+
 		onMounted(() => {
 			initData();
+			$("#chat-circle").click(function() {    
+			    $("#chat-circle").toggle('scale');
+			    $(".chat-box").toggle('scale');
+			    scrollToBottom();
+			})
 		});
 
 		return {
@@ -89,7 +151,11 @@ const chat = createApp({
 			chatbotPhotoUrl,
 			messageClass,
 			sendNewMessage,
-			messageModel
+			messageModel,
+			conversationsContainer,
+			messageScroll,
+			messageFormState,
+			messageStyle
 		}
 	}
 });
