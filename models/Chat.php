@@ -150,6 +150,16 @@ class Chat extends ActiveRecord
         }
     }
 
+
+    public function getTypeBadge()
+    {
+        $param = App::params('chat_type')[$this->type];
+
+        if ($param) {
+            return Label::widget(['options' => $param]);
+        }
+    }
+
     public function getDefaultGridColumns()
     {
         return [
@@ -158,6 +168,7 @@ class Chat extends ActiveRecord
             'session_id',
             'message',
             'status',
+            'type',
             'created_at',
             'last_updated',
             'active',
@@ -167,7 +178,6 @@ class Chat extends ActiveRecord
     public function gridColumns()
     {
         return [
-            
             'session_id' => [
                 'attribute' => 'session_id', 
                 'format' => 'raw',
@@ -180,13 +190,14 @@ class Chat extends ActiveRecord
                 }
             ],
             'message' => ['attribute' => 'message', 'format' => 'raw'],
-            'status' => ['attribute' => 'status', 'format' => 'raw', 'value' => 'statusBadge'],
             'user_email' => [
                 'label' => 'User email',
-                'attribute' => 'user_id', 
+                'attribute' => 'userEmail', 
                 'format' => 'raw',
                 'value' => 'userEmail'
             ],
+            'status' => ['attribute' => 'status', 'format' => 'raw', 'value' => 'statusBadge'],
+            'type' => ['attribute' => 'type', 'format' => 'raw', 'value' => 'typeBadge'],
             // 'reply_id' => ['attribute' => 'reply_id', 'format' => 'raw'],
         ];
     }
@@ -199,6 +210,7 @@ class Chat extends ActiveRecord
             'userEmail:raw',
             'message:raw',
             'statusBadge:raw',
+            'typeBadge:raw',
         ];
     }
 
@@ -266,5 +278,21 @@ class Chat extends ActiveRecord
             'status' => Chat::ANSWERED 
         ]);
         $chat->save();
+    }
+
+    public static function findByKeywords($keywords='', $attributes='', $limit=10, $andFilterWhere=[])
+    {
+        return parent::findByKeywordsData($attributes, function($attribute) use($keywords, $limit, $andFilterWhere) {
+            return self::find()
+                ->select("{$attribute} AS data")
+                ->alias('c')
+                ->joinWith('user u')
+                ->groupBy($attribute)
+                ->where(['LIKE', $attribute, $keywords])
+                ->andFilterWhere($andFilterWhere)
+                ->limit($limit)
+                ->asArray()
+                ->all();
+        });
     }
 }

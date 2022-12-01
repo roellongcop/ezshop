@@ -6,6 +6,8 @@ use app\widgets\DateRange;
 use yii\widgets\ActiveForm;
 use app\widgets\SearchButton;
 use app\widgets\RecordStatusFilter;
+use app\helpers\App;
+use app\widgets\Filter;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\search\CartSearch */
@@ -18,9 +20,11 @@ use app\widgets\RecordStatusFilter;
 ]); ?>
     <?= Search::widget(['model' => $model]) ?>
     <?= DateRange::widget(['model' => $model]) ?>
-    <?= RecordStatusFilter::widget([
+    <?= Filter::widget([
         'model' => $model,
         'form' => $form,
+        'attribute' => 'record_status',
+        'data' => App::keyMapParams('cart_status')
     ]) ?>
     <?= Pagination::widget([
         'model' => $model,

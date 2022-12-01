@@ -122,6 +122,7 @@ class CartSearch extends Cart
             ['like', 'p.name', $this->keywords],  
             ['like', 'p.regular_price', $this->keywords],  
             ['like', 'p.sale_price', $this->keywords],  
+            ['like', 'u.email', $this->keywords],  
         ]);
 
         $query->daterange($this->date_range);

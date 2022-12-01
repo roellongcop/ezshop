@@ -14,8 +14,8 @@ class CartController extends Controller
     public function actionFindByKeywords($keywords='')
     {
         return $this->asJson(
-            Cart::findByKeywords($keywords, ['id'])
-        );
+            Cart::findByKeywords($keywords, ['c.color', 'c.size', 'c.quantity', 'p.name', 'p.regular_price', 'p.sale_price', 'u.email'])
+        ); 
     }
 
     /**

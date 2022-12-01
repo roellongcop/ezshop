@@ -10,6 +10,10 @@ return [
         0 => [ 'id' => 0, 'label' => 'Answered', 'class' => 'success'],
         1 => [ 'id' => 1, 'label' => 'Un-Answered', 'class' => 'danger'],
     ],
+    'chat_type' => [
+        0 => [ 'id' => 0, 'label' => 'BOT', 'class' => 'success'],
+        1 => [ 'id' => 1, 'label' => 'User', 'class' => 'primary'],
+    ],
     'cart_status' => [
         0 => [ 'id' => 0, 'label' => 'Placed Order', 'class' => 'success'],
         1 => [ 'id' => 1, 'label' => 'Active', 'class' => 'primary'],

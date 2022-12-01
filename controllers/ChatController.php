@@ -14,7 +14,7 @@ class ChatController extends Controller
     public function actionFindByKeywords($keywords='')
     {
         return $this->asJson(
-            Chat::findByKeywords($keywords, ['id'])
+            Chat::findByKeywords($keywords, ['c.session_id', 'c.message', 'u.email'])
         );
     }
 

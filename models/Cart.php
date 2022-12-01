@@ -317,7 +317,7 @@ class Cart extends ActiveRecord
             return self::find()
                 ->select("{$attribute} AS data")
                 ->alias('c')
-                ->joinWith('product p')
+                ->joinWith(['product p', 'user u'])
                 ->groupBy($attribute)
                 ->where(['LIKE', $attribute, $keywords])
                 ->andFilterWhere($andFilterWhere)
@@ -415,5 +415,23 @@ class Cart extends ActiveRecord
             'user_id' => App::identity('id'),
             'session_id' => App::session('id'),
         ]);
+    }
+
+    public function getBulkActions()
+    {
+        $columns = [];
+
+        if (App::isLogin() && App::identity()->can('delete', $this->controllerID())) {
+            $columns['delete'] = [
+                'label' => 'Delete',
+                'process' => 'delete',
+                'icon' => 'delete',
+                'function' => function($id) {
+                    static::deleteAll(['id' => $id]);
+                }
+            ];
+        }
+        
+        return $columns;
     }
 }
