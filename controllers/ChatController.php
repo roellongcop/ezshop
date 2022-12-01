@@ -185,6 +185,23 @@ class ChatController extends Controller
         ]);
     }
 
+    public function actionLiveChatView($session_id)
+    {
+        $model = Chat::find()
+            ->where(['session_id' => $session_id])
+            ->orderBy(['id' => SORT_DESC])
+            ->one();
+
+        if (!$model) {
+            App::danger('Chat not found');
+            return $this->redirect(['live-chat']);
+        }
+
+        return $this->render('live-chat-view', [
+            'model' => $model,
+        ]);
+    }
+
     public function actionTrain($id)
     {
         $chat = Chat::controllerFind($id);
