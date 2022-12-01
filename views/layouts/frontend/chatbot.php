@@ -37,22 +37,19 @@ CSS);
             <div class="chat-box-overlay">   
             </div>
             <div class="chat-logs" ref="conversationsContainer" @scroll="messageScroll">
-                <div v-for="message in messages" :key="message.id" :class="messageClass(message)" class="chat-msg">
-                    <div class="timeSent">{{message.timeSent}}</div>
-                    <div class="cm-msg-text" :style="messageStyle(message)" :id="'message-id-' + message.id" v-html="message.message">
+                <div v-for="(message, index) in messages" :key="message.id" :class="messageClass(message)" class="chat-msg">
+                    <div v-if="showTimesent(index)" class="timeSent" v-html="message.timeSent"></div>
+                    <div class="cm-msg-text" :class="messageStyleClass(index)" :style="messageStyle(message)" :id="'message-id-' + message.id" v-html="message.message">
                     </div>
                 </div>
 
                 <div v-if="messageFormState.content.length">
                     <div v-for="(content, index) in messageFormState.content" :key="index" class="chat-msg self">
                         <div class="timeSent">Just now</div>
-                        <div class="cm-msg-text-placeholder">
-                            {{content}}
-                        </div>
+                        <div class="cm-msg-text-placeholder" v-html="content"></div>
                     </div>
                 </div>
             </div>
-
 
             <div class="text-center" v-if="showScrollable">
                 <button @click="scrollToBottom" class="btn btn-outline-primary font-weight-bold btn-sm btn-pill btn-scroller">

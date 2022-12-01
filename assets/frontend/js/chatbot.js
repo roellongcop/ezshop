@@ -121,6 +121,29 @@ const chat = createApp({
 			return message.type == TYPE_CHATBOT ? {}: {background: chatbot.value.theme_color};
 		}
 
+		const messageStyleClass = (index) => {
+			let addedClass = '';
+			let currentMessage = messages.value[index];
+			let nextMessage = messages.value[index + 1];
+			if (nextMessage) {
+				if (currentMessage.type == nextMessage.type && currentMessage.timeSent == nextMessage.timeSent) {
+					addedClass += 'mb-1 bblr0';
+				}
+			}
+
+			if (index == 0) {
+				return addedClass;
+			}
+
+			let previousMessage = messages.value[index - 1];
+			if (currentMessage.type == previousMessage.type && currentMessage.timeSent == previousMessage.timeSent) {
+				addedClass += ' btlr0';
+			}
+
+
+			return addedClass;
+		}
+
 
 		const scrollToBottom = (force = true) => {
 	  		nextTick(() => {
@@ -211,6 +234,21 @@ const chat = createApp({
 			})
 		});
 
+		const showTimesent = (index) => {
+			if (index == 0) {
+				return true;
+			}
+
+			let currentMessage = messages.value[index];
+			let previousMessage = messages.value[index - 1];
+
+			if (currentMessage.type == previousMessage.type && currentMessage.timeSent == previousMessage.timeSent) {
+				return false;
+			}
+
+			return true;
+		}
+
 		return {
 			messages,
 			chatbot,
@@ -223,7 +261,9 @@ const chat = createApp({
 			messageFormState,
 			messageStyle,
 			showScrollable,
-			scrollToBottom
+			scrollToBottom,
+			showTimesent,
+			messageStyleClass
 		}
 	}
 });

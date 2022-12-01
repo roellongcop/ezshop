@@ -179,3 +179,10 @@ div.required label.control-label:after {
 .chat-submit:focus {
   outline: none;
 }
+
+.bblr0 {
+  border-bottom-left-radius: 0 !important;
+}
+.btlr0 {
+  border-top-left-radius: 0 !important;
+}
