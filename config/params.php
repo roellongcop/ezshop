@@ -3,6 +3,9 @@
 return [
     'user.passwordResetTokenExpire' => 3600,
     'pagination' => [25 => 25, 50 => 50, 75 => 75, 100 => 100],
+    'payment_mode' => [
+        0 => [ 'id' => 0, 'label' => 'Cash on Delivery', 'class' => 'primary'],
+    ],
     'chat_status' => [
         0 => [ 'id' => 0, 'label' => 'Answered', 'class' => 'success'],
         1 => [ 'id' => 1, 'label' => 'Un-Answered', 'class' => 'danger'],

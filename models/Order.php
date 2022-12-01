@@ -231,9 +231,12 @@ class Order extends ActiveRecord
             'serial',
             'checkbox',
             'order_no',
+            'name',
+            'subtotal',
+            'shipping',
+            'total',
+            'payment_mode',
 
-
-            
             'created_at',
             'last_updated',
             'active',
@@ -254,8 +257,14 @@ class Order extends ActiveRecord
                     ]);
                 }
             ],
-            'billing_firstname' => ['attribute' => 'billing_firstname', 'format' => 'raw'],
-            'billing_lastname' => ['attribute' => 'billing_lastname', 'format' => 'raw'],
+            'name' => [
+                'label' => 'Name',
+                'attribute' => 'billing_firstname', 
+                'format' => 'raw',
+                'value' => fn($model) => implode(' ', [$model->billing_firstname, $model->billing_lastname])
+            ],
+            // 'billing_firstname' => ['attribute' => 'billing_firstname', 'format' => 'raw'],
+            // 'billing_lastname' => ['attribute' => 'billing_lastname', 'format' => 'raw'],
             'billing_email' => ['attribute' => 'billing_email', 'format' => 'raw'],
             'billing_mobile' => ['attribute' => 'billing_mobile', 'format' => 'raw'],
             'billing_address1' => ['attribute' => 'billing_address1', 'format' => 'raw'],
@@ -274,7 +283,11 @@ class Order extends ActiveRecord
             'subtotal' => ['attribute' => 'subtotal', 'format' => 'raw'],
             'shipping' => ['attribute' => 'shipping', 'format' => 'raw'],
             'total' => ['attribute' => 'total', 'format' => 'raw'],
-            'payment_mode' => ['attribute' => 'payment_mode', 'format' => 'raw'],
+            'payment_mode' => [
+                'attribute' => 'payment_mode', 
+                'format' => 'raw',
+                'value' => 'paymentMode'
+            ],
         ];
     }
 
@@ -406,7 +419,9 @@ class Order extends ActiveRecord
 
     public function getPaymentMode()
     {
-        return ($this->payment_mode == self::PAYMENT_COD) ? 'Cash on Delivery': '';
+        $param = App::params('payment_mode')[$this->payment_mode];
+
+        return App::if($param, fn ($options) => Label::widget(['options' => $options]));
     }
 
     public function getStatusBadge()

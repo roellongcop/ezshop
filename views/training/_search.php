@@ -6,6 +6,8 @@ use app\widgets\DateRange;
 use yii\widgets\ActiveForm;
 use app\widgets\SearchButton;
 use app\widgets\RecordStatusFilter;
+use app\widgets\Filter;
+use app\models\Training;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\search\TrainingSearch */
@@ -18,6 +20,12 @@ use app\widgets\RecordStatusFilter;
 ]); ?>
     <?= Search::widget(['model' => $model]) ?>
     <?= DateRange::widget(['model' => $model]) ?>
+    <?= Filter::widget([
+        'form' => $form,
+        'model' => $model,
+        'attribute' => 'intent',
+        'data' => Training::filter('intent')
+    ]) ?>
     <?= RecordStatusFilter::widget([
         'model' => $model,
         'form' => $form,

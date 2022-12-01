@@ -16,7 +16,7 @@ class ShippingController extends Controller
     public function actionFindByKeywords($keywords='')
     {
         return $this->asJson(
-            Shipping::findByKeywords($keywords, ['id'])
+            Shipping::findByKeywords($keywords, ['s.rate', 'p.name', 'm.name'])
         );
     }
 

@@ -82,10 +82,10 @@ class TrainingSearch extends Training
             'updated_by' => $this->updated_by,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            'intent' => $this->intent,
         ]);
         
         $query->andFilterWhere(['like', 'query', $this->query])
-            ->andFilterWhere(['like', 'intent', $this->intent])
             ->andFilterWhere(['like', 'response', $this->response])
             ->andFilterWhere(['like', 'suggestion', $this->suggestion]);
         
