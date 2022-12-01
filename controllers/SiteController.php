@@ -430,8 +430,8 @@ class SiteController extends Controller
         $totalCart = App::post('totalCart') ?: 0;
 
         for ($i=0; $i < $counter; $i++) { 
-            $myTotalWishlist = App::identity('myTotalWishlist');
-            $myTotalCart = App::identity('myTotalCart');
+            $myTotalWishlist = App::identity('myTotalWishlist') ?: 0;
+            $myTotalCart = App::identity('myTotalCart') ?: 0;
 
             if ($myTotalWishlist != (int)$totalWishlist || $myTotalCart != (int)$totalCart) {
                 return $this->asJson([
@@ -803,8 +803,6 @@ class SiteController extends Controller
     }
 
 
-    
-
     public function actionSendNewMessage()
     {
         if (($post = App::post()) != null) {
@@ -833,7 +831,7 @@ class SiteController extends Controller
                 }
                 return $this->asJson([
                     'status' => 'success',
-                    // 'labels' => $training,
+                    'training' => $training,
                 ]);
             }
             return $this->asJson([

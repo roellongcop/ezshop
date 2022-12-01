@@ -131,10 +131,17 @@ class Training extends ActiveRecord
     public function predict($query='')
     {
         $query = trim($query);
+        $_SAMPLES_ = self::samples();
 
         $data = array_merge(['dummy' => ['']], self::samples());
-        $labels = array_keys($data);
         $samples = $this->nestedUppercase(array_values($data));
+
+        $labels = ['dummy'];
+        $index = 0;
+        foreach ($_SAMPLES_ as $id => $explodedQuery) {
+            $labels[$id] = $index;
+            $index++;
+        }
 
         $classifier = new NaiveBayes();
         $classifier->train($samples, $labels);
@@ -144,7 +151,7 @@ class Training extends ActiveRecord
 
         return [
             'predict' => $predict,
-            'training' => self::findOne($id)
+            'training' => self::findOne($id),
         ];
     }
 
