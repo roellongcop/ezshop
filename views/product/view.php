@@ -20,6 +20,11 @@ $this->params['wrapCard'] = false;
     	'names' => ['update', 'duplicate', 'delete', 'log'], 
     	'model' => $model
     ]) ?> 
+    <?= Html::tag('a', 'View on Shop', [
+        'href' => $model->frontendUrl,
+        'class' => 'btn btn-primary',
+        'target' => '_blank'
+    ]) ?>
     <div class="my-2"></div>
     <div class="row">
         <div class="col-md-6">

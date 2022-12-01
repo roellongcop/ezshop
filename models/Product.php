@@ -381,9 +381,22 @@ class Product extends ActiveRecord
         }
     }
 
+    public function getBeforeCanDelete()
+    {
+        return $this->getCanDelete();
+    }
+
     public function getCanDelete()
     {
-        return false;
+        $cart = Cart::find()->where(['product_id' => $this->id])->count();
+        $reviews = Review::find()->where(['product_id' => $this->id])->count();
+        $wishlist = Wishlist::find()->where(['product_id' => $this->id])->count();
+        
+        if ($cart || $reviews || $wishlist) {
+            return false;
+        }
+
+        return true;
     }
 
     public function getProductCategories()
