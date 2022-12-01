@@ -43,12 +43,15 @@ $this->params['wrapCard'] = false;
             ]) ?>
                 <table class="table table-bordered">
                     <tbody>
-                        <?= App::foreach((new Chat())->replace(), fn($value, $key) => <<< HTML
-                            <tr>
-                                <th>{$key}</th>
-                                <td>{$value}</td>
-                            </tr>
-                        HTML) ?>
+                        <?= App::foreach((new Chat())->replace(), function($value, $key) {
+                            $value = is_callable($value) ? call_user_func($value): $value;
+                            return <<< HTML
+                                <tr>
+                                    <th>{$key}</th>
+                                    <td>{$value}</td>
+                                </tr>
+                            HTML;
+                        }) ?>
                     </tbody>
                 </table>
             <?php $this->endContent() ?>

@@ -5,6 +5,8 @@ namespace app\models;
 use app\widgets\Anchor;
 use app\widgets\Label;
 use app\helpers\App;
+use app\helpers\Html;
+use app\helpers\Url;
 
 /**
  * This is the model class for table "{{%chats}}".
@@ -115,9 +117,9 @@ class Chat extends ActiveRecord
 
         foreach ($replace as $key => $value) {
             if (str_contains($message, $key)) {
-                $VALUE = is_callable($value) ? call_user_func($value): $value;
+                $value = is_callable($value) ? call_user_func($value): $value;
 
-                $message = str_replace($key, $VALUE, $message);
+                $message = str_replace($key, $value, $message);
             }
         }
 
@@ -129,7 +131,26 @@ class Chat extends ActiveRecord
         $chatbot = App::setting('chatbot');
 
         return [
-            '[CHATBOT_NAME]' => $chatbot->name
+            '[CHATBOT_NAME]' => $chatbot->name,
+            '[PRICE_RANGE]' => function() {
+                return implode('<br>', [
+                    Html::tag('a', '₱0 - ₱100', [
+                        'href' => Url::toRoute(['site/shop', 'price_range[]' => '0-100'])
+                    ]),
+                    Html::tag('a', '₱100 - ₱500', [
+                        'href' => Url::toRoute(['site/shop', 'price_range[]' => '100-500'])
+                    ]),
+                    Html::tag('a', '₱500 - ₱1,000', [
+                        'href' => Url::toRoute(['site/shop', 'price_range[]' => '500-1000'])
+                    ]),
+                    Html::tag('a', '₱1,000 - ₱5,000', [
+                        'href' => Url::toRoute(['site/shop', 'price_range[]' => '1000-5000'])
+                    ]),
+                    Html::tag('a', '₱5,000 - ₱10,000', [
+                        'href' => Url::toRoute(['site/shop', 'price_range[]' => '5000-10000'])
+                    ]),
+                ]);
+            }
         ];
     }
 
