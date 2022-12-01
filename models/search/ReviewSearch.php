@@ -102,9 +102,9 @@ class ReviewSearch extends Review
         $query->andFilterWhere(['or', 
             ['like', 'p.name', $this->keywords],  
             // ['like', 'r.user_id', $this->keywords],  
-            // ['like', 'r.score', $this->keywords],  
-            // ['like', 'r.name', $this->keywords],  
-            // ['like', 'r.email', $this->keywords],  
+            ['like', 'r.score', $this->keywords],  
+            ['like', 'r.name', $this->keywords],  
+            ['like', 'r.email', $this->keywords],  
             ['like', 'r.review', $this->keywords],  
         ]);
 

@@ -14,7 +14,7 @@ class ReviewController extends Controller
     public function actionFindByKeywords($keywords='')
     {
         return $this->asJson(
-            Review::findByKeywords($keywords, ['id'])
+            Review::findByKeywords($keywords, ['r.review', 'p.name', 'r.score', 'r.email', 'r.name'])
         );
     }
 

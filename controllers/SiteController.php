@@ -551,7 +551,7 @@ class SiteController extends Controller
     { 
         return $this->asJson(
             Review::findByKeywords($keywords, 
-                ['p.name', 'r.review'], 
+                ['p.name', 'r.review', 'r.score'], 
                 10, 
                 [
                 'r.user_id' => App::identity('id')
