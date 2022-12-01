@@ -57,6 +57,7 @@ class WishlistSearch extends Wishlist
     {
         $query = Wishlist::find()
             ->alias('w')
+            ->groupBy('w.id')
             ->joinWith(['product p', 'user u']);
 
         // add conditions that should always apply here

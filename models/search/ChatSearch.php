@@ -70,6 +70,12 @@ class ChatSearch extends Chat
             ]
         ]);
 
+
+        $dataProvider->sort->attributes['totalPerSession'] = [
+            'asc' => ['(SELECT COUNT("*") WHERE `c`.`session_id` = `c`.`session_id`)' => SORT_ASC],
+            'desc' => ['(SELECT COUNT("*") WHERE `c`.`session_id` = `c`.`session_id`)' => SORT_DESC],
+        ];
+
         $dataProvider->sort->attributes['userEmail'] = [
             'asc' => ['u.email' => SORT_ASC],
             'desc' => ['u.email' => SORT_DESC],

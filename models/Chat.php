@@ -334,4 +334,11 @@ class Chat extends ActiveRecord
                 ->all();
         });
     }
+
+    public function getTotalPerSession()
+    {
+        return self::find()
+            ->where(['session_id' => $this->session_id])
+            ->count();
+    }
 }

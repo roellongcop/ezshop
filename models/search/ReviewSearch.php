@@ -57,7 +57,8 @@ class ReviewSearch extends Review
     {
         $query = Review::find()
             ->alias('r')
-            ->joinWith('product p');
+            ->joinWith('product p')
+            ->groupBy('r.id');
 
         // add conditions that should always apply here
         $this->load($params);

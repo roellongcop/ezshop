@@ -58,6 +58,7 @@ class ShippingSearch extends Shipping
     {
         $query = Shipping::find()
             ->alias('s')
+            ->groupBy('s.id')
             ->joinWith(['province p', 'municipality m']);
 
         // add conditions that should always apply here

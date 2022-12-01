@@ -27,6 +27,7 @@ class ChatController extends Controller
     {
         $searchModel = new ChatSearch();
         $dataProvider = $searchModel->search(['ChatSearch' => App::queryParams()]);
+        $dataProvider->query->groupBy(['c.id']);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -172,7 +173,17 @@ class ChatController extends Controller
         # dont delete; use in condition if user has access to in-active data
     }
 
+    public function actionLiveChat()
+    {
+        $searchModel = new ChatSearch();
+        $dataProvider = $searchModel->search(['ChatSearch' => App::queryParams()]);
+        $dataProvider->query->groupBy(['c.session_id']);
 
+        return $this->render('live-chat', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
 
     public function actionTrain($id)
     {

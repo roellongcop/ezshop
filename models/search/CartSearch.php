@@ -57,7 +57,8 @@ class CartSearch extends Cart
     {
         $query = Cart::find()
             ->alias('c')
-            ->joinWith(['product p', 'user u']);
+            ->joinWith(['product p', 'user u'])
+            ->groupBy('c.id');
 
         // add conditions that should always apply here
         $this->load($params);
