@@ -6,6 +6,7 @@ use app\helpers\App;
 use app\helpers\Html;
 use yii\helpers\Html as YiiHtml;
 use app\widgets\Anchor;
+use app\widgets\Label;
 use app\models\form\user\BillingDetailForm;
 
 /**
@@ -96,22 +97,51 @@ class Cart extends ActiveRecord
     {
         return new \app\models\query\CartQuery(get_called_class());
     }
+
+
+    public function getStatusBadge()
+    {
+        $param = App::params('cart_status')[$this->record_status] ?? '';
+
+        if ($param) {
+            return Label::widget(['options' => $param]);
+        }
+    }
+
+    public function getFooterGridColumns()
+    {
+        $columns = parent::getFooterGridColumns();
+
+        $columns['status'] = [
+            'attribute' => 'record_status',
+            'label' => 'Status',
+            'format' => 'raw', 
+            'value' => 'statusBadge'
+        ];
+
+        if (isset($columns['active'])) {
+            unset($columns['active']);
+        }
+
+
+        return $columns;
+    }
      
     public function gridColumns()
     {
         return [
-            'product_id' => [
-                'attribute' => 'product_id', 
+            'productName' => [
+                'attribute' => 'productName', 
                 'format' => 'raw',
                 'value' => function($model) {
                     return Anchor::widget([
-                        'title' => $model->product_id,
+                        'title' => $model->productName,
                         'link' => $model->viewUrl,
                         'text' => true
                     ]);
                 }
             ],
-            'user_id' => ['attribute' => 'user_id', 'format' => 'raw'],
+            'userEmail' => ['attribute' => 'userEmail', 'format' => 'raw'],
             'color' => ['attribute' => 'color', 'format' => 'raw'],
             'size' => ['attribute' => 'size', 'format' => 'raw'],
             'quantity' => ['attribute' => 'quantity', 'format' => 'raw'],
@@ -121,17 +151,38 @@ class Cart extends ActiveRecord
     public function detailColumns()
     {
         return [
-            'product_id:raw',
-            'user_id:raw',
+            'productName:raw',
+            'userEmail:raw',
             'color:raw',
             'size:raw',
             'quantity:raw',
         ];
     }
 
+    public function getFooterDetailColumns()
+    {
+        $columns = parent::getFooterDetailColumns();
+        $columns['status'] = [
+            'attribute' => 'statusBadge',
+            'label' => 'Status',
+            'format' => 'raw', 
+            'value' => $this->statusBadge
+        ];
+
+        if (isset($columns['recordStatusHtml'])) {
+            unset($columns['recordStatusHtml']);
+        }
+
+        return $columns;
+    }
+
     public function getUser()
     {
         return $this->hasOne(User::class, ['id' => 'user_id']);
+    }
+    public function getUserEmail()
+    {
+        return App::if($this->user, fn($user) => $user->email);
     }
 
     public function getProduct()

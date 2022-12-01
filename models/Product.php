@@ -381,6 +381,11 @@ class Product extends ActiveRecord
         }
     }
 
+    public function getCanDelete()
+    {
+        return false;
+    }
+
     public function getProductCategories()
     {
         return $this->hasMany(ProductCategory::class, ['name' => 'categories']);

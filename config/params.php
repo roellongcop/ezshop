@@ -3,6 +3,10 @@
 return [
     'user.passwordResetTokenExpire' => 3600,
     'pagination' => [25 => 25, 50 => 50, 75 => 75, 100 => 100],
+    'cart_status' => [
+        0 => [ 'id' => 0, 'label' => 'Placed Order', 'class' => 'success'],
+        1 => [ 'id' => 1, 'label' => 'Active', 'class' => 'primary'],
+    ],
     'order_status' => [
         0 => [ 'id' => 0, 'label' => 'Pending', 'class' => 'warning'],
         1 => [ 'id' => 1, 'label' => 'Processing', 'class' => 'info'],

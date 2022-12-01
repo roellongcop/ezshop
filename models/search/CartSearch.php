@@ -57,7 +57,7 @@ class CartSearch extends Cart
     {
         $query = Cart::find()
             ->alias('c')
-            ->joinWith('product p');
+            ->joinWith(['product p', 'user u']);
 
         // add conditions that should always apply here
         $this->load($params);
@@ -69,6 +69,11 @@ class CartSearch extends Cart
                 'pageSize' => $this->pagination
             ]
         ]);
+
+        $dataProvider->sort->attributes['userEmail'] = [
+            'asc' => ['u.email' => SORT_ASC],
+            'desc' => ['u.email' => SORT_DESC],
+        ];
 
         $dataProvider->sort->attributes['productName'] = [
             'asc' => ['p.name' => SORT_ASC],
