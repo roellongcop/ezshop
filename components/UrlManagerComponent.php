@@ -21,7 +21,7 @@ class UrlManagerComponent extends \yii\web\UrlManager
 
         'product-detail/<slug>' => 'site/product-detail',
 
-        '<action:view-order|my-orders|checkout|my-cart|my-wishlist|my-account-details|signup-verification|customer-dashboard|signup-success|signup|shop|about|index|login|reset-password|contact|home>' => 'site/<action>',
+        '<action:my-reviews|view-order|my-orders|checkout|my-cart|my-wishlist|my-account-details|signup-verification|customer-dashboard|signup-success|signup|shop|about|index|login|reset-password|contact|home>' => 'site/<action>',
 
         'setting/general/<tab>' => 'setting/general',
         'setting/general' => 'setting/general',

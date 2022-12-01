@@ -5,7 +5,7 @@ namespace app\models;
 use app\widgets\Anchor;
 use app\helpers\ArrayHelper;
 use Phpml\Classification\NaiveBayes;
-
+use yii\db\Query;
 /**
  * This is the model class for table "{{%trainings}}".
  *
@@ -131,7 +131,7 @@ class Training extends ActiveRecord
         return strtoupper($value);
     }
 
-    public function predict($query='')
+    public function getPrediction()
     {
         $query = trim($query);
         $_SAMPLES_ = self::samples();
@@ -155,6 +155,60 @@ class Training extends ActiveRecord
         return [
             'predict' => $predict,
             'training' => self::findOne($id),
+        ];
+    }
+
+    public function predict($query='')
+    {
+        $keywords = explode(' ', trim($query));
+        $condition = [];
+        $orderBy = [];
+
+        if (count($keywords) == 1) {
+            $condition = ['LIKE', 'query', trim($query)];
+            $rawQuery = (new Query())
+                ->select(['COUNT("*")'])
+                ->where(['LIKE', 'query', trim($query)])
+                ->createCommand()
+                ->rawSql;
+
+            $orderBy = [
+                "({$rawQuery})" => SORT_DESC,
+            ];
+        }
+        else {
+            $condition = ['or'];
+            $orders = [];
+            foreach ($keywords as $keyword) {
+                $condition[] = ['LIKE', 'query', trim($keyword)];
+
+                $rawQuery = (new Query())
+                    ->select(['COUNT("*")'])
+                    ->where(['LIKE', 'query', trim($keyword)])
+                    ->createCommand()
+                    ->rawSql;
+
+                $orders[] = "({$rawQuery})";
+            }
+
+            $orderByQuery = implode(' + ', $orders);
+
+            $orderBy = [
+                "({$orderByQuery})" => SORT_DESC,
+            ];
+        }
+
+        $orderB['LENGTH(query)'] = SORT_ASC;
+
+        $training = Training::find()
+            ->where($condition)
+            ->active()
+            ->orderBy($orderBy)
+            ->one();
+
+        return [
+            'predict' => $training ? '': 'dummy',
+            'training' => $training
         ];
     }
 
