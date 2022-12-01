@@ -126,6 +126,16 @@ class Cart extends ActiveRecord
 
         return $columns;
     }
+
+    public function getProductViewUrl()
+    {
+        return App::if($this->product, fn($product) => $product->viewUrl);
+    }
+
+    public function getUserViewUrl()
+    {
+        return App::if($this->user, fn($user) => $user->viewUrl);
+    }
      
     public function gridColumns()
     {
@@ -136,16 +146,78 @@ class Cart extends ActiveRecord
                 'value' => function($model) {
                     return Anchor::widget([
                         'title' => $model->productName,
-                        'link' => $model->viewUrl,
+                        'link' => $model->productViewUrl,
                         'text' => true
                     ]);
                 }
             ],
-            'userEmail' => ['attribute' => 'userEmail', 'format' => 'raw'],
+            'userEmail' => [
+                'attribute' => 'userEmail', 
+                'format' => 'raw',
+                'value' => function($model) {
+                    return Anchor::widget([
+                        'title' => $model->userEmail,
+                        'link' => $model->userViewUrl,
+                        'text' => true
+                    ]);
+                }
+            ],
             'color' => ['attribute' => 'color', 'format' => 'raw'],
             'size' => ['attribute' => 'size', 'format' => 'raw'],
             'quantity' => ['attribute' => 'quantity', 'format' => 'raw'],
         ];
+    }
+
+    public function getBeforeCanDelete()
+    {
+        if ($this->record_status == self::CART_ORDERED) {
+            return false;
+        }
+
+        return true;
+    }
+    public function getCanDelete()
+    {
+        if ($this->record_status == self::CART_ORDERED) {
+            return false;
+        }
+
+        return true;
+    }
+
+
+    public function getBeforeCanUpdate()
+    {
+        if ($this->record_status == self::CART_ORDERED) {
+            return false;
+        }
+
+        return true;
+    }
+    public function getCanUpdate()
+    {
+        if ($this->record_status == self::CART_ORDERED) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function getBeforeCanDuplicate()
+    {
+        if ($this->record_status == self::CART_ORDERED) {
+            return false;
+        }
+
+        return true;
+    }
+    public function getCanDuplicate()
+    {
+        if ($this->record_status == self::CART_ORDERED) {
+            return false;
+        }
+
+        return true;
     }
 
     public function detailColumns()
