@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\helpers\App;
 use app\models\Chat;
+use app\models\Training;
 use app\models\search\ChatSearch;
 
 /**
@@ -169,5 +170,28 @@ class ChatController extends Controller
     public function actionInActiveData()
     {
         # dont delete; use in condition if user has access to in-active data
+    }
+
+
+
+    public function actionTrain($id)
+    {
+        $chat = Chat::controllerFind($id);
+        $training = new Training([
+            'query' => $chat->message
+        ]);
+
+        if ($training->load(App::post()) && $training->save()) {
+            $chat->status = Chat::TRAINED;
+            $chat->save();
+
+            App::success('Successfully Train');
+            return $this->redirect($chat->viewUrl);
+        }
+
+        return $this->render('train', [
+            'chat' => $chat,
+            'training' => $training,
+        ]);
     }
 }

@@ -27,6 +27,7 @@ class Chat extends ActiveRecord
 {
     const ANSWERED = 0;
     const UN_ANSWERED = 1;
+    const TRAINED = 2;
 
     const TYPE_CHATBOT = 0;
     const TYPE_USER = 1;
@@ -72,6 +73,7 @@ class Chat extends ActiveRecord
             ['status', 'in', 'range' => [
                 self::ANSWERED,
                 self::UN_ANSWERED,
+                self::TRAINED
             ]],
             ['type', 'in', 'range' => [
                 self::TYPE_CHATBOT,

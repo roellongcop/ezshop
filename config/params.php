@@ -9,6 +9,7 @@ return [
     'chat_status' => [
         0 => [ 'id' => 0, 'label' => 'Answered', 'class' => 'success'],
         1 => [ 'id' => 1, 'label' => 'Un-Answered', 'class' => 'danger'],
+        2 => [ 'id' => 2, 'label' => 'Trained', 'class' => 'primary'],
     ],
     'chat_type' => [
         0 => [ 'id' => 0, 'label' => 'BOT', 'class' => 'success'],

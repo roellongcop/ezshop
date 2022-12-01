@@ -263,3 +263,7 @@ div.required label.control-label:after {
     background: white url('{$loadingIcon}') no-repeat center center / 10rem;
 }*/
 /*=============================================*/
+
+.label.label-lg.label-inline {
+    white-space: nowrap;
+}

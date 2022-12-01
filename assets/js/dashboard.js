@@ -244,7 +244,7 @@ var _demo2 = function ({unAnswered, answered}) {
                 }
             }
         },
-        colors: [KTAppSettings['colors']['theme']['base']['primary'], KTAppSettings['colors']['theme']['base']['success']]
+        colors: [KTAppSettings['colors']['theme']['base']['danger'], KTAppSettings['colors']['theme']['base']['success']]
     };
 
     var chart = new ApexCharts(document.querySelector(apexChart), options);

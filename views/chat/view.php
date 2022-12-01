@@ -3,6 +3,9 @@
 use app\widgets\Anchors;
 use app\widgets\Detail;
 use app\models\search\ChatSearch;
+use app\models\Chat;
+use app\helpers\App;
+use app\helpers\Html;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Chat */
@@ -18,5 +21,11 @@ $this->params['showCreateButton'] = true;
     	'names' => ['update', 'duplicate', 'delete', 'log'], 
     	'model' => $model
     ]) ?> 
+
+    <?= App::if($model->status == Chat::UN_ANSWERED, 
+        Html::a('Train', ['train', 'id' => $model->id], [
+            'class' => 'btn btn-success font-weight-bold'
+        ])
+    ) ?>
     <?= Detail::widget(['model' => $model]) ?>
 </div>
