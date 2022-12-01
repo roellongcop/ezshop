@@ -2,7 +2,7 @@
 
 use app\widgets\Anchors;
 use app\widgets\Detail;
-use app\models\EmailSearch;
+use app\models\search\EmailSearch;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Email */

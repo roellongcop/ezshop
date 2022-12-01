@@ -6,7 +6,7 @@ use app\widgets\FilterColumn;
 use app\widgets\Grid;
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\EmailSearch */
+/* @var $searchModel app\models\search\EmailSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Emails';

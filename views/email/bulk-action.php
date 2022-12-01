@@ -1,7 +1,7 @@
 <?php
 
 use app\widgets\ConfirmBulkAction;
-use app\models\EmailSearch;
+use app\models\search\EmailSearch;
 
 $this->title = 'Confirm Bulk Action';
 $this->params['breadcrumbs'][] = ['label' => 'Emails', 'url' => $model->indexUrl];

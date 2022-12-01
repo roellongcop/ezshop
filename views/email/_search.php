@@ -8,7 +8,7 @@ use app\widgets\SearchButton;
 use app\widgets\RecordStatusFilter;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\EmailSearch */
+/* @var $model app\models\search\EmailSearch */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 <?php $form = ActiveForm::begin([
