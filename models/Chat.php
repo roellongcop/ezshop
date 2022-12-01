@@ -99,13 +99,29 @@ class Chat extends ActiveRecord
         if (!parent::beforeSave($insert)) {
             return false;
         }
-        $replace = $this->replace();
 
-        $this->message = str_replace(array_keys($replace), array_values($replace), $this->message);
+        $this->message = $this->setTheMessage();
 
         $this->user_id = App::ifElse(App::identity(), fn($user) => $user->id, 0);
 
         return true;
+    }
+
+    public function setTheMessage()
+    {
+        $replace = $this->replace();
+
+        $message = $this->message;
+
+        foreach ($replace as $key => $value) {
+            if (str_contains($message, $key)) {
+                $VALUE = is_callable($value) ? call_user_func($value): $value;
+
+                $message = str_replace($key, $VALUE, $message);
+            }
+        }
+
+        return $message;
     }
 
     public function replace()
