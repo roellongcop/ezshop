@@ -4,6 +4,7 @@
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 use app\helpers\App;
+use app\helpers\Url;
 
 $this->title = 'Dashboard';
 $this->params['searchModel'] = $searchModel; 
@@ -124,6 +125,55 @@ $this->params['headerButtons'] = $this->render('_dropdown-year', [
 				<!--end::Body-->
 			</div>
 			<!--end::Stats Widget 3-->
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-lg-4">
+			<div class="card card-custom card-stretch gutter-b">
+				<!--begin::Header-->
+				<div class="card-header border-0 pt-6">
+					<h3 class="card-title align-items-start flex-column">
+						<span class="card-label font-weight-bolder font-size-h4 text-dark-75">Most Chat Query</span>
+						<span class="text-muted mt-3 font-weight-bold font-size-lg">
+							Top 5 most chat recorded
+						</span>
+					</h3>
+				</div>
+				<!--end::Header-->
+				<!--begin::Body-->
+				<div class="card-body pt-7">
+
+					<?= App::foreach($mostChat, function($chat)  {
+						$url = Url::toRoute(['chat/index', 'message' => $chat['message']]);
+						return <<< HTML
+							<div class="d-flex align-items-center mb-6">
+								<div class="symbol symbol-35 symbol-light-info flex-shrink-0 mr-3">
+									<span class="symbol-label font-weight-bolder font-size-lg">
+										<a href="{$url}">
+											<i class="fa fa-eye"></i>
+										</a>
+									</span>
+								</div>
+								<div class="d-flex align-items-center flex-wrap flex-row-fluid">
+									<div class="d-flex flex-column pr-5 flex-grow-1">
+										<a href="{$url}" class="text-dark text-hover-primary mb-1 font-weight-bolder font-size-lg">
+											{$chat['message']}
+										</a>
+										<span class="text-muted font-weight-bold">
+											{$chat['date']}
+										</span>
+									</div>
+									<span class="text-dark-50 font-weight-bold font-size-lg py-2">
+										{$chat['total']}
+									</span>
+								</div>
+							</div>
+						HTML;
+					}) ?>
+					
+				</div>
+			</div>
 		</div>
 	</div>
 </div>

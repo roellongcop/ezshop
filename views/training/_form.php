@@ -12,6 +12,17 @@ $this->params['wrapCard'] = false;
 /* @var $this yii\web\View */
 /* @var $model app\models\Training */
 /* @var $form app\widgets\ActiveForm */
+
+$this->registerJsFile(App::publishedUrl("/plugins/custom/datatables/datatables.bundle.js"), [
+    'depends' => ['app\themes\keen\sub\demo1\main\assets\AppAsset']
+]);
+
+$this->registerJs(<<< JS
+    $('.datatable').DataTable({
+        pageLength: 5,
+        order: [[0, 'desc']]
+    });
+JS);
 ?>
 <?php $form = ActiveForm::begin(['id' => 'training-form']); ?>
     <div class="row">
@@ -41,7 +52,11 @@ $this->params['wrapCard'] = false;
             <?php $this->beginContent('@app/views/layouts/_card_wrapper.php', [
                 'title' => 'Available Placeholder'
             ]) ?>
-                <table class="table table-bordered">
+                <table class="table table-bordered datatable">
+                    <thead>
+                        <th>placeholder</th>
+                        <th>value</th>
+                    </thead>
                     <tbody>
                         <?= App::foreach((new Chat())->replace(), function($value, $key) {
                             $value = is_callable($value) ? call_user_func($value): $value;

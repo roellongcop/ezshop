@@ -64,3 +64,24 @@ select.kt-selectpicker.is-valid + button.dropdown-toggle {
     padding: 2px 5px;
     border-radius: 4px;
 }
+
+.dataTables_filter {
+    text-align: right;
+}
+.dataTables_filter label,
+.dataTables_length label {
+    display: inline-flex;
+}
+
+.dataTables_filter input {
+    margin-top: -5px;
+    margin-left: 5px;
+}
+.dataTables_length select{
+    margin-top: -5px;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+.dataTables_paginate {
+    float: right;
+}

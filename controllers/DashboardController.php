@@ -19,6 +19,7 @@ use app\models\VisitLog;
 use app\models\Visitor;
 use app\models\Order;
 use app\models\Cart;
+use app\models\Chat;
 use app\helpers\ArrayHelper;
 use app\models\search\DashboardSearch;
 
@@ -130,6 +131,18 @@ class DashboardController extends Controller
         $totalQuantityBestSeller = $bestSeller ? array_sum(array_values(ArrayHelper::map($bestSeller, 'product_name', 'quantity'))): 0;
 
 
+        $mostChat = Chat::find()
+            ->select(['COUNT("*") AS total', 'message', 'DATE_FORMAT(created_at, "%M %d, %Y") as date'])
+            ->where(['type' => Chat::TYPE_USER])
+            ->groupBy('message')
+            ->orderBy([
+                'total' => SORT_DESC,
+                'created_at' => SORT_DESC
+            ])
+            ->limit(5)
+            ->asArray()
+            ->all();
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'monthlySales' => $monthlySales,
@@ -139,6 +152,7 @@ class DashboardController extends Controller
             'bestSeller' => $bestSeller,
             'totalBestSeller' => $totalBestSeller,
             'totalQuantityBestSeller' => $totalQuantityBestSeller,
+            'mostChat' => $mostChat,
         ]);
     }
 

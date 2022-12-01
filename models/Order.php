@@ -236,6 +236,7 @@ class Order extends ActiveRecord
             'shipping',
             'total',
             'payment_mode',
+            'status',
 
             'created_at',
             'last_updated',
@@ -280,13 +281,18 @@ class Order extends ActiveRecord
             'shipping_municipality_id' => ['attribute' => 'shipping_municipality_id', 'format' => 'raw'],
             'shipping_zip' => ['attribute' => 'shipping_zip', 'format' => 'raw'],
             'products' => ['attribute' => 'products', 'format' => 'jsonEditor'],
-            'subtotal' => ['attribute' => 'subtotal', 'format' => 'raw'],
-            'shipping' => ['attribute' => 'shipping', 'format' => 'raw'],
-            'total' => ['attribute' => 'total', 'format' => 'raw'],
+            'subtotal' => ['attribute' => 'subtotal', 'format' => 'peso'],
+            'shipping' => ['attribute' => 'shipping', 'format' => 'peso'],
+            'total' => ['attribute' => 'total', 'format' => 'peso'],
             'payment_mode' => [
                 'attribute' => 'payment_mode', 
                 'format' => 'raw',
                 'value' => 'paymentMode'
+            ],
+            'status' => [
+                'attribute' => 'status', 
+                'format' => 'raw',
+                'value' => 'statusBadge'
             ],
         ];
     }
