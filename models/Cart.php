@@ -140,7 +140,7 @@ class Cart extends ActiveRecord
     public function gridColumns()
     {
         return [
-            'productName' => [
+            'product_name' => [
                 'attribute' => 'productName', 
                 'format' => 'raw',
                 'value' => function($model) {
@@ -151,7 +151,7 @@ class Cart extends ActiveRecord
                     ]);
                 }
             ],
-            'userEmail' => [
+            'user_email' => [
                 'attribute' => 'userEmail', 
                 'format' => 'raw',
                 'value' => function($model) {

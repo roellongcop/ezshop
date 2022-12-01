@@ -111,30 +111,76 @@ class Wishlist extends ActiveRecord
     {
         return App::if($this->product, fn($product) => Html::image($product->image, ['w' => $w]));
     }
+
+    public function getFooterGridColumns()
+    {
+        $columns = parent::getFooterGridColumns();
+
+        if (isset($columns['active'])) {
+            unset($columns['active']);
+        }
+
+        return $columns;
+    }
+
+    public function getProductViewUrl()
+    {
+        return App::if($this->product, fn($product) => $product->viewUrl);
+    }
+
+    public function getUserViewUrl()
+    {
+        return App::if($this->user, fn($user) => $user->viewUrl);
+    }
+
+    public function getFooterDetailColumns()
+    {
+        $columns = parent::getFooterDetailColumns();
+        if (isset($columns['recordStatusHtml'])) {
+            unset($columns['recordStatusHtml']);
+        }
+
+        return $columns;
+    }
+
+    public function getUserEmail()
+    {
+        return App::if($this->user, fn($user) => $user->email);
+    }
      
     public function gridColumns()
     {
         return [
-            'user_id' => [
-                'attribute' => 'user_id', 
+            'product_name' => [
+                'attribute' => 'productName', 
                 'format' => 'raw',
                 'value' => function($model) {
                     return Anchor::widget([
-                        'title' => $model->user_id,
-                        'link' => $model->viewUrl,
+                        'title' => $model->productName,
+                        'link' => $model->productViewUrl,
                         'text' => true
                     ]);
                 }
             ],
-            'product_id' => ['attribute' => 'product_id', 'format' => 'raw'],
+            'user_email' => [
+                'attribute' => 'userEmail', 
+                'format' => 'raw',
+                'value' => function($model) {
+                    return Anchor::widget([
+                        'title' => $model->userEmail,
+                        'link' => $model->userViewUrl,
+                        'text' => true
+                    ]);
+                }
+            ],
         ];
     }
 
     public function detailColumns()
     {
         return [
-            'user_id:raw',
-            'product_id:raw',
+            'productName:raw',
+            'userEmail:raw',
         ];
     }
 
