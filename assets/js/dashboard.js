@@ -196,6 +196,81 @@ var _initStatsWidget3 = function({data, categories}) {
 }
 
 
+var _demo2 = function ({unAnswered, answered}) {
+    const apexChart = "#chart_2";
+    var options = {
+        series: [{
+            name: 'Un-Answered',
+            data: unAnswered
+        }, {
+            name: 'Answered',
+            data: answered
+        }],
+        chart: {
+            height: 350,
+            type: 'area'
+        },
+        dataLabels: {
+            enabled: false
+        },
+        stroke: {
+            curve: 'smooth'
+        },
+        xaxis: {
+            // type: 'datetime',
+            categories: [
+                'Jan',
+                'Feb',
+                'Mar',
+                'Apr',
+                'May',
+                'Jun',
+                'Jul',
+                'Aug',
+                'Sep',
+                'Oct',
+                'Nov',
+                'Dec',
+            ]
+        },
+        tooltip: {
+            style: {
+                fontSize: '12px',
+                fontFamily: KTAppSettings['font-family']
+            },
+            y: {
+                formatter: function(val) {
+                    return val;
+                }
+            }
+        },
+        colors: [KTAppSettings['colors']['theme']['base']['primary'], KTAppSettings['colors']['theme']['base']['success']]
+    };
+
+    var chart = new ApexCharts(document.querySelector(apexChart), options);
+    chart.render();
+}
+
+
+
+$.ajax({
+    url: app.baseUrl + "dashboard/chat-frequency",
+    method: 'get',
+    data: {
+        year: $('.dashboard-page').data('year'),
+    },
+    dataType: 'json',
+    success: function(s) {
+        if (s.status == 'success') {
+            _demo2(s);
+        }
+    },
+    error: (e) => {
+        console.log(e)
+    }
+})
+
+
 $.ajax({
     url: app.baseUrl + "dashboard/monthly-orders",
     method: 'get',

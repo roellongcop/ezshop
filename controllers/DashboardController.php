@@ -233,4 +233,51 @@ class DashboardController extends Controller
             'data' => array_values($bestSeller),
         ]);
     }
+
+    public function actionChatFrequency($year='')
+    {
+        $year = $year ?: App::formatter()->asDateToTimezone('', 'Y');
+
+        $data = [];
+
+
+        foreach (App::params('months') as $no => $label) {
+            $date = date('Y-m', strtotime(date("{$year}-{$no}")));
+
+            $data[] = Chat::find()
+                ->select(["COUNT('*') as total", 'type'])
+                ->where(["DATE_FORMAT(created_at, '%Y-%m')" => $date])
+                ->groupBy('type')
+                ->asArray()
+                ->all();
+        }
+
+
+        $unAnswered = [];
+        $answered = [];
+
+        foreach ($data as $d) {
+
+            if ($d) {
+                foreach ($d as $dd) {
+                    if ($dd['type'] == Chat::UN_ANSWERED) {
+                        $unAnswered[] = $dd['total'];
+                    }
+                    else {
+                        $answered[] = $dd['total'];
+                    }
+                }
+            }
+            else {
+                $unAnswered[] = 0;
+                $answered[] = 0;
+            }
+        }
+
+        return $this->asJson([
+            'status' => 'success',
+            'unAnswered' => $unAnswered,
+            'answered' => $answered,
+        ]);
+    }
 }

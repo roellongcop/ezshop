@@ -93,11 +93,10 @@ class ChatSearch extends Chat
             'c.updated_by' => $this->updated_by,
             'c.created_at' => $this->created_at,
             'c.updated_at' => $this->updated_at,
+            'c.message' => $this->message,
         ]);
 
 
-        $query->andFilterWhere(['like', 'c.message', $this->message]);
-                
         $query->andFilterWhere(['or', 
             // ['like', 'c.user_id', $this->keywords],  
             // ['like', 'c.reply_id', $this->keywords],  

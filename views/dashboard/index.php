@@ -175,5 +175,19 @@ $this->params['headerButtons'] = $this->render('_dropdown-year', [
 				</div>
 			</div>
 		</div>
+		<div class="col-md-8">
+			<div class="card card-custom gutter-b">
+				<div class="card-header">
+					<div class="card-title">
+						<h3 class="card-label">Chat Frequency</h3>
+					</div>
+				</div>
+				<div class="card-body">
+					<!--begin::Chart-->
+					<div id="chart_2"></div>
+					<!--end::Chart-->
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
