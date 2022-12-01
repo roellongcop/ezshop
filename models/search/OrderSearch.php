@@ -121,22 +121,17 @@ class OrderSearch extends Order
             ['like', 'billing_email', $this->keywords],  
             ['like', 'billing_mobile', $this->keywords],  
             ['like', 'billing_address1', $this->keywords],  
-            ['like', 'billing_province_id', $this->keywords],  
-            ['like', 'billing_municipality_id', $this->keywords],  
             ['like', 'billing_zip', $this->keywords],  
             ['like', 'shipping_firstname', $this->keywords],  
             ['like', 'shipping_lastname', $this->keywords],  
             ['like', 'shipping_email', $this->keywords],  
             ['like', 'shipping_mobile', $this->keywords],  
             ['like', 'shipping_address1', $this->keywords],  
-            ['like', 'shipping_province_id', $this->keywords],  
-            ['like', 'shipping_municipality_id', $this->keywords],  
             ['like', 'shipping_zip', $this->keywords],  
             ['like', 'products', $this->keywords],  
             ['like', 'subtotal', $this->keywords],  
             ['like', 'shipping', $this->keywords],  
             ['like', 'total', $this->keywords],  
-            ['like', 'payment_mode', $this->keywords],  
         ]);
 
         $query->daterange($this->date_range);
