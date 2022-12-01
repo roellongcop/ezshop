@@ -136,10 +136,28 @@ class Cart extends ActiveRecord
     {
         return App::if($this->user, fn($user) => $user->viewUrl);
     }
+
+    public function getDefaultGridColumns()
+    {
+        return [
+            'serial',
+            'checkbox',
+            'product_name',
+            'user_email',
+            'color',
+            'size',
+            'quantity',
+            'status',
+            'created_at',
+            'last_updated',
+            'active',
+        ];
+    }
      
     public function gridColumns()
     {
         return [
+            'session_id' => ['attribute' => 'session_id', 'format' => 'raw'],
             'product_name' => [
                 'attribute' => 'productName', 
                 'format' => 'raw',

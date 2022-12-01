@@ -223,7 +223,7 @@ class Order extends ActiveRecord
     {
         return new \app\models\query\OrderQuery(get_called_class());
     }
-     
+
     public function gridColumns()
     {
         return [

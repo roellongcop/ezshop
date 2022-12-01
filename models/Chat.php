@@ -149,21 +149,25 @@ class Chat extends ActiveRecord
             return Label::widget(['options' => $param]);
         }
     }
+
+    public function getDefaultGridColumns()
+    {
+        return [
+            'serial',
+            'checkbox',
+            'session_id',
+            'message',
+            'status',
+            'created_at',
+            'last_updated',
+            'active',
+        ];
+    }
      
     public function gridColumns()
     {
         return [
-            // 'user_id' => [
-            //     'attribute' => 'user_id', 
-            //     'format' => 'raw',
-            //     'value' => function($model) {
-            //         return Anchor::widget([
-            //             'title' => $model->user_id,
-            //             'link' => $model->viewUrl,
-            //             'text' => true
-            //         ]);
-            //     }
-            // ],
+            
             'session_id' => [
                 'attribute' => 'session_id', 
                 'format' => 'raw',
@@ -177,8 +181,13 @@ class Chat extends ActiveRecord
             ],
             'message' => ['attribute' => 'message', 'format' => 'raw'],
             'status' => ['attribute' => 'status', 'format' => 'raw', 'value' => 'statusBadge'],
+            'user_email' => [
+                'label' => 'User email',
+                'attribute' => 'user_id', 
+                'format' => 'raw',
+                'value' => 'userEmail'
+            ],
             // 'reply_id' => ['attribute' => 'reply_id', 'format' => 'raw'],
-            // 'session_id' => ['attribute' => 'session_id', 'format' => 'raw'],
         ];
     }
 

@@ -12,6 +12,7 @@ class FormatterComponent extends \yii\i18n\Formatter
 {
     public function asStripTags($value)
     {
+        $value = is_array($value) ? json_encode($value): $value;
         return strip_tags($value);
     }
 
