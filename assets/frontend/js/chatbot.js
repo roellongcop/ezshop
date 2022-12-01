@@ -133,8 +133,11 @@ const chat = createApp({
 	  			}
 	  			else {
 	  				if(conversationsContainer.value.scrollHeight - conversationsContainer.value.scrollTop <= 1000) {
-
-		  				conversationsContainer.value.scrollTop = conversationsContainer.value.scrollHeight;
+	  					conversationsContainer.value.scrollTo({
+	  						top: conversationsContainer.value.scrollHeight,
+	  						behavior: 'smooth'
+	  					});
+		  				// conversationsContainer.value.scrollTop = conversationsContainer.value.scrollHeight;
 	  				}
 	  			}
 			});
