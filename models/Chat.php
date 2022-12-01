@@ -3,6 +3,7 @@
 namespace app\models;
 
 use app\widgets\Anchor;
+use app\widgets\Label;
 use app\helpers\App;
 
 /**
@@ -102,6 +103,8 @@ class Chat extends ActiveRecord
 
         $this->message = str_replace(array_keys($replace), array_values($replace), $this->message);
 
+        $this->user_id = App::ifElse(App::identity(), fn($user) => $user->id, 0);
+
         return true;
     }
 
@@ -119,6 +122,10 @@ class Chat extends ActiveRecord
         return $this->hasOne(Chat::class, ['id' => 'reply_id']);
     }
 
+    public function getUserEmail()
+    {
+        return App::if($this->user, fn($user) => $user->email);
+    }
 
     public function getUser()
     {
@@ -133,34 +140,56 @@ class Chat extends ActiveRecord
     {
         return new \app\models\query\ChatQuery(get_called_class());
     }
+
+    public function getStatusBadge()
+    {
+        $param = App::params('chat_status')[$this->status];
+
+        if ($param) {
+            return Label::widget(['options' => $param]);
+        }
+    }
      
     public function gridColumns()
     {
         return [
-            'user_id' => [
-                'attribute' => 'user_id', 
+            // 'user_id' => [
+            //     'attribute' => 'user_id', 
+            //     'format' => 'raw',
+            //     'value' => function($model) {
+            //         return Anchor::widget([
+            //             'title' => $model->user_id,
+            //             'link' => $model->viewUrl,
+            //             'text' => true
+            //         ]);
+            //     }
+            // ],
+            'session_id' => [
+                'attribute' => 'session_id', 
                 'format' => 'raw',
                 'value' => function($model) {
                     return Anchor::widget([
-                        'title' => $model->user_id,
+                        'title' => $model->session_id,
                         'link' => $model->viewUrl,
                         'text' => true
                     ]);
                 }
             ],
-            'reply_id' => ['attribute' => 'reply_id', 'format' => 'raw'],
-            'session_id' => ['attribute' => 'session_id', 'format' => 'raw'],
             'message' => ['attribute' => 'message', 'format' => 'raw'],
+            'status' => ['attribute' => 'status', 'format' => 'raw', 'value' => 'statusBadge'],
+            // 'reply_id' => ['attribute' => 'reply_id', 'format' => 'raw'],
+            // 'session_id' => ['attribute' => 'session_id', 'format' => 'raw'],
         ];
     }
 
     public function detailColumns()
     {
         return [
-            'user_id:raw',
-            'reply_id:raw',
+            // 'reply_id:raw',
             'session_id:raw',
+            'userEmail:raw',
             'message:raw',
+            'statusBadge:raw',
         ];
     }
 

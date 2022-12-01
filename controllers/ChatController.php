@@ -71,7 +71,7 @@ class ChatController extends Controller
      * If duplication is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionDuplicate($id)
+    /*public function _actionDuplicate($id)
     {
         $originalModel = Chat::controllerFind($id);
         $model = new Chat();
@@ -87,7 +87,7 @@ class ChatController extends Controller
             'model' => $model,
             'originalModel' => $originalModel,
         ]);
-    }
+    }*/
 
     /**
      * Updates an existing Chat model.
@@ -96,7 +96,7 @@ class ChatController extends Controller
      * @return mixed
      * @throws ForbiddenHttpException if the model cannot be found
      */
-    public function actionUpdate($id)
+    /*public function _actionUpdate($id)
     {
         $model = Chat::controllerFind($id);
 
@@ -108,7 +108,7 @@ class ChatController extends Controller
         return $this->render('update', [
             'model' => $model,
         ]);
-    }
+    }*/
 
     /**
      * Deletes an existing Chat model.
@@ -117,7 +117,7 @@ class ChatController extends Controller
      * @return mixed
      * @throws ForbiddenHttpException if the model cannot be found
      */
-    public function actionDelete($id)
+    /*public function _actionDelete($id)
     {
         $model = Chat::controllerFind($id);
 
@@ -129,7 +129,7 @@ class ChatController extends Controller
         }
 
         return $this->redirect($model->indexUrl);
-    }
+    }*/
 
     public function actionChangeRecordStatus()
     {
