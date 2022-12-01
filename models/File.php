@@ -33,7 +33,7 @@ use yii\imagine\Image;
 class File extends ActiveRecord
 {
     const EXTENSIONS = [
-        'image' => ['jpeg', 'jpg', 'gif', 'bmp', 'tiff','png', 'ico',],
+        'image' => ['jpeg', 'jpg', 'gif', 'bmp', 'tiff','png', 'ico', 'webp'],
         'file' => ['doc', 'docx', 'pdf', 'xls', 'xlsx', 'csv', 'sql'],
     ];
     const IMAGE_HOLDER = 'https://via.placeholder.com/100';

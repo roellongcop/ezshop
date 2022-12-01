@@ -187,7 +187,7 @@ class Review extends ActiveRecord
                     ]);
                 }
             ],
-            'user_id' => ['attribute' => 'user_id', 'format' => 'raw'],
+            'user_id' => ['attribute' => 'user_id', 'format' => 'raw', 'value' => 'publisherName'],
             'score' => ['attribute' => 'score', 'format' => 'raw'],
             'name' => ['attribute' => 'name', 'format' => 'raw'],
             'email' => ['attribute' => 'email', 'format' => 'raw'],
@@ -198,8 +198,8 @@ class Review extends ActiveRecord
     public function detailColumns()
     {
         return [
-            'product_id:raw',
-            'user_id:raw',
+            'productName:raw',
+            'publisherName:raw',
             'score:raw',
             'name:raw',
             'email:raw',

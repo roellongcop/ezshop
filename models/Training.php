@@ -113,7 +113,10 @@ class Training extends ActiveRecord
 
     public static function samples()
     {
-        $models = self::find()->active()->all();
+        $models = self::find()
+            ->active()
+            ->orderBy(['LENGTH(query)' => SORT_DESC])
+            ->all();
 
         $models = ArrayHelper::map($models, 'id', 'explodedQuery');
 
