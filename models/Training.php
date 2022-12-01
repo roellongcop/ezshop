@@ -92,7 +92,7 @@ class Training extends ActiveRecord
             ],
             'intent' => ['attribute' => 'intent', 'format' => 'raw'],
             'response' => ['attribute' => 'response', 'format' => 'ul'],
-            'suggestion' => ['attribute' => 'suggestion', 'format' => 'raw'],
+            // 'suggestion' => ['attribute' => 'suggestion', 'format' => 'raw'],
         ];
     }
 
@@ -102,7 +102,7 @@ class Training extends ActiveRecord
             'query:raw',
             'intent:raw',
             'response:ul',
-            'suggestion:raw',
+            // 'suggestion:raw',
         ];
     }
 
