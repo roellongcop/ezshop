@@ -224,6 +224,22 @@ class Order extends ActiveRecord
         return new \app\models\query\OrderQuery(get_called_class());
     }
 
+
+    public function getDefaultGridColumns()
+    {
+        return [
+            'serial',
+            'checkbox',
+            'order_no',
+
+
+            
+            'created_at',
+            'last_updated',
+            'active',
+        ];
+    }
+
     public function gridColumns()
     {
         return [

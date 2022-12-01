@@ -96,7 +96,7 @@ class ChatController extends Controller
      * @return mixed
      * @throws ForbiddenHttpException if the model cannot be found
      */
-    /*public function _actionUpdate($id)
+    public function actionUpdate($id)
     {
         $model = Chat::controllerFind($id);
 
@@ -108,7 +108,7 @@ class ChatController extends Controller
         return $this->render('update', [
             'model' => $model,
         ]);
-    }*/
+    }
 
     /**
      * Deletes an existing Chat model.
