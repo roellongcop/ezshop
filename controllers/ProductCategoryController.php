@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\helpers\App;
 use app\models\ProductCategory;
+use app\models\Setting;
 use app\models\search\ProductCategorySearch;
 
 /**
@@ -14,7 +15,9 @@ class ProductCategoryController extends Controller
     public function actionFindByKeywords($keywords='')
     {
         return $this->asJson(
-            ProductCategory::findByKeywords($keywords, ['name', 'value'])
+            ProductCategory::findByKeywords($keywords, ['name'], 10, [
+                'type' => Setting::TYPE_PRODUCT_CATEGORY
+            ])
         );
     }
     /**
