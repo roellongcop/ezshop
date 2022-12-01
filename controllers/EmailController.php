@@ -15,7 +15,7 @@ class EmailController extends Controller
     public function actionFindByKeywords($keywords='')
     {
         return $this->asJson(
-            Email::findByKeywords($keywords, ['id'])
+            Email::findByKeywords($keywords, ['name', 'email', 'subject', 'message'])
         );
     }
 
