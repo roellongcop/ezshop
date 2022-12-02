@@ -62,7 +62,7 @@ CSS);
             </div>
         </div>
         <div class="chat-input">      
-            <form @submit.prevent="sendNewMessage">
+            <form @submit.prevent="sendNewMessage('')">
                 <input autocomplete="off" maxlength="225" type="text" id="chat-input" v-model="messageModel" placeholder="Send a message..."/>
                 <button type="submit" class="chat-submit" id="chat-submit"><i class="fab fa-telegram-plane" :style="{color: chatbot.theme_color}"></i></button>
             </form>      

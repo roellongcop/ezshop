@@ -81,7 +81,8 @@ class Chat extends ActiveRecord
                 self::TYPE_CHATBOT,
                 self::TYPE_USER,
             ]],
-            [['message'], 'trim']
+            [['message', 'hidden_message'], 'trim'],
+            [['hidden_message'], 'safe'],
         ]);
     }
 
@@ -119,9 +120,9 @@ class Chat extends ActiveRecord
 
         $message = $this->message;
 
-        foreach ($replace as $key => $value) {
+        foreach ($replace as $key => $data) {
             if (str_contains($message, $key)) {
-                $value = is_callable($value) ? call_user_func($value): $value;
+                $value = is_callable($data['value']) ? call_user_func($data['value']): $data['value'];
 
                 $message = str_replace($key, $value, $message);
             }
@@ -135,31 +136,65 @@ class Chat extends ActiveRecord
         $chatbot = App::setting('chatbot');
 
         return [
-            '[CHATBOT_NAME]' => $chatbot->name,
-            '[PRICE_RANGE]' => function() {
-                return implode('<br>', [
-                    Html::tag('a', '₱0 - ₱100', [
-                        'href' => Url::toRoute(['site/shop', 'price_range[]' => '0-100']),
-                        'class' => 'btn btn-outline-primary btn-pill mb-1'
-                    ]),
-                    Html::tag('a', '₱100 - ₱500', [
-                        'href' => Url::toRoute(['site/shop', 'price_range[]' => '100-500']),
-                        'class' => 'btn btn-outline-primary btn-pill mb-1'
-                    ]),
-                    Html::tag('a', '₱500 - ₱1,000', [
-                        'href' => Url::toRoute(['site/shop', 'price_range[]' => '500-1000']),
-                        'class' => 'btn btn-outline-primary btn-pill mb-1'
-                    ]),
-                    Html::tag('a', '₱1,000 - ₱5,000', [
-                        'href' => Url::toRoute(['site/shop', 'price_range[]' => '1000-5000']),
-                        'class' => 'btn btn-outline-primary btn-pill mb-1'
-                    ]),
-                    Html::tag('a', '₱5,000 - ₱10,000', [
-                        'href' => Url::toRoute(['site/shop', 'price_range[]' => '5000-10000']),
-                        'class' => 'btn btn-outline-primary btn-pill mb-1'
-                    ]),
-                ]);
-            }
+            '[CHATBOT_NAME]' => [
+                'description' => 'Chatbot Name',
+                'value' => $chatbot->name
+            ],
+            '[PRICE_RANGE]' => [
+                'description' => 'Clickable price range of products',
+                'value' => function() {
+                    return implode(' ', [
+                        Html::tag('a', '₱0 - ₱100', [
+                            'href' => Url::toRoute(['site/shop', 'price_range[]' => '0-100']),
+                            'class' => 'btn btn-outline-success btn-pill mb-1',
+                            'target' => '_blank'
+                        ]),
+                        Html::tag('a', '₱100 - ₱500', [
+                            'href' => Url::toRoute(['site/shop', 'price_range[]' => '100-500']),
+                            'class' => 'btn btn-outline-success btn-pill mb-1',
+                            'target' => '_blank'
+                        ]),
+                        Html::tag('a', '₱500 - ₱1,000', [
+                            'href' => Url::toRoute(['site/shop', 'price_range[]' => '500-1000']),
+                            'class' => 'btn btn-outline-success btn-pill mb-1',
+                            'target' => '_blank'
+                        ]),
+                        Html::tag('a', '₱1,000 - ₱5,000', [
+                            'href' => Url::toRoute(['site/shop', 'price_range[]' => '1000-5000']),
+                            'class' => 'btn btn-outline-success btn-pill mb-1',
+                            'target' => '_blank'
+                        ]),
+                        Html::tag('a', '₱5,000 - ₱10,000', [
+                            'href' => Url::toRoute(['site/shop', 'price_range[]' => '5000-10000']),
+                            'class' => 'btn btn-outline-success btn-pill mb-1',
+                            'target' => '_blank'
+                        ]),
+                    ]);
+                }
+            ],
+            '[PRODUCT_CATEGORIES]' => [
+                'description' => 'Clickable 5 product categories',
+                'value' => function() {
+                    $categories = ProductCategory::dropdown('id', 'name',[], true, 5);
+
+                    $data = App::foreach($categories, fn($category) => Html::tag('a', $category, [
+                        'href' => Url::toRoute(['site/shop', 'categories' => $category]),
+                        'class' => 'btn btn-outline-success btn-pill mb-1',
+                        'target' => '_blank'
+                    ]), false);
+
+                    return implode('<br>', $data);
+                }
+            ],
+            '[CATEGORY_BUTTON]' => [
+                'description' => 'Category button',
+                'value' => Html::tag('a', 'Show Categories', [
+                    'href' => '#',
+                    'data-message' => 'Show Categories',
+                    'data-hidden_message' => '--showCategory',
+                    'class' => 'btn btn-outline-success btn-pill mb-1 btn-hidden-message',
+                ])
+            ]
         ];
     }
 

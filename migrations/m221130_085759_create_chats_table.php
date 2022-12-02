@@ -20,6 +20,7 @@ class m221130_085759_create_chats_table extends \app\migrations\Migration
             'reply_id' => $this->bigInteger(20)->notNull()->defaultValue(0),
             'session_id' => $this->string()->notNull(),
             'message' => 'MEDIUMTEXT',
+            'hidden_message' => $this->string(),
             'status' => $this->tinyInteger(20)->notNull()->defaultValue(0),
             'type' => $this->tinyInteger(20)->notNull()->defaultValue(0),
         ]));

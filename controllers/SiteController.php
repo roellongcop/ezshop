@@ -811,10 +811,12 @@ class SiteController extends Controller
             $chat = new Chat([
                 'session_id' => App::session('id'),
                 'type' => Chat::TYPE_USER,
-                'message' => $post['message']
+                'message' => $post['message'],
+                'hidden_message' => $post['hiddenMessage'],
             ]);
+            $message = $post['hiddenMessage'] ?: $post['message'];
 
-            $training = (new Training())->predict($post['message']);
+            $training = (new Training())->predict($message);
 
             if ($training['training']) {
                 $chat->status = Chat::ANSWERED;

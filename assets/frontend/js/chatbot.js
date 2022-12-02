@@ -47,9 +47,10 @@ const chat = createApp({
 			})
 		}
 
-		const sendNewMessage = () => {
+		const sendNewMessage = (hiddenMessage='') => {
 			if (messageModel.value) {
 				let message = messageModel.value;
+
 				messageModel.value = '';
 
 				messageFormState.isSending = true;
@@ -58,7 +59,10 @@ const chat = createApp({
 				scrollToBottom();
 				$.ajax({
 					url: app.baseUrl + 'site/send-new-message',
-					data: {message: message},
+					data: {
+						message,
+						hiddenMessage
+					},
 					dataType: 'json',
 					method: 'post',
 					success: (response) => {
@@ -72,7 +76,7 @@ const chat = createApp({
 						messageFormState.isSending = false;
 					}
 				})
-				}
+			}
 		}
 
 		const poll = () => {
@@ -232,6 +236,11 @@ const chat = createApp({
 			    $("#chat-circle").toggle('scale');
 			    $(".chat-box").toggle('scale');
 			})
+
+			$(document).on('click', '.btn-hidden-message',  function() {
+				messageModel.value = $(this).data('message');
+				sendNewMessage($(this).data('hidden_message'));
+			});
 		});
 
 		const showTimesent = (index) => {

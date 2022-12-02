@@ -56,14 +56,16 @@ JS);
                 <table class="table table-bordered datatable">
                     <thead>
                         <th>placeholder</th>
+                        <th>description</th>
                         <th>value</th>
                     </thead>
                     <tbody>
-                        <?= App::foreach((new Chat())->replace(), function($value, $key) {
-                            $value = is_callable($value) ? call_user_func($value): $value;
+                        <?= App::foreach((new Chat())->replace(), function($data, $key) {
+                            $value = is_callable($data['value']) ? call_user_func($data['value']): $data['value'];
                             return <<< HTML
                                 <tr>
-                                    <th>{$key}</th>
+                                    <td>{$key}</td>
+                                    <td>{$data['description']}</td>
                                     <td>{$value}</td>
                                 </tr>
                             HTML;
