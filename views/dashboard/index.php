@@ -134,9 +134,9 @@ $this->params['headerButtons'] = $this->render('_dropdown-year', [
 				<!--begin::Header-->
 				<div class="card-header border-0 pt-6">
 					<h3 class="card-title align-items-start flex-column">
-						<span class="card-label font-weight-bolder font-size-h4 text-dark-75">Most Chat Query</span>
+						<span class="card-label font-weight-bolder font-size-h4 text-dark-75">Top Chat Queries</span>
 						<span class="text-muted mt-3 font-weight-bold font-size-lg">
-							Top 5 most chat recorded
+							Top 5 most ask questions
 						</span>
 					</h3>
 				</div>
