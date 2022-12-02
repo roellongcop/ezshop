@@ -16,8 +16,12 @@ $this->params['breadcrumbs'][] = $model->session_id;
 $this->params['searchModel'] = new ChatSearch();
 $this->params['wrapCard'] = false; 
 $this->params['activeMenuLink'] = '/chat/live-chat';
+
+$this->registerJsFile(App::publishedUrl('/vue3/vue.global.js', Yii::getAlias('@app/assets')));
+$this->addJsFile('js/chatbot', ['app\assets\AppAsset'], ['type' => 'module']);
+
 ?>
-<div class="chat-view-page">
+<div class="chat-view-page" id="live-chat" data-session_id="<?= $model->session_id ?>">
     <div class="row">
         <div class="col-md-6">
             <?php $this->beginContent('@app/views/layouts/_card_wrapper.php', [
@@ -34,7 +38,7 @@ $this->params['activeMenuLink'] = '/chat/live-chat';
                             'label' => 'User email',
                             'attribute' => 'userEmail', 
                             'format' => 'raw',
-                            'value' => 'userEmail'
+                            'value' => fn ($model) => $model->userEmail 
                         ],
                         'total_message' => [
                             'label' => 'Total Messages',
@@ -64,6 +68,29 @@ $this->params['activeMenuLink'] = '/chat/live-chat';
             <?php $this->beginContent('@app/views/layouts/_card_wrapper.php', [
                 'title' => 'Live Chat'
             ]) ?>
+                <div class="scroll scroll-pull" data-height="375" data-mobile-height="300" style="    height: 58vh; overflow: auto;" ref="conversationsContainer" @scroll="messageScroll">
+                    <div class="messages chat-box-body">
+                        <div v-for="message in messages" :key="message.id" class="d-flex flex-column mb-5" :class="setContainerClass(message)" :id="'message-id-' + message.id">
+                            <div class="d-flex align-items-center">
+                                <div>
+                                    <span class="text-muted font-size-sm" v-html="message.timeSent"></span>
+                                </div>
+                            </div>
+                            <div class="mt-2 rounded p-5 text-dark-50 font-weight-bold font-size-lg max-w-400px" v-html="message.message" :class="setMessageClass(message)"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="scrollToBottomContainer" v-if="showScrollable">
+                    <span></span>
+                    <span>
+                        <button @click="scrollToBottom" class="btn btn-primary font-weight-bold btn-sm btn-pill" >
+                            Scroll to Bottom
+                        </button>
+                    </span>
+                    <span></span>
+                </div>
+               
             <?php $this->endContent() ?>
         </div>
     </div>

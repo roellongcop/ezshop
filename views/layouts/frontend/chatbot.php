@@ -51,10 +51,14 @@ CSS);
                 </div>
             </div>
 
-            <div class="text-center" v-if="showScrollable">
-                <button @click="scrollToBottom" class="btn btn-outline-primary font-weight-bold btn-sm btn-pill btn-scroller">
-                    Scroll to Bottom
-                </button>
+            <div class="scrollToBottomContainer" v-if="showScrollable">
+                <span></span>
+                <span>
+                    <button @click="scrollToBottom" class="btn btn-outline-primary font-weight-bold btn-sm btn-pill btn-scroller">
+                        Scroll to Bottom
+                    </button>
+                </span>
+                <span></span>
             </div>
         </div>
         <div class="chat-input">      

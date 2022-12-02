@@ -776,20 +776,22 @@ class SiteController extends Controller
         return $this->redirect(['my-orders']);
     }
 
-    public function actionInitChatbotData()
+    public function actionInitChatbotData($session_id='')
     {
+        $session_id = $session_id ?: App::session('id');
+
         $messages = Chat::find()
-            ->where(['session_id' => App::session('id')])
+            ->where(['session_id' => $session_id])
             ->limit(20)
             ->orderBy(['id' => SORT_DESC])
             ->all();
 
         $totalMessages = Chat::find()
-            ->where(['session_id' => App::session('id')])
+            ->where(['session_id' => $session_id])
             ->count();
 
         $minimumMessageId = Chat::find()
-            ->where(['session_id' => App::session('id')])
+            ->where(['session_id' => $session_id])
             ->min('id');
 
             
@@ -847,8 +849,10 @@ class SiteController extends Controller
     }
 
 
-    public function actionChatPoll()
+    public function actionChatPoll($session_id='')
     {
+        $session_id = $session_id ?: App::session('id');
+
         session_write_close();
         ignore_user_abort(false);
         set_time_limit(0);
@@ -862,7 +866,7 @@ class SiteController extends Controller
             $response = [];
 
             $totalMessages = Chat::find()
-                ->where(['session_id' => App::session('id')])
+                ->where(['session_id' => $session_id])
                 ->count();
 
             if ($totalMessages > 0 && ($totalMessages != $totalMessages_post)) {
@@ -871,7 +875,7 @@ class SiteController extends Controller
 
 
             $messages = Chat::find()
-                ->where(['session_id' => App::session('id')])
+                ->where(['session_id' => $session_id])
                 ->andWhere(['>', 'id', $maxMessageId_post])
                 ->orderBy(['id' => SORT_DESC])
                 ->limit(20)
@@ -896,13 +900,15 @@ class SiteController extends Controller
         ]);
     }
 
-    public function actionLoadPreviousMessages()
+    public function actionLoadPreviousMessages($session_id='')
     {
+        $session_id = $session_id ?: App::session('id');
+        
         if (($post = App::post()) != null) {
             $minMessageId = (int) (App::post('minMessageId') ?: 1);
 
             $messages = Chat::find()
-                ->where(['session_id' => App::session('id')])
+                ->where(['session_id' => $session_id])
                 ->andWhere(['<', 'id', $minMessageId])
                 ->orderBy(['id' => SORT_DESC])
                 ->limit(20)

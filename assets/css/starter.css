@@ -267,3 +267,17 @@ div.required label.control-label:after {
 .label.label-lg.label-inline {
     white-space: nowrap;
 }
+div.scrollToBottomContainer { 
+    width: 100%; display: table; 
+    position: absolute;
+    right: 1em;
+    bottom: 1em;
+}
+div.scrollToBottomContainer span {
+    display: table-cell;
+    width: 1%;
+}
+div.scrollToBottomContainer span:nth-of-type(2) {
+    width: 99%;
+    text-align: center;
+}
