@@ -9,6 +9,7 @@ class InputList extends BaseWidget
     public $label;
     public $name;
     public $data;
+    public $type = 'input';
 
     public function init()
     {
@@ -21,6 +22,7 @@ class InputList extends BaseWidget
             'label' => $this->label,
             'name' => $this->name,
             'data' => $this->data,
+            'type' => $this->type,
         ]);
     }
 }

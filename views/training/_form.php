@@ -42,7 +42,8 @@ JS);
                 <?= InputList::widget([
                     'label' => 'Response',
                     'name' => 'Training[response][]',
-                    'data' => $model->response
+                    'data' => $model->response,
+                    'type' => 'textarea'
                 ]) ?>
 
     			<?php # $form->field($model, 'suggestion')->textarea(['rows' => 6]) ?>
