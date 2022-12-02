@@ -140,6 +140,71 @@ class Chat extends ActiveRecord
                 'description' => 'Chatbot Name',
                 'value' => $chatbot->name
             ],
+            '[LOGIN_PAGE]' => [
+                'description' => 'Login page link',
+                'value' => Html::tag('a', 'Login Page', [
+                    'href' => Url::toRoute(['site/login']),
+                    'class' => 'btn btn-outline-success btn-pill mb-1',
+                    'target' => '_blank'
+                ]),
+            ],
+            '[SIGNUP_PAGE]' => [
+                'description' => 'Signup page link',
+                'value' => Html::tag('a', 'Signup Page', [
+                    'href' => Url::toRoute(['site/signup']),
+                    'class' => 'btn btn-outline-success btn-pill mb-1',
+                    'target' => '_blank'
+                ]),
+            ],
+            '[HOME_PAGE]' => [
+                'description' => 'Home page link',
+                'value' => Html::tag('a', 'Home Page', [
+                    'href' => Url::toRoute(['site/home']),
+                    'class' => 'btn btn-outline-success btn-pill mb-1',
+                    'target' => '_blank'
+                ]),
+            ],
+            '[SHOP_PAGE]' => [
+                'description' => 'Shop page link',
+                'value' => Html::tag('a', 'Shop Page', [
+                    'href' => Url::toRoute(['site/shop']),
+                    'class' => 'btn btn-outline-success btn-pill mb-1',
+                    'target' => '_blank'
+                ]),
+            ],
+            '[CART_PAGE]' => [
+                'description' => 'Cart page link',
+                'value' => Html::tag('a', 'Cart Page', [
+                    'href' => Url::toRoute(['site/my-cart']),
+                    'class' => 'btn btn-outline-success btn-pill mb-1',
+                    'target' => '_blank'
+                ]),
+            ],
+            '[CHECKOUT_PAGE]' => [
+                'description' => 'Checkout page link',
+                'value' => Html::tag('a', 'Checkout Page', [
+                    'href' => Url::toRoute(['site/checkout']),
+                    'class' => 'btn btn-outline-success btn-pill mb-1',
+                    'target' => '_blank'
+                ]),
+            ],
+            '[ABOUT_PAGE]' => [
+                'description' => 'About page link',
+                'value' => Html::tag('a', 'About Page', [
+                    'href' => Url::toRoute(['site/about']),
+                    'class' => 'btn btn-outline-success btn-pill mb-1',
+                    'target' => '_blank'
+                ]),
+            ],
+
+            '[CONTACT_PAGE]' => [
+                'description' => 'Contact page link',
+                'value' => Html::tag('a', 'Contact Page', [
+                    'href' => Url::toRoute(['site/contact']),
+                    'class' => 'btn btn-outline-success btn-pill mb-1',
+                    'target' => '_blank'
+                ]),
+            ],
             '[PRICE_RANGE]' => [
                 'description' => 'Clickable price range of products',
                 'value' => function() {

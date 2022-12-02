@@ -50,7 +50,6 @@ class SiteController extends Controller
         'signup',
         'signup-success',
         'signup-verification',
-        'my-account-details',
         'to-wishlist',
         'add-to-cart',
         'navbar-poll',
