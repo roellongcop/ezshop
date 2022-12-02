@@ -68,10 +68,10 @@ $this->addJsFile('js/chatbot', ['app\assets\AppAsset'], ['type' => 'module']);
             <?php $this->beginContent('@app/views/layouts/_card_wrapper.php', [
                 'title' => 'Live Chat'
             ]) ?>
-                <div class="scroll scroll-pull" data-height="375" data-mobile-height="300" style="    height: 58vh; overflow: auto;" ref="conversationsContainer" @scroll="messageScroll">
-                    <div class="messages chat-box-body">
-                        <div v-for="message in messages" :key="message.id" class="d-flex flex-column mb-5" :class="setContainerClass(message)" :id="'message-id-' + message.id">
-                            <div class="d-flex align-items-center">
+                <div class="scroll scroll-pull chat-box-body scroller-thumb" data-height="375" data-mobile-height="300" style="height: 58vh; overflow: auto;" ref="conversationsContainer" @scroll="messageScroll">
+                    <div class="messages ">
+                        <div v-for="(message, index) in messages" :key="message.id" class="d-flex flex-column" :class="setContainerClass(message, index)" :id="'message-id-' + message.id">
+                            <div class="d-flex align-items-center" v-if="showTimesent(index)">
                                 <div>
                                     <span class="text-muted font-size-sm" v-html="message.timeSent"></span>
                                 </div>

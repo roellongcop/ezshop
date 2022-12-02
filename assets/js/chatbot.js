@@ -149,22 +149,60 @@ const chat = createApp({
 		}
 
 
-		const setContainerClass = (message) => {
+		const setContainerClass = (message, index) => {
+			let addedClass = '';
 			if (message.type == TYPE_CHATBOT) {
-				return 'align-items-start';
+				addedClass += 'align-items-start';
+			}
+			else {
+				addedClass += 'align-items-end';
 			}
 
-			return 'align-items-end';
+			let currentMessage = messages.value[index];
+			let nextMessage = messages.value[index + 1];
+			if (nextMessage) {
+				if (currentMessage.type == nextMessage.type && currentMessage.timeSent == nextMessage.timeSent) {
+					addedClass += 'mb-1 bblr0';
+				}
+			}
+
+			if (index == 0) {
+				return addedClass;
+			}
+
+			let previousMessage = messages.value[index - 1];
+			if (currentMessage.type == previousMessage.type && currentMessage.timeSent == previousMessage.timeSent) {
+				addedClass += ' btlr0';
+			}
+
+
+			return addedClass;
 		}
 
 		const setMessageClass = (message) => {
 			if (message.type == TYPE_CHATBOT) {
-				return 'bg-light-success  text-left';
+				return 'bg-light-success text-left';
 			}
 
 			return 'bg-light-primary text-right';
 		}
 
+		const showTimesent = (index) => {
+			if (index == 0) {
+				return true;
+			}
+
+			let currentMessage = messages.value[index];
+			let previousMessage = messages.value[index - 1];
+
+			if (currentMessage.type == previousMessage.type && currentMessage.timeSent == previousMessage.timeSent) {
+				return false;
+			}
+
+			return true;
+		}
+
+		 
 		onMounted(() => {
 			initData()
 		});
@@ -177,7 +215,8 @@ const chat = createApp({
 			conversationsContainer,
 			showScrollable,
 			messageScroll,
-			scrollToBottom
+			scrollToBottom,
+			showTimesent,
 		}
 	}
 });
