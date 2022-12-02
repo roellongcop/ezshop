@@ -129,7 +129,7 @@ class ProductTest extends \Codeception\Test\Unit
         $model = $this->tester->grabRecord('app\models\Product', [
             'record_status' => Product::RECORD_ACTIVE
         ]);
-        expect_that($model->delete());
+        expect_not($model->delete());
     }
 
     public function testActivateData()

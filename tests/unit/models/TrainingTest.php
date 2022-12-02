@@ -11,7 +11,7 @@ class TrainingTest extends \Codeception\Test\Unit
         return array_replace([
             'query' => 'Query3',
             'intent' => 'Intent',
-            'response' => 'Response',
+            'response' => ['Response'],
             'suggestion' => 'Suggestion',
             'record_status' => Training::RECORD_ACTIVE
         ], $replace);
@@ -20,6 +20,7 @@ class TrainingTest extends \Codeception\Test\Unit
     public function testCreateSuccess()
     {
         $model = new Training($this->data());
+
         expect_that($model->save());
     }
 

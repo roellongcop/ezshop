@@ -52,13 +52,13 @@ class FormatterComponentTest extends \Codeception\Test\Unit
             ->equals(['test' => 'value']);
     }
 
-    public function testAsJsonEditor()
-    {
-        $this->tester->assertStringContainsString(
-            '<div id="',
-            $this->formatter->asJsonEditor(['test' => 'value'])
-        );
-    }
+    // public function testAsJsonEditor()
+    // {
+    //     $this->tester->assertStringContainsString(
+    //         '<div id="',
+    //         $this->formatter->asJsonEditor(['test' => 'value'])
+    //     );
+    // }
 
     public function testAsQuery2ControllerID()
     {

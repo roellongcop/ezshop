@@ -7,7 +7,7 @@ $model = new \app\helpers\FixtureData(function($params) {
     return [
 		'query' => 'Query',
 		'intent' => 'Intent',
-		'response' => 'Response',
+		'response' => json_encode(['Response']),
 		'suggestion' => 'Suggestion',
 		'record_status' => Training::RECORD_ACTIVE,
         'created_by' => 1,
