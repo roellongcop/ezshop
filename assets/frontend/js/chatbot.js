@@ -47,10 +47,17 @@ const chat = createApp({
 			})
 		}
 
+		const hasWhiteSpace = (str) => {
+		  	return str.trim().length === 0;
+		}
+
 		const sendNewMessage = (hiddenMessage='') => {
 			if (messageModel.value) {
 				let message = messageModel.value;
 
+				if (hasWhiteSpace(message)) {
+					return;
+				}
 				messageModel.value = '';
 
 				messageFormState.isSending = true;
