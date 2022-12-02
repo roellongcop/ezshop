@@ -25,7 +25,7 @@ class ChatController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new ChatSearch();
+        $searchModel = new ChatSearch(['type' => Chat::TYPE_USER]);
         $dataProvider = $searchModel->search(['ChatSearch' => App::queryParams()]);
         $dataProvider->query->groupBy(['c.id']);
 
