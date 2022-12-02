@@ -244,7 +244,8 @@ const chat = createApp({
 			    $(".chat-box").toggle('scale');
 			})
 
-			$(document).on('click', '.btn-hidden-message',  function() {
+			$(document).on('click', '.btn-hidden-message',  function(e) {
+				e.preventDefault();
 				messageModel.value = $(this).data('message');
 				sendNewMessage($(this).data('hidden_message'));
 			});
