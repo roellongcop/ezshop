@@ -183,7 +183,28 @@ class Chat extends ActiveRecord
                         'target' => '_blank'
                     ]), false);
 
-                    return implode('<br>', $data);
+                    return implode('', $data);
+                }
+            ],
+            '[BEST_SELLER]' => [
+                'description' => 'Top 3 Best Seller Product',
+                'value' => function() {
+                    $carts = Cart::find()
+                        ->alias('c')
+                        ->joinWith('product p')
+                        ->select(['SUM(`c`.`quantity`) AS total', 'p.name AS produt_name', 'p.slug AS slug'])
+                        ->groupBy('c.product_id')
+                        ->orderBy(['total' => SORT_DESC])
+                        ->asArray()
+                        ->limit(5)
+                        ->all();
+                    $data = App::foreach($carts, fn($cart) => Html::tag('a', $cart['produt_name'], [
+                        'href' => Url::toRoute(['site/product-detail', 'slug' => $cart['slug']]),
+                        'class' => 'btn btn-outline-success btn-pill mb-1',
+                        'target' => '_blank'
+                    ]), false);
+
+                    return implode('', $data);
                 }
             ],
             '[CATEGORY_BUTTON]' => [
@@ -201,6 +222,15 @@ class Chat extends ActiveRecord
                     'href' => '#',
                     'data-message' => 'Show Price Range',
                     'data-hidden_message' => '--showPriceRange',
+                    'class' => 'btn btn-outline-success btn-pill mb-1 btn-hidden-message',
+                ])
+            ],
+            '[BEST_SELLER_BUTTON]' => [
+                'description' => 'Best seller button',
+                'value' => Html::tag('a', 'Best Seller', [
+                    'href' => '#',
+                    'data-message' => 'Best Seller',
+                    'data-hidden_message' => '--showBestSeller',
                     'class' => 'btn btn-outline-success btn-pill mb-1 btn-hidden-message',
                 ])
             ]

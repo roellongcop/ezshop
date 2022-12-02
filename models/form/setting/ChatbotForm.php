@@ -48,7 +48,7 @@ class ChatbotForm extends SettingForm
             ],
             'default_message' => [
                 'name' => 'default_message',
-                'default' => "Sorry I can't understand your query right now.\nAre you searching for a product? Click the button below.\n[CATEGORY_BUTTON] [PRICE_RANGE_BUTTON]
+                'default' => "Sorry I can't understand your query right now.\nAre you searching for a product? Click the button below.\n[CATEGORY_BUTTON] [PRICE_RANGE_BUTTON][BEST_SELLER_BUTTON]
                 "
             ],
             'theme_color' => [
