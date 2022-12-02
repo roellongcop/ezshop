@@ -125,6 +125,20 @@ class ProductCategory extends Setting
         return $this->value;
     }
 
+    public function getBeforeCanDelete()
+    {
+        return $this->getCanDelete();
+    }
+
+    public function getCanDelete()
+    {
+        if ($this->products) {
+            return false;
+        }
+
+        return true;
+    }
+
     public function getTruncatedDescription()
     {
         return StringHelper::truncate($this->description, 100);

@@ -39,7 +39,7 @@ CSS);
             <div class="chat-logs" ref="conversationsContainer" @scroll="messageScroll">
                 <div v-for="(message, index) in messages" :key="message.id" :class="messageClass(message)" class="chat-msg">
                     <div v-if="showTimesent(index)" class="timeSent" v-html="message.timeSent"></div>
-                    <div class="cm-msg-text" :class="messageStyleClass(index)" :style="messageStyle(message)" :id="'message-id-' + message.id" v-html="message.message">
+                    <div class="cm-msg-text" :class="messageStyleClass(index)" :style="messageStyle(message)" :id="'message-id-' + message.id" v-html="message.displayMessage">
                     </div>
                 </div>
 

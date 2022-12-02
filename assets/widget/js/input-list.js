@@ -19,7 +19,7 @@ class InputListWidget {
 
             if(result) {
                 if (self.type == 'input') {
-                    listContainer.prepend(
+                    listContainer.append(
                         `<div class="input-group mb-2">
                             <div class="input-group-prepend">
                                 <button class="btn btn-secondary handle-sortable" type="button">
@@ -36,7 +36,7 @@ class InputListWidget {
                     );
                 }
                 else if(self.type == 'textarea') {
-                    listContainer.prepend(
+                    listContainer.append(
                         `<div class="input-group mb-2">
                             <div class="input-group-prepend">
                                 <button class="btn btn-secondary handle-sortable" type="button">

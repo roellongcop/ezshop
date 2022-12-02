@@ -186,3 +186,7 @@ div.required label.control-label:after {
 .btlr0 {
   border-top-left-radius: 0 !important;
 }
+
+.btn-pill {
+  border-radius: 2rem;
+}
