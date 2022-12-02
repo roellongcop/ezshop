@@ -198,7 +198,7 @@ class Training extends ActiveRecord
             ];
         }
 
-        $orderB['LENGTH(query)'] = SORT_ASC;
+        $orderBy['LENGTH(query)'] = SORT_ASC;
 
         $training = Training::find()
             ->where($condition)
