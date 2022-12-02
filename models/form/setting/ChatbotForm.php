@@ -44,11 +44,12 @@ class ChatbotForm extends SettingForm
             ],
             'welcome_message' => [
                 'name' => 'welcome_message',
-                'default' => 'Good day! \n What can I do for you today?'
+                'default' => "Good day!\nWhat can I do for you today?"
             ],
             'default_message' => [
                 'name' => 'default_message',
-                'default' => 'Sorry I can\'t understand your query right now'
+                'default' => "Sorry I can't understand your query right now.\nAre you searching for a product? Click the button below.\n[CATEGORY_BUTTON] [PRICE_RANGE_BUTTON]
+                "
             ],
             'theme_color' => [
                 'name' => 'theme_color',

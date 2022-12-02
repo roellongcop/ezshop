@@ -194,6 +194,15 @@ class Chat extends ActiveRecord
                     'data-hidden_message' => '--showCategory',
                     'class' => 'btn btn-outline-success btn-pill mb-1 btn-hidden-message',
                 ])
+            ],
+            '[PRICE_RANGE_BUTTON]' => [
+                'description' => 'Price range button',
+                'value' => Html::tag('a', 'Show Price Range', [
+                    'href' => '#',
+                    'data-message' => 'Show Price Range',
+                    'data-hidden_message' => '--showPriceRange',
+                    'class' => 'btn btn-outline-success btn-pill mb-1 btn-hidden-message',
+                ])
             ]
         ];
     }
