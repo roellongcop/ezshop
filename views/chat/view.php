@@ -22,7 +22,7 @@ $this->params['showCreateButton'] = true;
     	'model' => $model
     ]) ?> 
 
-    <?= App::if($model->status != Chat::ANSWERED, 
+    <?= App::if($model->status != Chat::TRAINED, 
         Html::a('Train', ['train', 'id' => $model->id], [
             'class' => 'btn btn-success font-weight-bold'
         ])
