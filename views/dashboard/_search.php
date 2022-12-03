@@ -41,13 +41,13 @@ ksort($modules);
         ]
     ]) ?>
 
-    <?= Filter::widget([
-        'data' => $modules,
-        'title' => 'Module',
-        'attribute' => 'modules',
-        'model' => $model,
-        'form' => $form,
-    ]) ?>
+    <?php # Filter::widget([
+        #'data' => $modules,
+        #'title' => 'Module',
+        #'attribute' => 'modules',
+        #'model' => $model,
+        #'form' => $form,
+    #]) ?>
   
     <?= Pagination::widget([
         'model' => $model,

@@ -14,7 +14,7 @@ class TrainingController extends Controller
     public function actionFindByKeywords($keywords='')
     {
         return $this->asJson(
-            Training::findByKeywords($keywords, ['query', 'intent', 'response'])
+            Training::findByKeywords($keywords, ['query', 'intent'])
         );
     }
 
