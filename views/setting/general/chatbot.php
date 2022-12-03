@@ -14,13 +14,15 @@ use app\helpers\Html;
 			<?= $form->field($model, 'default_message')->textarea(['rows' => 8]) ?>
 			<?= $form->field($model, 'theme_color')->textInput(['type' => 'color']) ?>
 		</div>
-		<div class="col-md-4">
-			<label>Chatbot Photo</label>
+		<div class="col-md-4 text-center">
+			<div>
+				<label>Chatbot Photo</label>
+			</div>
 			<?= Html::image($model->photo, ['w' => 200], [
                 'class' => 'img-thumbnail chatbot-photo',
                 'loading' => 'lazy',
             ] ) ?>
-            <br>
+            <div class="my-2"></div>
 
             <?= ImageGallery::widget([
                 'tag' => 'Setting',
