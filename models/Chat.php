@@ -248,7 +248,25 @@ class Chat extends ActiveRecord
                         'target' => '_blank'
                     ]), false);
 
-                    return implode('', $data);
+                    return implode('', $data ?: []);
+                }
+            ],
+            '[PRODUCT_SALE]' => [
+                'description' => 'Clickable 5 product on sale',
+                'value' => function() {
+                    $products = Product::find()
+                        ->where("`sale_price` < `regular_price`")
+                        ->active()
+                        ->limit(5)
+                        ->all();
+
+                    $data = App::foreach($products, fn($product) => Html::tag('a', $product->name, [
+                        'href' => Url::toRoute(['site/product-detail', 'slug' => $product->slug]),
+                        'class' => 'btn btn-outline-success btn-pill mb-1',
+                        'target' => '_blank'
+                    ]), false);
+
+                    return implode('', $data ?: []);
                 }
             ],
             '[BEST_SELLER]' => [
@@ -269,7 +287,7 @@ class Chat extends ActiveRecord
                         'target' => '_blank'
                     ]), false);
 
-                    return implode('', $data);
+                    return implode('', $data ?: []);
                 }
             ],
             '[CATEGORY_BUTTON]' => [
