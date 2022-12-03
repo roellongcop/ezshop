@@ -298,7 +298,51 @@ class Chat extends ActiveRecord
                     'data-hidden_message' => '--showBestSeller',
                     'class' => 'btn btn-outline-success btn-pill mb-1 btn-hidden-message',
                 ])
-            ]
+            ],
+            '[COLORS_BUTTON]' => [
+                'description' => 'Colors button',
+                'value' => Html::tag('a', 'Available Colors', [
+                    'href' => '#',
+                    'data-message' => 'Available Colors',
+                    'data-hidden_message' => '--showColors',
+                    'class' => 'btn btn-outline-success btn-pill mb-1 btn-hidden-message',
+                ])
+            ],
+            '[COLORS]' => [
+                'description' => 'Clickable color of products',
+                'value' => function() {
+                    return App::foreach(
+                        Product::uniqueColors(), 
+                        fn($color) => Html::tag('a', $color, [
+                            'href' => Url::toRoute(['site/shop', 'colors[]' => $color]),
+                            'class' => 'btn btn-outline-success btn-pill mb-1',
+                            'target' => '_blank'
+                        ])
+                    );
+                }
+            ],
+            '[SIZES_BUTTON]' => [
+                'description' => 'Sizes button',
+                'value' => Html::tag('a', 'Available Sizes', [
+                    'href' => '#',
+                    'data-message' => 'Available Sizes',
+                    'data-hidden_message' => '--showSizes',
+                    'class' => 'btn btn-outline-success btn-pill mb-1 btn-hidden-message',
+                ])
+            ],
+            '[SIZES]' => [
+                'description' => 'Clickable color of products',
+                'value' => function() {
+                    return App::foreach(
+                        Product::uniqueSizes(), 
+                        fn($size) => Html::tag('a', $size, [
+                            'href' => Url::toRoute(['site/shop', 'sizes[]' => $size]),
+                            'class' => 'btn btn-outline-success btn-pill mb-1',
+                            'target' => '_blank'
+                        ])
+                    );
+                }
+            ],
         ];
     }
 
