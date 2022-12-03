@@ -86,6 +86,14 @@ JS);
                                 </a>
                             </li>
 
+                            <li class="nav-item">
+                                <a class="nav-link webcam-tab-link" data-toggle="tab" href="#webcam-tab-<?= $widgetId ?>">
+                                    <span class="nav-icon">
+                                        <i class="fas fa-camera"></i>
+                                    </span>
+                                    <span class="nav-text">Webcam</span>
+                                </a>
+                            </li>
                         </ul>
                         <div class="tab-content pt-10">
                             <div class="tab-pane fade show active my-photos-tab-container" 
@@ -207,6 +215,33 @@ JS);
                                 </div>
                             </div>
 
+                            <div class="tab-pane fade webcam-tab-container" id="webcam-tab-<?= $widgetId ?>" role="tabpanel">
+                                <?= Webcam::widget([
+                                    'tag' => $tag,
+                                    'withNameInput' => false,
+                                    'withInput' => false,
+                                    'model' => $model,
+                                    'videoOptions' => [
+                                        'width' => $finalCropWidth,
+                                        'height' => $finalCropHeight,
+                                        'autoplay' => true,
+                                        'style' => 'margin: 0 auto;width: 100%; height: auto;max-width: 400px;'
+                                    ],
+                                    'buttonOptions' => [
+                                        'class' => 'btn btn-primary btn-sm mt-3',
+                                        'value' => 'Capture',
+                                        'style' => 'max-width: 200px;margin: 0 auto;',
+                                    ],
+                                    'ajaxSuccess' => $ajaxSuccess . <<< JS
+                                        let container = '#image-gallery-container-{$widgetId}',
+                                        fileIdInput = [container, '.file-id-input'].join(' '),
+                                        imageGalleryModal = [container, '.image-gallery-modal'].join(' ');
+
+                                        $(fileIdInput).val(s.file.token);
+                                        $(imageGalleryModal).modal('hide');
+                                    JS
+                                ]) ?>
+                            </div>
                         </div>
                     </div>
                 </div>
