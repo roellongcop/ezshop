@@ -76,6 +76,10 @@ JS);
                             'class' => 'nav-item nav-link' . ($activePage == 'checkout' ? ' active': '')
                         ]) ?>
 
+                        <?= App::if(App::isLogin() && App::identity()->can('index', 'dashboard'), YiiHtml::a('Dashboard', ['dashboard/index'], [
+                            'class' => 'nav-item nav-link'
+                        ])) ?>
+
                         <?= App::if(App::isGuest(), YiiHtml::a('Sign In', ['site/login'], [
                             'class' => 'nav-item nav-link'
                         ])) ?>
