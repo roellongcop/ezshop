@@ -290,6 +290,15 @@ class Chat extends ActiveRecord
                     return implode('', $data ?: []);
                 }
             ],
+            '[SALE_BUTTON]' => [
+                'description' => 'Product Sale button',
+                'value' => Html::tag('a', 'Product on Sale', [
+                    'href' => '#',
+                    'data-message' => 'Product on Sale',
+                    'data-hidden_message' => '--showProductOnSale',
+                    'class' => 'btn btn-outline-success btn-pill mb-1 btn-hidden-message',
+                ])
+            ],
             '[CATEGORY_BUTTON]' => [
                 'description' => 'Category button',
                 'value' => Html::tag('a', 'Show Categories', [

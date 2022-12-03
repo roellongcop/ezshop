@@ -140,7 +140,7 @@
   }
   .chat-logs {
     padding:15px; 
-    height:370px;
+    height:30em;
     overflow-y:scroll;
 /*    padding-bottom: 4em;*/
   }
