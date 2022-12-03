@@ -414,12 +414,23 @@ class Chat extends ActiveRecord
             'checkbox',
             'session_id',
             'message',
+            'reply',
             'status',
             'type',
             'created_at',
-            'last_updated',
             'active',
         ];
+    }
+
+    public function getReplyList()
+    {
+        return App::ifElse(
+            $this->replies, 
+            fn($replies) => Html::tag('ul', 
+                App::foreach($replies, fn($chat) => Html::tag('li', $chat->displayMessage))
+            ), 
+            'Default Message'
+        );
     }
      
     public function gridColumns()
@@ -437,6 +448,12 @@ class Chat extends ActiveRecord
                 }
             ],
             'message' => ['attribute' => 'message', 'format' => 'raw'],
+            'reply' => [
+                'attribute' => 'reply_id', 
+                'label' => 'reply', 
+                'format' => 'raw', 
+                'value' => 'replyList'
+            ],
             'user_email' => [
                 'label' => 'User email',
                 'attribute' => 'userEmail', 

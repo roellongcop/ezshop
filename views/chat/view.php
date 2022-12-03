@@ -33,7 +33,7 @@ $this->params['showCreateButton'] = true;
         </div>
         <div class="col-md-6">
             <p class="lead font-weight-bold">CHATBOT REPLY</p>
-            <?= App::ifElse($model->replies, fn($replies) => Html::tag('ul', App::foreach($model->replies, fn($chat) => Html::tag('li', $chat->displayMessage))), 'Default Message') ?>
+            <?= $model->replyList ?>
         </div>
     </div>
 </div>
