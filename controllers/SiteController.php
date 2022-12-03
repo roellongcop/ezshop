@@ -826,7 +826,7 @@ class SiteController extends Controller
 
             if ($chat->save()) {
                 if ($training['training']) {
-                    Chat::response($training['training']);
+                    Chat::response($training['training'], $chat);
                 }
 
                 if ($training['predict'] === 'dummy') {

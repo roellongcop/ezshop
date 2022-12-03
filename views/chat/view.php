@@ -27,5 +27,13 @@ $this->params['showCreateButton'] = true;
             'class' => 'btn btn-success font-weight-bold'
         ])
     ) ?>
-    <?= Detail::widget(['model' => $model]) ?>
+    <div class="row">
+        <div class="col-md-6">
+            <?= Detail::widget(['model' => $model]) ?>
+        </div>
+        <div class="col-md-6">
+            <p class="lead font-weight-bold">CHATBOT REPLY</p>
+            <?= App::ifElse($model->replies, fn($replies) => Html::tag('ul', App::foreach($model->replies, fn($chat) => Html::tag('li', $chat->displayMessage))), 'Default Message') ?>
+        </div>
+    </div>
 </div>

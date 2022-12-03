@@ -503,16 +503,22 @@ class Chat extends ActiveRecord
         }
     }
 
-    public static function response($training)
+    public function getReplies()
+    {
+        return $this->hasMany(Chat::class, ['reply_id' => 'id']);
+    }
+
+    public static function response($training, $chat)
     {
         foreach ($training->response as $response) {
-            $chat = new self([
+            $model = new self([
                 'session_id' => App::session('id'),
+                'reply_id' => $chat->id,
                 'type' => self::TYPE_CHATBOT,
                 'message' => $response,
                 'status' => self::ANSWERED 
             ]);
-            $chat->save();
+            $model->save();
         }
     }
 
