@@ -6,16 +6,16 @@ use Yii;
 use app\helpers\App;
 use app\models\Setting;
 use app\models\Theme;
+use app\models\form\setting\AboutUsForm;
+use app\models\form\setting\ChatbotForm;
 use app\models\form\setting\EmailSettingForm;
 use app\models\form\setting\GeneralSettingForm;
 use app\models\form\setting\ImageSettingForm;
 use app\models\form\setting\NotificationSettingForm;
-use app\models\form\setting\SystemSettingForm;
-use app\models\form\setting\AboutUsForm;
-use app\models\form\setting\SocialMediaForm;
+use app\models\form\setting\PriceSettingForm;
 use app\models\form\setting\ShippingForm;
-use app\models\form\setting\ChatbotForm;
-
+use app\models\form\setting\SocialMediaForm;
+use app\models\form\setting\SystemSettingForm;
 use app\models\form\user\MySettingForm;
 use app\models\search\SettingSearch;
 
@@ -192,6 +192,10 @@ class SettingController extends Controller
 
             case 'chatbot':
                 $model = new ChatbotForm();
+                break;
+
+            case 'price':
+                $model = new PriceSettingForm();
                 break;
             
             default:

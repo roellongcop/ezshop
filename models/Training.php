@@ -2,9 +2,10 @@
 
 namespace app\models;
 
-use app\widgets\Anchor;
-use app\helpers\ArrayHelper;
 use Phpml\Classification\NaiveBayes;
+use app\helpers\App;
+use app\helpers\ArrayHelper;
+use app\widgets\Anchor;
 use yii\db\Query;
 /**
  * This is the model class for table "{{%trainings}}".
@@ -92,8 +93,17 @@ class Training extends ActiveRecord
             ],
             'intent' => ['attribute' => 'intent', 'format' => 'raw'],
             'response' => ['attribute' => 'response', 'format' => 'ul'],
-            // 'suggestion' => ['attribute' => 'suggestion', 'format' => 'raw'],
+            'suggestion' => [
+                'attribute' => 'suggestion', 
+                'format' => 'raw',
+                'value' => 'suggestionType'
+            ],
         ];
+    }
+
+    public function getSuggestionType()
+    {
+        return App::ifElse(App::params('suggestions')[$this->suggestion] ?? $this->suggestion, fn($suggestion) => $suggestion, 'Multiple');
     }
 
     public function detailColumns()
@@ -102,7 +112,7 @@ class Training extends ActiveRecord
             'query:raw',
             'intent:raw',
             'response:ul',
-            // 'suggestion:raw',
+            'suggestionType:raw',
         ];
     }
 
@@ -131,7 +141,7 @@ class Training extends ActiveRecord
         return strtoupper($value);
     }
 
-    public function getPrediction()
+    public function naiveBayesPrediction($query)
     {
         $query = trim($query);
         $_SAMPLES_ = self::samples();
@@ -156,6 +166,43 @@ class Training extends ActiveRecord
             'predict' => $predict,
             'training' => self::findOne($id),
         ];
+    }
+
+    public function neuralPrediction($query)
+    {
+        $query = trim($query);
+        $_SAMPLES_ = self::samples();
+
+        $data = array_merge(['dummy' => ['']], self::samples());
+        $samples = $this->nestedUppercase(array_values($data));
+
+        $labels = ['dummy'];
+        $index = 0;
+        foreach ($_SAMPLES_ as $id => $explodedQuery) {
+            $labels[$id] = $index;
+            $index++;
+        }
+
+
+        $layer1 = new \Phpml\NeuralNetwork\Layer(
+            2, 
+            \Phpml\NeuralNetwork\Node\Neuron::class, 
+            new \Phpml\NeuralNetwork\ActivationFunction\PReLU
+        );
+        $layer2 = new \Phpml\NeuralNetwork\Layer(
+            2, 
+            \Phpml\NeuralNetwork\Node\Neuron::class, 
+            new \Phpml\NeuralNetwork\ActivationFunction\Sigmoid
+        );
+        $mlp = new \Phpml\Classification\MLPClassifier(4, [$layer1, $layer2], ['a', 'b', 'c']);
+
+        $mlp->train(
+            $samples = $samples,
+            $targets = $labels
+        );
+
+        $mlp->setLearningRate(0.1);
+        return $mlp->predict(explode(' ', strtoupper($query)));
     }
 
     public function predict($query='')

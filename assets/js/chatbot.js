@@ -82,7 +82,7 @@ const chat = createApp({
   					conversationsContainer.value.scrollTop = conversationsContainer.value.scrollHeight;
 	  			}
 	  			else {
-	  				if(conversationsContainer.value.scrollHeight - conversationsContainer.value.scrollTop <= 700) {
+	  				if(conversationsContainer.value.scrollHeight - conversationsContainer.value.scrollTop <= 1000) {
 	  					conversationsContainer.value.scrollTo({
 	  						top: conversationsContainer.value.scrollHeight,
 	  						behavior: 'smooth'
@@ -126,7 +126,7 @@ const chat = createApp({
 		    	}
 		    }
 
-		    if(conversationsContainer.value.scrollHeight - conversationsContainer.value.scrollTop > 700) {
+		    if(conversationsContainer.value.scrollHeight - conversationsContainer.value.scrollTop > 1000) {
 		    	showScrollable.value = true;
 		    }
 		    else {

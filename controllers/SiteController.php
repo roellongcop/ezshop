@@ -99,8 +99,6 @@ class SiteController extends Controller
             'class' => 'app\filters\ChatbotFilter',
         ];
 
-        
-
         return $behaviors;
     }
 
@@ -405,7 +403,6 @@ class SiteController extends Controller
                 }
             }
             
-
             return $this->asJson([
                 'status' => 'failed',
                 'errorSummary' => $model->errorSummary
@@ -424,7 +421,7 @@ class SiteController extends Controller
         ignore_user_abort(false);
         set_time_limit(0);
 
-        $counter = rand(5, 10);
+        $counter = rand(2, 5);
         $totalWishlist = App::post('totalWishlist') ?: 0;
         $totalCart = App::post('totalCart') ?: 0;
 
@@ -443,8 +440,7 @@ class SiteController extends Controller
                 break;
             }
 
-            
-            sleep(2);
+            sleep(1);
         }
 
         return $this->asJson([
@@ -531,7 +527,6 @@ class SiteController extends Controller
         ]);
     }
 
-
     public function actionMyReviews()
     {
         $searchModel = new ReviewSearch([
@@ -607,14 +602,12 @@ class SiteController extends Controller
             ]);
         }
 
-
         return $this->asJson([
             'status' => 'failed',
             'model' => $model,
             'errorSummary' => Html::errorSummary($model, ['encode' => false])
         ]);
     }
-
 
     public function actionMyCart()
     {
@@ -658,7 +651,6 @@ class SiteController extends Controller
         ]);
     }
 
-
     public function actionFindCartByKeywords($keywords='')
     { 
         return $this->asJson(
@@ -699,7 +691,6 @@ class SiteController extends Controller
         ]);
     }
 
-
     public function actionComputeShipping()
     {
         if (App::isGuest()) {
@@ -725,13 +716,11 @@ class SiteController extends Controller
             ]);
         }
 
-
         return $this->asJson([
             'status' => 'error',
             'message' => 'no data'
         ]); 
     }
-
 
     public function actionMyOrders()
     {
@@ -764,7 +753,6 @@ class SiteController extends Controller
         return $this->redirect(App::referrer());
     }
 
-
     public function actionViewOrder($order_no='')
     {
         if ($order_no && ($order = Order::findOne(['order_no' => $order_no])) != null) {
@@ -793,8 +781,6 @@ class SiteController extends Controller
             ->where(['session_id' => $session_id])
             ->min('id');
 
-            
-
         return $this->asJson([
             'status' => 'success',
             'messages' => array_reverse($messages),
@@ -802,7 +788,6 @@ class SiteController extends Controller
             'minimumMessageId' => $minimumMessageId,
         ]);
     }
-
 
     public function actionSendNewMessage()
     {
@@ -849,16 +834,15 @@ class SiteController extends Controller
         ]);
     }
 
-
     public function actionChatPoll($session_id='')
     {
-        $session_id = $session_id ?: App::session('id');
-
         session_write_close();
         ignore_user_abort(false);
         set_time_limit(0);
 
-        $counter = rand(5, 10);
+        $session_id = $session_id ?: App::session('id');
+
+        $counter = rand(2, 5);
         $maxMessageId_post = (int) (App::post('maxMessageId') ?: 0);
         $minMessageId_post = (int) (App::post('minMessageId') ?: 0);
         $totalMessages_post = (int) (App::post('totalMessages') ?: 0);
@@ -874,14 +858,12 @@ class SiteController extends Controller
                 $response['totalMessages'] = $totalMessages;
             }
 
-
             $messages = Chat::find()
                 ->where(['session_id' => $session_id])
                 ->andWhere(['>', 'id', $maxMessageId_post])
                 ->orderBy(['id' => SORT_DESC])
                 ->limit(20)
                 ->all();
-
 
             if ($messages) {
                 $response['messages'] = array_reverse($messages);
@@ -892,7 +874,7 @@ class SiteController extends Controller
                 return $this->asJson($response);
             }
             
-            sleep(2);
+            sleep(1);
         }
 
         return $this->asJson([

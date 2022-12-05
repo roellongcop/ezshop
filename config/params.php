@@ -6,6 +6,10 @@ return [
     'payment_mode' => [
         0 => [ 'id' => 0, 'label' => 'Cash on Delivery', 'class' => 'primary'],
     ],
+    'suggestions' => [
+        'multiple' => 'Multiple',
+        'ai' => 'Artificial Intelligence',
+    ],
     'chat_status' => [
         0 => [ 'id' => 0, 'label' => 'Answered', 'class' => 'success'],
         1 => [ 'id' => 1, 'label' => 'Un-Answered', 'class' => 'danger'],
@@ -78,13 +82,6 @@ return [
             'icon' => 'fas fa-user-lock',
             'page' => 'my-account-details'
         ],
-    ],
-    'price_filter' => [
-        0 => 100,
-        100 => 500,
-        500 => 1000,
-        1000 => 5000,
-        5000 => 10000
     ],
     'product_sorting' => [
         'latest' => ['id' => 0, 'label' => 'Latest', 'class' => 'primary'],
