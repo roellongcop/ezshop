@@ -92,8 +92,17 @@ class Training extends ActiveRecord
             ],
             'intent' => ['attribute' => 'intent', 'format' => 'raw'],
             'response' => ['attribute' => 'response', 'format' => 'ul'],
-            // 'suggestion' => ['attribute' => 'suggestion', 'format' => 'raw'],
+            'suggestion' => [
+                'attribute' => 'suggestion', 
+                'format' => 'raw',
+                'value' => 'suggestionType'
+            ],
         ];
+    }
+
+    public function getSuggestionType()
+    {
+        return $this->suggestion ?: 'Multiple';
     }
 
     public function detailColumns()
@@ -102,7 +111,7 @@ class Training extends ActiveRecord
             'query:raw',
             'intent:raw',
             'response:ul',
-            // 'suggestion:raw',
+            'suggestionType:raw',
         ];
     }
 
@@ -131,7 +140,7 @@ class Training extends ActiveRecord
         return strtoupper($value);
     }
 
-    public function getPrediction()
+    public function naiveBayesPrediction()
     {
         $query = trim($query);
         $_SAMPLES_ = self::samples();
@@ -156,6 +165,29 @@ class Training extends ActiveRecord
             'predict' => $predict,
             'training' => self::findOne($id),
         ];
+    }
+
+    public function neuralPrediction()
+    {
+        $layer1 = new \Phpml\NeuralNetwork\Layer(
+            2, 
+            \Phpml\NeuralNetwork\Node\Neuron::class, 
+            new \Phpml\NeuralNetwork\ActivationFunction\PReLU
+        );
+        $layer2 = new \Phpml\NeuralNetwork\Layer(
+            2, 
+            \Phpml\NeuralNetwork\Node\Neuron::class, 
+            new \Phpml\NeuralNetwork\ActivationFunction\Sigmoid
+        );
+        $mlp = new \Phpml\Classification\MLPClassifier(4, [$layer1, $layer2], ['a', 'b', 'c']);
+
+        $mlp->train(
+            $samples = [[1, 0, 0, 0], [0, 1, 1, 0], [1, 1, 1, 1], [0, 0, 0, 0]],
+            $targets = ['a', 'a', 'b', 'c']
+        );
+
+        $mlp->setLearningRate(0.1);
+        return $mlp->predict([[1, 1, 1, 1], [0, 0, 0, 0]]);
     }
 
     public function predict($query='')

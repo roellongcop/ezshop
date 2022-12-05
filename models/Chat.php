@@ -536,7 +536,8 @@ class Chat extends ActiveRecord
 
     public static function response($training, $chat)
     {
-        foreach ($training->response as $response) {
+        if ($training->suggestion == 'Random') {
+            $response = $training->response[rand(0, count($training->response) - 1)];
             $model = new self([
                 'session_id' => App::session('id'),
                 'reply_id' => $chat->id,
@@ -545,6 +546,18 @@ class Chat extends ActiveRecord
                 'status' => self::ANSWERED 
             ]);
             $model->save();
+        }
+        else {
+            foreach ($training->response as $response) {
+                $model = new self([
+                    'session_id' => App::session('id'),
+                    'reply_id' => $chat->id,
+                    'type' => self::TYPE_CHATBOT,
+                    'message' => $response,
+                    'status' => self::ANSWERED 
+                ]);
+                $model->save();
+            }
         }
     }
 

@@ -45,8 +45,11 @@ JS);
                     'data' => $model->response,
                     'type' => 'textarea'
                 ]) ?>
-
-    			<?php # $form->field($model, 'suggestion')->textarea(['rows' => 6]) ?>
+                <div class="mt-10"></div>
+    			<?= $form->field($model, 'suggestion')->dropDownList([
+                    'Multiple' => 'Multiple',
+                    'Random' => 'Random',
+                ]) ?>
             <?php $this->endContent() ?>
         </div>
         <div class="col-md-6">
