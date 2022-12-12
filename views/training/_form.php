@@ -1,12 +1,11 @@
 <?php
 
-use app\helpers\App;
-use app\models\Chat;
-use app\models\Training;
 use app\widgets\ActiveForm;
-use app\widgets\BootstrapSelect;
 use app\widgets\DataList;
 use app\widgets\InputList;
+use app\models\Training;
+use app\models\Chat;
+use app\helpers\App;
 
 $this->params['wrapCard'] = false;
 
@@ -47,15 +46,9 @@ JS);
                     'type' => 'textarea'
                 ]) ?>
                 <div class="mt-10"></div>
-                <?= BootstrapSelect::widget([
-                    'model' => $model,
-                    'form' => $form,
-                    'attribute' => 'suggestion',
-                    'data' => App::params('suggestions'),
-                    'options' => [
-                        'class' => 'kt-selectpicker form-control',
-                        'tabindex' => 'null',
-                    ]
+    			<?= $form->field($model, 'suggestion')->dropDownList([
+                    'Multiple' => 'Multiple',
+                    'Random' => 'Random',
                 ]) ?>
             <?php $this->endContent() ?>
         </div>

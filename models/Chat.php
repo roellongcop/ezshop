@@ -208,13 +208,33 @@ class Chat extends ActiveRecord
             '[PRICE_RANGE]' => [
                 'description' => 'Clickable price range of products',
                 'value' => function() {
-
-                    return App::foreach(App::setting('price')->priceRange, 
-                        fn($value, $key) => Html::tag('a', '₱'.number_format($key).' - ₱' . number_format($value), [
-                        'href' => Url::toRoute(['site/shop', 'price_range[]' => "{$key}-{$value}"]),
-                        'class' => 'btn btn-outline-success btn-pill mb-1',
-                        'target' => '_blank'
-                    ]));
+                    return implode(' ', [
+                        Html::tag('a', '₱0 - ₱100', [
+                            'href' => Url::toRoute(['site/shop', 'price_range[]' => '0-100']),
+                            'class' => 'btn btn-outline-success btn-pill mb-1',
+                            'target' => '_blank'
+                        ]),
+                        Html::tag('a', '₱100 - ₱500', [
+                            'href' => Url::toRoute(['site/shop', 'price_range[]' => '100-500']),
+                            'class' => 'btn btn-outline-success btn-pill mb-1',
+                            'target' => '_blank'
+                        ]),
+                        Html::tag('a', '₱500 - ₱1,000', [
+                            'href' => Url::toRoute(['site/shop', 'price_range[]' => '500-1000']),
+                            'class' => 'btn btn-outline-success btn-pill mb-1',
+                            'target' => '_blank'
+                        ]),
+                        Html::tag('a', '₱1,000 - ₱5,000', [
+                            'href' => Url::toRoute(['site/shop', 'price_range[]' => '1000-5000']),
+                            'class' => 'btn btn-outline-success btn-pill mb-1',
+                            'target' => '_blank'
+                        ]),
+                        Html::tag('a', '₱5,000 - ₱10,000', [
+                            'href' => Url::toRoute(['site/shop', 'price_range[]' => '5000-10000']),
+                            'class' => 'btn btn-outline-success btn-pill mb-1',
+                            'target' => '_blank'
+                        ]),
+                    ]);
                 }
             ],
             '[PRODUCT_CATEGORIES]' => [

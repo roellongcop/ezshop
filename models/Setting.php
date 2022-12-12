@@ -62,10 +62,6 @@ class Setting extends ActiveRecord
             'label' => 'Chatbot', 
             'icon' => '<i class="fas fa-robot"></i>'
         ],
-        'price' => [
-            'label' => 'Price', 
-            'icon' => '<i class="fas fa-money-bill-wave-alt"></i>'
-        ],
     ];
 
     public $options;

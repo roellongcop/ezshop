@@ -2,10 +2,9 @@
 
 namespace app\models;
 
-use Phpml\Classification\NaiveBayes;
-use app\helpers\App;
-use app\helpers\ArrayHelper;
 use app\widgets\Anchor;
+use app\helpers\ArrayHelper;
+use Phpml\Classification\NaiveBayes;
 use yii\db\Query;
 /**
  * This is the model class for table "{{%trainings}}".
@@ -103,7 +102,7 @@ class Training extends ActiveRecord
 
     public function getSuggestionType()
     {
-        return App::ifElse(App::params('suggestions')[$this->suggestion] ?? $this->suggestion, fn($suggestion) => $suggestion, 'Multiple');
+        return $this->suggestion ?: 'Multiple';
     }
 
     public function detailColumns()
@@ -141,7 +140,7 @@ class Training extends ActiveRecord
         return strtoupper($value);
     }
 
-    public function naiveBayesPrediction($query)
+    public function naiveBayesPrediction()
     {
         $query = trim($query);
         $_SAMPLES_ = self::samples();
@@ -168,22 +167,8 @@ class Training extends ActiveRecord
         ];
     }
 
-    public function neuralPrediction($query)
+    public function neuralPrediction()
     {
-        $query = trim($query);
-        $_SAMPLES_ = self::samples();
-
-        $data = array_merge(['dummy' => ['']], self::samples());
-        $samples = $this->nestedUppercase(array_values($data));
-
-        $labels = ['dummy'];
-        $index = 0;
-        foreach ($_SAMPLES_ as $id => $explodedQuery) {
-            $labels[$id] = $index;
-            $index++;
-        }
-
-
         $layer1 = new \Phpml\NeuralNetwork\Layer(
             2, 
             \Phpml\NeuralNetwork\Node\Neuron::class, 
@@ -197,12 +182,12 @@ class Training extends ActiveRecord
         $mlp = new \Phpml\Classification\MLPClassifier(4, [$layer1, $layer2], ['a', 'b', 'c']);
 
         $mlp->train(
-            $samples = $samples,
-            $targets = $labels
+            $samples = [[1, 0, 0, 0], [0, 1, 1, 0], [1, 1, 1, 1], [0, 0, 0, 0]],
+            $targets = ['a', 'a', 'b', 'c']
         );
 
         $mlp->setLearningRate(0.1);
-        return $mlp->predict(explode(' ', strtoupper($query)));
+        return $mlp->predict([[1, 1, 1, 1], [0, 0, 0, 0]]);
     }
 
     public function predict($query='')
