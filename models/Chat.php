@@ -517,7 +517,9 @@ class Chat extends ActiveRecord
     public static function response($training, $chat)
     {
         if ($training->suggestion == 'ai') {
-            $response = $training->response[rand(0, count($training->response) - 1)];
+            $faker = \Faker\Factory::create();
+            $response = $faker->randomElement($training->response);
+
             $model = new self([
                 'session_id' => App::session('id'),
                 'reply_id' => $chat->id,
