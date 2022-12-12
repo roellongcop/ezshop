@@ -11,6 +11,7 @@ use app\models\form\setting\AboutUsForm;
 use app\models\form\setting\SocialMediaForm;
 use app\models\form\setting\ShippingForm;
 use app\models\form\setting\ChatbotForm;
+use app\models\form\setting\PriceSettingForm;
 
 class SettingComponent extends \yii\base\Component
 {
@@ -22,6 +23,7 @@ class SettingComponent extends \yii\base\Component
     public $socialMedia;
     public $shipping;
     public $chatbot;
+    public $price;
 
     public $theme;
 
@@ -37,6 +39,7 @@ class SettingComponent extends \yii\base\Component
         $this->socialMedia = new SocialMediaForm();
         $this->shipping = new ShippingForm();
         $this->chatbot = new ChatbotForm();
+        $this->price = new PriceSettingForm();
 
         $this->theme = Theme::findOne($this->system->theme);
     }
