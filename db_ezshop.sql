@@ -4491,7 +4491,7 @@ INSERT INTO `tbl_logs` (`id`, `user_id`, `model_id`, `request_data`, `change_att
 CREATE TABLE `tbl_migrations` (
   `version` varchar(180) NOT NULL,
   `apply_time` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `tbl_migrations`
