@@ -60,6 +60,10 @@ class DashboardController extends Controller
      */
     public function actionIndex($year='')
     {
+        if (App::isLogin() && App::identity('isCustomer')) {
+            return $this->redirect(['site/customer-dashboard']);
+        }
+
         $year = $year ?: App::formatter()->asDateToTimezone('', 'Y');
 
 
