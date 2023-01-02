@@ -35,7 +35,12 @@ $config = [
         'pdf' => ['class' => '\app\components\PdfComponent'],
         'request' => ['class' => '\app\components\RequestComponent'],
         'cache' => ['class' => 'yii\caching\FileCache'],
-        'mailer' => ['class' => '\app\components\MailerComponent'],
+        'mailer' => [
+            'class' => '\app\components\MailerComponent',
+            'transport' => [
+                'dsn' => 'sendmail://default',
+            ],
+        ],
         'assetManager' => ['class' => 'app\components\AssetManagerComponent'],
         'errorHandler' => ['errorAction' => 'site/error'],
         'log' => [

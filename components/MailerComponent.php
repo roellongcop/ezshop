@@ -4,16 +4,15 @@ namespace app\components;
 
 class MailerComponent extends \yii\symfonymailer\Mailer
 {
-   const TRANSPORT = [
-		// LIVE
-		'scheme' => 'smtps',
-		'host' => 'gennakar.accessgov.ph',
-		'username' => '',
-		'password' => '',
-		'port' => 465,
-	];
-
-    public $useFileTransport = true;
+   public $useFileTransport = true;
+	// const TRANSPORT = [
+	// 	'scheme' => 'smtps',
+	// 	'host' => 'ezstore.site',
+	// 	'username' => '',
+	// 	'password' => '',
+	// 	'port' => 25,
+	// 	'encryption'=>'tls',
+	// ];
 
 	// public function init()
 	// {

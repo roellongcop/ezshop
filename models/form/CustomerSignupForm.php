@@ -2,8 +2,9 @@
 
 namespace app\models\form;
 
-use app\models\User;
 use app\models\Role;
+use app\models\User;
+use app\models\form\CustomEmailForm;
 use app\models\form\user\BillingDetailForm;
 
 class CustomerSignupForm extends \yii\base\Model
@@ -61,6 +62,14 @@ class CustomerSignupForm extends \yii\base\Model
                 $billing = new BillingDetailForm(['user_id' => $user->id]);
                 $billing->email = $user->email;
                 $billing->save('email');
+
+                $mail = new CustomEmailForm([
+                    'to' => $user->email,
+                    'subject' => 'Signup',
+                    'template' => 'signup-success',
+                    'parameters' => ['user' => $user],
+                ]);
+                $mail->send();
 
                 return $user;
             }

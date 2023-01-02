@@ -13,6 +13,15 @@ use app\helpers\Html;
     <meta http-equiv="Content-Type" content="text/html; charset=<?= Yii::$app->charset ?>" />
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
+    <style type="text/css">
+        .btn .btn-primary {
+            background: #337ab7;
+            padding: 10px;
+            border-radius: 4px;
+            font-weight: 600;
+            color: #fff;
+        }
+    </style>
 </head>
 <body>
     <?php $this->beginBody() ?>

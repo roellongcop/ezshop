@@ -3,35 +3,31 @@
 namespace app\controllers;
 
 use app\helpers\App;
-use app\helpers\Html;
 use app\helpers\ArrayHelper;
-
-use app\models\Email;
-use app\models\Product;
-use app\models\User;
-use app\models\Province;
-use app\models\Municipality;
-use app\models\Wishlist;
-use app\models\Review;
+use app\helpers\Html;
 use app\models\Cart;
-use app\models\Order;
 use app\models\Chat;
+use app\models\Email;
+use app\models\Municipality;
+use app\models\Order;
+use app\models\Product;
+use app\models\Province;
+use app\models\Review;
 use app\models\Training;
-
+use app\models\User;
+use app\models\Wishlist;
+use app\models\form\CartForm;
+use app\models\form\ChangePasswordForm;
+use app\models\form\CustomEmailForm;
+use app\models\form\CustomerSignupForm;
+use app\models\form\LoginForm;
+use app\models\form\PasswordResetForm;
+use app\models\form\user\BillingDetailForm;
+use app\models\search\CartSearch;
+use app\models\search\OrderSearch;
 use app\models\search\ProductSearch;
 use app\models\search\ReviewSearch;
 use app\models\search\WishlistSearch;
-use app\models\search\CartSearch;
-use app\models\search\OrderSearch;
-
-use app\models\form\LoginForm;
-use app\models\form\PasswordResetForm;
-use app\models\form\CustomerSignupForm;
-use app\models\form\ChangePasswordForm;
-use app\models\form\CartForm;
-
-use app\models\form\user\BillingDetailForm;
-
 use yii\web\NotFoundHttpException;
 
 class SiteController extends Controller
@@ -61,24 +57,16 @@ class SiteController extends Controller
         // 'test'
     ];
 
-    /*public function actionTest()
+    public function actionTest()
     {
-        $data = \app\models\Training::samples();
-
-        $data = array_merge(['dummy' => ['']], $data);
-        // dd($data);
-
-
-        $classifier = new \Phpml\Classification\NaiveBayes();
-        $classifier->train(array_values($data), array_keys($data));
-
-        $var1 = $classifier->predict(['buy', 'product']);
-        // return 'a'
-
-
-        var_dump('var1', $var1);
-        dd($data);
-    }*/
+        $mail = new CustomEmailForm([
+            'to' => 'ezshop@ezstore.site',
+            'subject' => 'Subject',
+            'template' => 'signup-success',
+            'parameters' => ['user' => 'user'],
+        ]);
+        var_dump($mail->send()); die;
+    }
 
     public function behaviors()
     {

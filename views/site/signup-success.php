@@ -20,13 +20,11 @@ $this->params['activePage'] = 'sign-success';
                 Hello <span class="font-weight-bold"><?= $user->email ?></span>!
             </p>
             <p>
-                Please click the button below to verify your account
+                We send an email verification.
             </p>
-            <div>
-                <?= YiiHtml::a('Verify Account', ['site/signup-verification', 'verification_token' => $user->verification_token], [
-                    'class' => "btn btn-primary"
-                ]) ?>
-            </div>
+            <p>
+                Go to your registered email and verify your account.
+            </p>
         </div>
     </div>
 </div>
