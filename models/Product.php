@@ -410,7 +410,7 @@ class Product extends ActiveRecord
             return 0;
         }
 
-        return abs((($this->regular_price - $this->sale_price) * 100) / $this->regular_price);
+        return number_format(abs((($this->regular_price - $this->sale_price) * 100) / $this->regular_price), 2);
     }
 
     public function getImageUrl($w=100)
