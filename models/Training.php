@@ -207,28 +207,23 @@ class Training extends ActiveRecord
 
     public function predict($query='')
     {
-        $training = Training::find()
-            ->where(['query' => trim($query)])
-            ->orderBy(['LENGTH(query)' => SORT_ASC])
-            ->one();
-            
-        if ($training) {
+        if (($training = Training::findOne(['query' => trim($query)])) != null) {
             return [
                 'predict' => $training ? '': 'dummy',
                 'training' => $training
             ];
         }
 
-        $training = Training::find()
-            ->where(['LIKE', 'query', $query])
-            ->orderBy(['LENGTH(query)' => SORT_ASC])
-            ->one();
-        if ($training) {
-            return [
-                'predict' => $training ? '': 'dummy',
-                'training' => $training
-            ];
-        }
+        // $training = Training::find()
+        //     ->where(['LIKE', 'query', $query])
+        //     ->orderBy(['LENGTH(query)' => SORT_ASC])
+        //     ->one();
+        // if ($training) {
+        //     return [
+        //         'predict' => $training ? '': 'dummy',
+        //         'training' => $training
+        //     ];
+        // }
 
         $keywords = explode(' ', trim($query));
         $condition = [];
