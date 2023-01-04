@@ -6,8 +6,10 @@ use app\helpers\App;
 use app\helpers\Url;
 use app\jobs\EmailJob;
 use app\jobs\NotificationJob;
+use app\models\Notification;
 use app\models\Queue;
 use app\models\User;
+use app\models\form\CustomEmailForm;
 
 class ChangePasswordForm extends \yii\base\Model
 {
@@ -77,17 +79,34 @@ class ChangePasswordForm extends \yii\base\Model
 
             if ($user->save()) {
 
-                Queue::push(new NotificationJob([
+                // Queue::push(new NotificationJob([
+                //     'user_id' => $user->id,
+                //     'type' => 'notification_change_password',
+                //     'message' => App::setting('notification')->notification_change_password,
+                //     'link' => Url::toRoute(['user/my-password'], true),
+                // ]));
+
+                $notification = new Notification([
+                    'status' => Notification::STATUS_UNREAD,
+                    'record_status' => Notification::RECORD_ACTIVE,
                     'user_id' => $user->id,
                     'type' => 'notification_change_password',
+                    'link' => Url::toRoute(['user/my-password']),
                     'message' => App::setting('notification')->notification_change_password,
-                    'link' => Url::toRoute(['user/my-password'], true),
-                ]));
+                ]);
+                $notification->save();
 
-                Queue::push(new EmailJob([
+                // Queue::push(new EmailJob([
+                //     'to' => $user->email,
+                //     'content' => App::setting('email')->email_change_password,
+                // ]));
+
+                $mail = new CustomEmailForm([
                     'to' => $user->email,
+                    'subject' => 'Change Password',
                     'content' => App::setting('email')->email_change_password,
-                ]));
+                ]);
+                $mail->send();
 
                 return $user;
             }
