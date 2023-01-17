@@ -798,6 +798,13 @@ class SiteController extends Controller
             }
 
             if ($chat->save()) {
+                if ($chat->chatSession->isUser) {
+                    return $this->asJson([
+                        'status' => 'success',
+                        'training' => $training,
+                    ]);
+                }
+
                 if ($training['training']) {
                     Chat::response($training['training'], $chat);
                 }

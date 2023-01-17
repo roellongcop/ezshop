@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\helpers\App;
 use app\models\Chat;
+use app\models\ChatSession;
 use app\models\Training;
 use app\models\search\ChatSearch;
 
@@ -197,8 +198,16 @@ class ChatController extends Controller
             return $this->redirect(['live-chat']);
         }
 
+        $chatSession = ChatSession::findOrCreate(['session_id' => $session_id]);
+
+        if ($chatSession->isNewRecord) {
+            $chatSession->status = chatSession::CHATBOT;
+            $chatSession->save(false);
+        }
+
         return $this->render('live-chat-view', [
             'model' => $model,
+            'chatSession' => $chatSession,
         ]);
     }
 
@@ -220,6 +229,67 @@ class ChatController extends Controller
         return $this->render('train', [
             'chat' => $chat,
             'training' => $training,
+        ]);
+    }
+
+    public function actionChatSession()
+    {
+        if (($post = App::post()) != null) {
+            $model = ChatSession::findOne($post['id']);
+
+            if (!$model) {
+                return $this->asJson([
+                    'status' => 'failed',
+                    'errors' => 'No data found.',
+                    'errorSummary' => 'No data found.'
+                ]);
+            }
+
+            $model->status = $post['record_status'];
+
+            if ($model->save(false)) {
+                $model->refresh();
+                return $this->asJson([
+                    'status' => 'success',
+                    'attributes' => $model->attributes
+                ]);
+            }
+            else {
+                return $this->asJson([
+                    'status' => 'failed',
+                    'errors' => $model->errors,
+                    'errorSummary' => $model->errorSummary
+                ]);
+            }
+        }
+    }
+
+    public function actionSendNewMessage()
+    {
+        if (($post = App::post()) != null) {
+            $chat = new Chat([
+                'session_id' => $post['session_id'],
+                'type' => Chat::TYPE_CHATBOT,
+                'message' => $post['message'],
+                'hidden_message' => $post['hiddenMessage'],
+                'status' => Chat::ANSWERED
+            ]);
+
+
+            if ($chat->save()) {
+                return $this->asJson([
+                    'status' => 'success',
+                ]);
+            }
+            return $this->asJson([
+                'status' => 'failed',
+                'errorSummary' => $chat->errorSummary
+            ]);
+        }
+
+        return $this->asJson([
+            'status' => 'failed',
+            'errorSummary' => 'No post data'
         ]);
     }
 }

@@ -144,7 +144,7 @@ div.required label.control-label:after {
     background: white;
     padding: 10px 15px 10px 15px;
     color: #666;
-    max-width: 75%;
+/*    max-width: 75%;*/
     float: right;
     right: 10px;
     position: relative;
@@ -179,12 +179,19 @@ div.required label.control-label:after {
 .chat-submit:focus {
   outline: none;
 }
+.bbrr0 {
+  border-bottom-right-radius: 0 !important;
+}
 
 .bblr0 {
   border-bottom-left-radius: 0 !important;
 }
 .btlr0 {
   border-top-left-radius: 0 !important;
+}
+
+.btrr0 {
+  border-top-right-radius: 0 !important;
 }
 
 .btn-pill {

@@ -189,6 +189,7 @@
     padding:10px 15px 10px 15px;  
     color:#666;
     max-width:75%;
+  width: fit-content;
 /*    float:left;*/
     margin-left:10px; 
     position:relative;
@@ -203,6 +204,7 @@
     margin-right:10px;
     background: #5A5EB9;
     color:white;
+/*    width: 75%;*/
   }
   .cm-msg-button>ul>li {
     list-style:none;

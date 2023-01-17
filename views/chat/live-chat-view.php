@@ -1,11 +1,12 @@
 <?php
 
-use app\widgets\Anchors;
-use app\widgets\Detail;
-use app\models\search\ChatSearch;
-use app\models\Chat;
 use app\helpers\App;
 use app\helpers\Html;
+use app\models\Chat;
+use app\models\search\ChatSearch;
+use app\widgets\Anchors;
+use app\widgets\Detail;
+use app\widgets\Switcher;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Chat */
@@ -19,7 +20,6 @@ $this->params['activeMenuLink'] = '/chat/live-chat';
 
 $this->registerJsFile(App::publishedUrl('/vue3/vue.global.js', Yii::getAlias('@app/assets')));
 $this->addJsFile('js/chatbot', ['app\assets\AppAsset'], ['type' => 'module']);
-
 ?>
 <div class="chat-view-page" id="live-chat" data-session_id="<?= $model->session_id ?>">
     <div class="row">
@@ -66,7 +66,16 @@ $this->addJsFile('js/chatbot', ['app\assets\AppAsset'], ['type' => 'module']);
         </div>
         <div class="col-md-6">
             <?php $this->beginContent('@app/views/layouts/_card_wrapper.php', [
-                'title' => 'Live Chat'
+                'title' => 'Live Chat',
+                'toolbar' => '<div class="card-toolbar" title="Toggle to Disable Chatbot">
+                    <span class="font-weight-bolder mr-3">INTERACT</span>
+                    '. Switcher::widget([
+                        'model' => $chatSession,
+                        'controller' => 'chat',
+                        'action' => 'chat-session',
+                        'checked' => $chatSession->isUser
+                    ]) .'
+                </div>'
             ]) ?>
                 <div class="scroll scroll-pull chat-box-body scroller-thumb" data-height="375" data-mobile-height="300" style="height: 58vh; overflow: auto;" ref="conversationsContainer" @scroll="messageScroll">
                     <div class="messages ">
@@ -77,6 +86,17 @@ $this->addJsFile('js/chatbot', ['app\assets\AppAsset'], ['type' => 'module']);
                                 </div>
                             </div>
                             <div class="mt-2 rounded p-5 text-dark-50 font-weight-bold font-size-lg max-w-400px" v-html="message.message" :class="setMessageClass(message)"></div>
+                        </div>
+
+                        <div v-if="messageFormState.content.length">
+                            <div v-for="(content, index) in messageFormState.content" :key="index" class="chat-msg self">
+                                <div class="d-flex align-items-center" v-if="showTimesent(index)">
+                                    <div>
+                                        <span class="text-muted font-size-sm">Sending...</span>
+                                    </div>
+                                </div>
+                                <div class="mt-2 rounded p-5 text-dark-50 font-weight-bold font-size-lg max-w-400px" v-html="content"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -89,6 +109,18 @@ $this->addJsFile('js/chatbot', ['app\assets\AppAsset'], ['type' => 'module']);
                         </button>
                     </span>
                     <span></span>
+                </div>
+
+                <div class="chat-input mt-5">      
+                    <!-- <form @submit.prevent="sendNewMessage('')"> -->
+                        <div class="input-group">
+                            <input class="form-control" autocomplete="off" maxlength="225" type="text" id="chat-input" v-model="messageModel" placeholder="Send a message..." @keydown.enter.exact.prevent="sendNewMessage('')"/>
+                            <div class="input-group-append">
+                                <button type="button" @click="sendNewMessage('')" class="chat-submit btn btn-success" id="chat-submit"><i class="fab fa-telegram-plane"></i></button>
+                            </div>
+                        </div>
+
+                    <!-- </form>       -->
                 </div>
                
             <?php $this->endContent() ?>

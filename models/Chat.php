@@ -580,4 +580,22 @@ class Chat extends ActiveRecord
     {
         return nl2br($this->message);
     }
+
+    public function getChatSession()
+    {
+        return $this->hasOne(ChatSession::class, ['session_id' => 'session_id']);
+    }
+
+    public function afterSave ($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+        if ($insert) {
+            $chatSession = ChatSession::findOrCreate(['session_id' => $this->session_id]);
+
+            if ($chatSession->isNewRecord) {
+                $chatSession->status = chatSession::CHATBOT;
+                $chatSession->save(false);
+            }
+        }
+    }
 }

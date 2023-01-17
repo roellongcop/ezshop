@@ -9,6 +9,13 @@ const chat = createApp({
 		const minimumMessageId = ref(1);
 
 		const conversationsContainer = ref('');
+		const messageModel = ref('');
+
+		const messageFormState = reactive({
+			isSending: false,
+			content: []
+		});
+
 
 		const TYPE_CHATBOT = 0;
 	    const TYPE_USER = 1;
@@ -60,6 +67,8 @@ const chat = createApp({
 			       	}
 
 			  		scrollToBottom(false);
+			  		messageFormState.isSending = false;
+					messageFormState.content = [];
 			       	poll();
 				},
 				error: (e) => {
@@ -151,18 +160,18 @@ const chat = createApp({
 
 		const setContainerClass = (message, index) => {
 			let addedClass = '';
-			if (message.type == TYPE_CHATBOT) {
-				addedClass += 'align-items-start';
+			if (message.type == TYPE_USER) {
+				addedClass += ' align-items-start';
 			}
 			else {
-				addedClass += 'align-items-end';
+				addedClass += ' align-items-end';
 			}
 
 			let currentMessage = messages.value[index];
 			let nextMessage = messages.value[index + 1];
 			if (nextMessage) {
 				if (currentMessage.type == nextMessage.type && currentMessage.timeSent == nextMessage.timeSent) {
-					addedClass += 'mb-1 bblr0';
+					addedClass += ' mb-1 bblr0';
 				}
 			}
 
@@ -180,7 +189,7 @@ const chat = createApp({
 		}
 
 		const setMessageClass = (message) => {
-			if (message.type == TYPE_CHATBOT) {
+			if (message.type == TYPE_USER) {
 				return 'bg-light-success text-left';
 			}
 
@@ -202,6 +211,45 @@ const chat = createApp({
 			return true;
 		}
 
+		const hasWhiteSpace = (str) => {
+		  	return str.trim().length === 0;
+		}
+
+		const sendNewMessage = (hiddenMessage='') => {
+			KTApp.unblockPage();
+			if (messageModel.value) {
+				let message = messageModel.value;
+
+				if (hasWhiteSpace(message)) {
+					return;
+				}
+				messageModel.value = '';
+
+				messageFormState.isSending = true;
+				messageFormState.content.push(message);
+
+				scrollToBottom();
+				$.ajax({
+					url: app.baseUrl + 'chat/send-new-message',
+					data: {
+						message,
+						hiddenMessage,
+						session_id: session_id.value
+					},
+					dataType: 'json',
+					method: 'post',
+					success: (response) => {
+						if (response.status == 'success') {
+				    		scrollToBottom();
+				    	}
+					},
+					error: (e) => {
+						messageFormState.isSending = false;
+					}
+				})
+			}
+		}
+
 		 
 		onMounted(() => {
 			initData()
@@ -217,6 +265,9 @@ const chat = createApp({
 			messageScroll,
 			scrollToBottom,
 			showTimesent,
+			messageFormState,
+			messageModel,
+			sendNewMessage,
 		}
 	}
 });

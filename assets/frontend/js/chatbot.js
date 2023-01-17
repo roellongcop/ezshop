@@ -138,7 +138,12 @@ const chat = createApp({
 			let nextMessage = messages.value[index + 1];
 			if (nextMessage) {
 				if (currentMessage.type == nextMessage.type && currentMessage.timeSent == nextMessage.timeSent) {
-					addedClass += 'mb-1 bblr0';
+					if (currentMessage.type == TYPE_CHATBOT) {
+						addedClass += 'mb-1 bblr0';
+					}
+					else {
+						addedClass += 'mb-1 bbrr0';
+					}
 				}
 			}
 
@@ -148,7 +153,12 @@ const chat = createApp({
 
 			let previousMessage = messages.value[index - 1];
 			if (currentMessage.type == previousMessage.type && currentMessage.timeSent == previousMessage.timeSent) {
-				addedClass += ' btlr0';
+				if (currentMessage.type == TYPE_CHATBOT) {
+					addedClass += ' btlr0';
+				}
+				else {
+					addedClass += ' btrr0';
+				}
 			}
 
 
