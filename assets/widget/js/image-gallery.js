@@ -382,7 +382,7 @@ class imageGalleryWidget {
         });
 
         $(document).on('click', self.saveImageBtn, function() {
-            self.cropper.getCroppedCanvas().toBlob((blob) => {
+            self.cropper.getCroppedCanvas({fillColor: '#fff'}).toBlob((blob) => {
                 KTApp.block(self.cropperTabContainer, {
                     overlayColor: '#000000',
                     state: 'primary',
